@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/Tres_Maria_Sys/sw.js', { scope: '/Tres_Maria_Sys/' })})}
