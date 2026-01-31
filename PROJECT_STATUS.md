@@ -168,7 +168,49 @@ Open: http://localhost:5173
 
 ---
 
+## Architecture (Optimization Layer)
+
+### Centralized Configuration (`src/config/index.js`)
+- Single source of truth for all app settings
+- API config, auth settings, storage config, UI settings
+- Business rules and validation rules
+- Feature flags for easy toggling
+- Helper functions: formatCurrency, formatNumber, formatDate, getStatusColor
+
+### Error Handling (`src/components/ErrorBoundary.jsx`)
+- Graceful error catching with user-friendly recovery UI
+- "Try Again" and "Go to Dashboard" buttons
+- Wraps entire app in App.jsx
+
+### Reusable UI Components (`src/components/ui/index.jsx`)
+- Spinner, PageLoader, StatusBadge
+- Card, CardHeader, Button, Input, Select
+- EmptyState, ConfirmModal, StatCard
+- Consistent styling across the app
+
+### Data Persistence (`src/services/storage.js`)
+- localStorage persistence layer with version control
+- `saveMockStore()` / `loadMockStore()` for state management
+- Data survives browser refresh (was #1 Known Limitation - NOW FIXED!)
+
+### Utility Helpers (`src/utils/helpers.js`)
+- debounce, throttle, deepClone, generateId
+- formatters, validators, date utilities
+- DRY principle - common functions in one place
+
+---
+
 ## Recent Changes (Session History)
+
+### Session: System Optimization
+
+1. **Centralized Config** - Created `src/config/index.js` with all app settings, formatters, and feature flags
+2. **Error Boundary** - Added `src/components/ErrorBoundary.jsx` for graceful error recovery
+3. **Reusable UI Components** - Created `src/components/ui/index.jsx` with 11 reusable components
+4. **Data Persistence** - Implemented localStorage persistence in `src/services/storage.js`
+5. **API Persistence** - Modified `src/services/api.js` to auto-save to localStorage after mutations
+6. **Utility Helpers** - Created `src/utils/helpers.js` with common utility functions
+7. **App Wrapper** - Modified `src/App.jsx` to wrap with ErrorBoundary
 
 ### Session: January 31, 2026
 
@@ -190,7 +232,7 @@ Open: http://localhost:5173
 ---
 
 ## Known Limitations (Mock Mode)
-1. Data resets when browser refreshes (in-memory only)
+1. ~~Data resets when browser refreshes~~ **FIXED!** - Now persists to localStorage
 2. No real authentication (token is simulated)
 3. Export buttons download mock CSV files
 4. Live tracking is simulated (not real GPS)
@@ -209,8 +251,10 @@ Or copy relevant sections from this file into your prompt.
 ## Pending/Future Improvements
 - [ ] Add real PostgreSQL backend connection
 - [ ] Implement real authentication with JWT
-- [ ] Add data persistence (localStorage or IndexedDB)
+- [x] ~~Add data persistence (localStorage or IndexedDB)~~ **COMPLETED!**
 - [ ] Real GPS integration for live tracking
 - [ ] Print functionality for reports
 - [ ] Mobile responsive improvements
 - [ ] Email notifications
+- [ ] Migrate pages to use reusable UI components from `src/components/ui/index.jsx`
+- [ ] Use centralized config formatters throughout the app

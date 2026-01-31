@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { mockApi, mockUsers, mockProducts, mockCategories, mockClients, mockSuppliers, mockOrders, mockInventory, mockDeliveries, mockPurchaseOrders, mockWarehouses, mockDashboardData } from './mockData';
+import { saveMockStore, loadMockStore } from './storage';
 
 // Set to true to use mock data (no backend needed)
 const USE_MOCK = true;
 
-// In-memory store for dynamic mock data (persists during session)
-const mockStore = {
+// Default store structure
+const defaultStore = {
   distributionPlans: [
     { id: 1, plan_number: 'DP-2026-001', status: 'completed', total_value: 125000, created_at: '2026-01-25', completed_at: '2026-01-26', deliveries_count: 5, items_count: 24 },
     { id: 2, plan_number: 'DP-2026-002', status: 'executing', total_value: 89500, created_at: '2026-01-28', completed_at: null, deliveries_count: 3, items_count: 15 },
@@ -23,6 +24,14 @@ const mockStore = {
   users: [...mockUsers],
   inventory: [...mockInventory],
   nextIds: { plan: 5, product: 11, category: 7, client: 6, supplier: 5, order: 8, po: 4, delivery: 4, warehouse: 3, user: 4 }
+};
+
+// Load from localStorage or use default (DATA PERSISTENCE!)
+const mockStore = loadMockStore(defaultStore);
+
+// Save store after each mutation (auto-persist)
+const persistStore = () => {
+  saveMockStore(mockStore);
 };
 
 const api = axios.create({
@@ -506,6 +515,12 @@ const mockGet = async (url) => {
 const mockPost = async (url, data) => {
   await delay(500);
   
+  // Helper to persist and return result
+  const persistAndReturn = (result) => {
+    persistStore();
+    return result;
+  };
+  
   // === AUTH ===
   if (url.includes('/auth/login')) {
     const user = mockStore.users.find(u => u.email === data.email && u.password === data.password);
@@ -542,7 +557,7 @@ const mockPost = async (url, data) => {
       priority: data.priority || 'normal', notes: data.notes || ''
     };
     mockStore.distributionPlans.unshift(newPlan);
-    return { data: { success: true, plan: newPlan } };
+    return persistAndReturn({ data: { success: true, plan: newPlan } });
   }
   
   // === PRODUCTS ===
@@ -550,7 +565,7 @@ const mockPost = async (url, data) => {
     const newId = mockStore.nextIds.product++;
     const newProduct = { id: newId, ...data, category: mockStore.categories.find(c => c.id === parseInt(data.category_id)) };
     mockStore.products.push(newProduct);
-    return { data: { success: true, product: newProduct } };
+    return persistAndReturn({ data: { success: true, product: newProduct } });
   }
   
   // === CATEGORIES ===
@@ -558,7 +573,7 @@ const mockPost = async (url, data) => {
     const newId = mockStore.nextIds.category++;
     const newCat = { id: newId, ...data, product_count: 0 };
     mockStore.categories.push(newCat);
-    return { data: { success: true, category: newCat } };
+    return persistAndReturn({ data: { success: true, category: newCat } });
   }
   
   // === CLIENTS ===
@@ -566,7 +581,7 @@ const mockPost = async (url, data) => {
     const newId = mockStore.nextIds.client++;
     const newClient = { id: newId, ...data };
     mockStore.clients.push(newClient);
-    return { data: { success: true, client: newClient } };
+    return persistAndReturn({ data: { success: true, client: newClient } });
   }
   
   // === SUPPLIERS ===
@@ -574,7 +589,7 @@ const mockPost = async (url, data) => {
     const newId = mockStore.nextIds.supplier++;
     const newSupplier = { id: newId, ...data, is_active: true };
     mockStore.suppliers.push(newSupplier);
-    return { data: { success: true, supplier: newSupplier } };
+    return persistAndReturn({ data: { success: true, supplier: newSupplier } });
   }
   
   // === ORDERS ===
@@ -586,12 +601,12 @@ const mockPost = async (url, data) => {
       ...data, client, status: 'pending', order_date: new Date().toISOString().split('T')[0]
     };
     mockStore.orders.unshift(newOrder);
-    return { data: { success: true, order: newOrder } };
+    return persistAndReturn({ data: { success: true, order: newOrder } });
   }
   
   // === PURCHASE ORDERS ===
   if (url.match(/\/purchase-orders\/\d+\/receive/)) {
-    return { data: { success: true, message: 'Goods received successfully' } };
+    return persistAndReturn({ data: { success: true, message: 'Goods received successfully' } });
   }
   if (url.includes('/purchase-orders')) {
     const newId = mockStore.nextIds.po++;
@@ -601,7 +616,7 @@ const mockPost = async (url, data) => {
       ...data, supplier, status: 'pending', order_date: new Date().toISOString().split('T')[0]
     };
     mockStore.purchaseOrders.unshift(newPO);
-    return { data: { success: true, purchaseOrder: newPO } };
+    return persistAndReturn({ data: { success: true, purchaseOrder: newPO } });
   }
   
   // === WAREHOUSE ===
@@ -609,7 +624,7 @@ const mockPost = async (url, data) => {
     const newId = mockStore.nextIds.warehouse++;
     const newWarehouse = { id: String(newId), ...data, is_active: true };
     mockStore.warehouses.push(newWarehouse);
-    return { data: { success: true, warehouse: newWarehouse } };
+    return persistAndReturn({ data: { success: true, warehouse: newWarehouse } });
   }
   
   // === USERS ===
@@ -620,7 +635,7 @@ const mockPost = async (url, data) => {
     const newId = mockStore.nextIds.user++;
     const newUser = { id: String(newId), ...data, is_active: true, password: 'password123' };
     mockStore.users.push(newUser);
-    return { data: { success: true, user: { ...newUser, password: undefined } } };
+    return persistAndReturn({ data: { success: true, user: { ...newUser, password: undefined } } });
   }
   
   return { data: { success: true, message: 'Created successfully', id: Date.now() } };
@@ -629,13 +644,19 @@ const mockPost = async (url, data) => {
 const mockPut = async (url, data) => {
   await delay(300);
   
+  // Helper to persist and return result
+  const persistAndReturn = (result) => {
+    persistStore();
+    return result;
+  };
+  
   // === DISTRIBUTION PLANS ===
   if (url.includes('/distribution/plans')) {
     const idMatch = url.match(/\/distribution\/plans\/(\d+)/);
     if (idMatch) {
       const plan = mockStore.distributionPlans.find(p => p.id === parseInt(idMatch[1]));
       if (plan) Object.assign(plan, data);
-      return { data: { success: true, plan } };
+      return persistAndReturn({ data: { success: true, plan } });
     }
   }
   
@@ -646,7 +667,7 @@ const mockPut = async (url, data) => {
       const idx = mockStore.products.findIndex(p => p.id === parseInt(idMatch[1]));
       if (idx !== -1) {
         mockStore.products[idx] = { ...mockStore.products[idx], ...data };
-        return { data: { success: true, product: mockStore.products[idx] } };
+        return persistAndReturn({ data: { success: true, product: mockStore.products[idx] } });
       }
     }
   }
@@ -658,7 +679,7 @@ const mockPut = async (url, data) => {
       const idx = mockStore.categories.findIndex(c => c.id === parseInt(idMatch[1]));
       if (idx !== -1) {
         mockStore.categories[idx] = { ...mockStore.categories[idx], ...data };
-        return { data: { success: true, category: mockStore.categories[idx] } };
+        return persistAndReturn({ data: { success: true, category: mockStore.categories[idx] } });
       }
     }
   }

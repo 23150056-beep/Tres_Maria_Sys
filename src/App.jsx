@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import useAuthStore from './stores/authStore';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Layouts
 import DashboardLayout from './layouts/DashboardLayout';
@@ -215,4 +216,11 @@ function App() {
   );
 }
 
-export default App;
+// Wrap App with ErrorBoundary for graceful error handling
+export default function AppWithErrorBoundary() {
+  return (
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  );
+}
