@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
@@ -18,10 +18,11 @@ import {
   DocumentTextIcon,
   UserGroupIcon,
   BanknotesIcon,
-  BellIcon,
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import useAuthStore from '../stores/authStore';
+import NotificationDropdown from '../components/NotificationDropdown';
+import { startNotificationPolling, stopNotificationPolling } from '../services/notificationService';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -177,6 +178,15 @@ export default function DashboardLayout() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
+  // Start notification polling when layout mounts
+  useEffect(() => {
+    const cleanup = startNotificationPolling(60000); // Check every 60 seconds
+    return () => {
+      cleanup();
+      stopNotificationPolling();
+    };
+  }, []);
+
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -273,10 +283,7 @@ export default function DashboardLayout() {
               </div>
               
               {/* Notifications */}
-              <button className="text-white/60 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors relative">
-                <BellIcon className="h-6 w-6" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-              </button>
+              <NotificationDropdown />
               
               {/* Settings */}
               <button className="text-white/60 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors">

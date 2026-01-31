@@ -143,7 +143,7 @@ export default function DeliveryReport() {
               <Pie data={statusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
                 {statusData.map((_, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Legend wrapperStyle={{ color: 'rgba(255,255,255,0.7)' }} />
             </PieChart>
           </ResponsiveContainer>
@@ -157,7 +157,7 @@ export default function DeliveryReport() {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
               <XAxis dataKey="date" tickFormatter={(d) => new Date(d).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
               <YAxis tick={{ fill: 'rgba(255,255,255,0.5)' }} />
-              <Tooltip labelFormatter={(d) => new Date(d).toLocaleDateString('en-PH')} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip labelFormatter={(d) => new Date(d).toLocaleDateString('en-PH')} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Legend wrapperStyle={{ color: 'rgba(255,255,255,0.7)' }} />
               <Bar dataKey="delivered" name="Delivered" fill="#10B981" />
               <Bar dataKey="failed" name="Failed" fill="#EF4444" />
@@ -218,7 +218,7 @@ export default function DeliveryReport() {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
               <XAxis type="number" tick={{ fill: 'rgba(255,255,255,0.5)' }} />
               <YAxis type="category" dataKey="area" width={100} tick={{ fontSize: 12, fill: 'rgba(255,255,255,0.5)' }} />
-              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Bar dataKey="count" fill="#3B82F6" name="Deliveries" />
             </BarChart>
           </ResponsiveContainer>
@@ -231,7 +231,7 @@ export default function DeliveryReport() {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
               <XAxis dataKey="date" tickFormatter={(d) => new Date(d).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
               <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft', fill: 'rgba(255,255,255,0.5)' }} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
-              <Tooltip labelFormatter={(d) => new Date(d).toLocaleDateString('en-PH')} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip labelFormatter={(d) => new Date(d).toLocaleDateString('en-PH')} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Line type="monotone" dataKey="avgTime" stroke="#8B5CF6" name="Avg. Time (min)" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>

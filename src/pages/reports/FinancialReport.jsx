@@ -125,7 +125,7 @@ export default function FinancialReport() {
             <XAxis dataKey="date" tickFormatter={(d) => new Date(d).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
             <YAxis yAxisId="left" tickFormatter={(v) => `₱${(v / 1000).toFixed(0)}k`} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
             <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v}%`} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
-            <Tooltip formatter={(v, name) => name === 'Profit Margin' ? `${v}%` : formatCurrency(v)} labelFormatter={(d) => new Date(d).toLocaleDateString('en-PH')} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+            <Tooltip formatter={(v, name) => name === 'Profit Margin' ? `${v}%` : formatCurrency(v)} labelFormatter={(d) => new Date(d).toLocaleDateString('en-PH')} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
             <Legend wrapperStyle={{ color: 'rgba(255,255,255,0.7)' }} />
             <Bar yAxisId="left" dataKey="revenue" fill="#10B981" name="Revenue" />
             <Bar yAxisId="left" dataKey="expenses" fill="#EF4444" name="Expenses" />
@@ -144,7 +144,7 @@ export default function FinancialReport() {
               <Pie data={data?.revenueBySource || []} dataKey="value" nameKey="source" cx="50%" cy="50%" outerRadius={100} label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
                 {(data?.revenueBySource || []).map((_, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
-              <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Legend wrapperStyle={{ color: 'rgba(255,255,255,0.7)' }} />
             </PieChart>
           </ResponsiveContainer>
@@ -158,7 +158,7 @@ export default function FinancialReport() {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
               <XAxis type="number" tickFormatter={(v) => `₱${(v / 1000).toFixed(0)}k`} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
               <YAxis type="category" dataKey="category" width={120} tick={{ fontSize: 12, fill: 'rgba(255,255,255,0.5)' }} />
-              <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Bar dataKey="amount" fill="#EF4444" />
             </BarChart>
           </ResponsiveContainer>
@@ -230,7 +230,7 @@ export default function FinancialReport() {
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
             <XAxis dataKey="date" tickFormatter={(d) => new Date(d).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
             <YAxis tickFormatter={(v) => `₱${(v / 1000).toFixed(0)}k`} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
-            <Tooltip formatter={(v) => formatCurrency(v)} labelFormatter={(d) => new Date(d).toLocaleDateString('en-PH')} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+            <Tooltip formatter={(v) => formatCurrency(v)} labelFormatter={(d) => new Date(d).toLocaleDateString('en-PH')} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
             <Legend wrapperStyle={{ color: 'rgba(255,255,255,0.7)' }} />
             <Area type="monotone" dataKey="inflow" stackId="1" stroke="#10B981" fill="#86EFAC" name="Cash In" />
             <Area type="monotone" dataKey="outflow" stackId="2" stroke="#EF4444" fill="#FCA5A5" name="Cash Out" />

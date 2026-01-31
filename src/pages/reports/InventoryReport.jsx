@@ -139,7 +139,7 @@ export default function InventoryReport() {
                 <Cell fill="#F59E0B" />
                 <Cell fill="#EF4444" />
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Legend wrapperStyle={{ color: 'rgba(255,255,255,0.7)' }} />
             </PieChart>
           </ResponsiveContainer>
@@ -153,7 +153,7 @@ export default function InventoryReport() {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
               <XAxis type="number" tickFormatter={(v) => `₱${(v / 1000).toFixed(0)}k`} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
               <YAxis type="category" dataKey="name" width={120} tick={{ fontSize: 12, fill: 'rgba(255,255,255,0.5)' }} />
-              <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Bar dataKey="value" fill="#3B82F6" />
             </BarChart>
           </ResponsiveContainer>
@@ -170,7 +170,7 @@ export default function InventoryReport() {
               <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.5)' }} />
               <YAxis yAxisId="left" orientation="left" stroke="#3B82F6" tickFormatter={(v) => formatNumber(v)} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
               <YAxis yAxisId="right" orientation="right" stroke="#10B981" tickFormatter={(v) => `₱${(v / 1000).toFixed(0)}k`} tick={{ fill: 'rgba(255,255,255,0.5)' }} />
-              <Tooltip formatter={(v, name) => name === 'value' ? formatCurrency(v) : formatNumber(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} />
+              <Tooltip formatter={(v, name) => name === 'value' ? formatCurrency(v) : formatNumber(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
               <Legend wrapperStyle={{ color: 'rgba(255,255,255,0.7)' }} />
               <Bar yAxisId="left" dataKey="units" fill="#3B82F6" name="Units" />
               <Bar yAxisId="right" dataKey="value" fill="#10B981" name="Value" />
