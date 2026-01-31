@@ -13,20 +13,20 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const statusColors = {
-  draft: 'bg-gray-100 text-gray-700',
-  approved: 'bg-blue-100 text-blue-700',
-  executing: 'bg-yellow-100 text-yellow-700',
-  completed: 'bg-green-100 text-green-700',
-  cancelled: 'bg-red-100 text-red-700'
+  draft: 'bg-gray-500/20 text-gray-400',
+  approved: 'bg-blue-500/20 text-blue-400',
+  executing: 'bg-yellow-500/20 text-yellow-400',
+  completed: 'bg-green-500/20 text-green-400',
+  cancelled: 'bg-red-500/20 text-red-400'
 };
 
 const allocationStatusColors = {
-  pending: 'bg-gray-100 text-gray-700',
-  allocated: 'bg-blue-100 text-blue-700',
-  picked: 'bg-yellow-100 text-yellow-700',
-  shipped: 'bg-purple-100 text-purple-700',
-  delivered: 'bg-green-100 text-green-700',
-  cancelled: 'bg-red-100 text-red-700'
+  pending: 'bg-gray-500/20 text-gray-400',
+  allocated: 'bg-blue-500/20 text-blue-400',
+  picked: 'bg-yellow-500/20 text-yellow-400',
+  shipped: 'bg-purple-500/20 text-purple-400',
+  delivered: 'bg-green-500/20 text-green-400',
+  cancelled: 'bg-red-500/20 text-red-400'
 };
 
 export default function DistributionPlanDetail() {
@@ -106,7 +106,7 @@ export default function DistributionPlanDetail() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="spinner h-12 w-12"></div>
       </div>
     );
   }
@@ -122,18 +122,18 @@ export default function DistributionPlanDetail() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate('/distribution')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+            className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg"
           >
             <ArrowLeftIcon className="h-5 w-5" />
           </button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900">{plan.plan_number}</h1>
+              <h1 className="text-2xl font-bold text-white">{plan.plan_number}</h1>
               <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusColors[plan.status]}`}>
                 {plan.status.charAt(0).toUpperCase() + plan.status.slice(1)}
               </span>
             </div>
-            <p className="text-gray-600 mt-1">
+            <p className="text-white/60 mt-1">
               Created on {new Date(plan.created_at).toLocaleDateString('en-PH')}
             </p>
           </div>
@@ -144,14 +144,14 @@ export default function DistributionPlanDetail() {
             <>
               <button
                 onClick={handleApprove}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="btn-primary"
               >
                 <CheckCircleIcon className="h-5 w-5 mr-2" />
                 Approve
               </button>
               <button
                 onClick={handleCancel}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                className="btn-secondary"
               >
                 <XMarkIcon className="h-5 w-5 mr-2" />
                 Cancel
@@ -173,50 +173,50 @@ export default function DistributionPlanDetail() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center">
-            <div className="bg-blue-100 p-3 rounded-lg">
-              <CubeIcon className="h-6 w-6 text-blue-600" />
+            <div className="bg-blue-500/20 p-3 rounded-lg">
+              <CubeIcon className="h-6 w-6 text-blue-400" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600">Total Orders</p>
-              <p className="text-2xl font-bold text-gray-900">{plan.total_orders || 0}</p>
+              <p className="text-sm text-white/60">Total Orders</p>
+              <p className="text-2xl font-bold text-white">{plan.total_orders || 0}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center">
-            <div className="bg-green-100 p-3 rounded-lg">
-              <TruckIcon className="h-6 w-6 text-green-600" />
+            <div className="bg-green-500/20 p-3 rounded-lg">
+              <TruckIcon className="h-6 w-6 text-green-400" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600">Total Value</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(plan.total_value)}</p>
+              <p className="text-sm text-white/60">Total Value</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(plan.total_value)}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center">
-            <div className="bg-purple-100 p-3 rounded-lg">
-              <MapPinIcon className="h-6 w-6 text-purple-600" />
+            <div className="bg-purple-500/20 p-3 rounded-lg">
+              <MapPinIcon className="h-6 w-6 text-purple-400" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600">Warehouse</p>
-              <p className="text-xl font-bold text-gray-900">{plan.warehouse_name || 'All'}</p>
+              <p className="text-sm text-white/60">Warehouse</p>
+              <p className="text-xl font-bold text-white">{plan.warehouse_name || 'All'}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center">
-            <div className="bg-yellow-100 p-3 rounded-lg">
-              <CheckCircleIcon className="h-6 w-6 text-yellow-600" />
+            <div className="bg-yellow-500/20 p-3 rounded-lg">
+              <CheckCircleIcon className="h-6 w-6 text-yellow-400" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-600">Plan Date</p>
-              <p className="text-xl font-bold text-gray-900">
+              <p className="text-sm text-white/60">Plan Date</p>
+              <p className="text-xl font-bold text-white">
                 {new Date(plan.plan_date).toLocaleDateString('en-PH')}
               </p>
             </div>
@@ -226,70 +226,70 @@ export default function DistributionPlanDetail() {
 
       {/* Notes */}
       {plan.notes && (
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Notes</h3>
-          <p className="text-gray-600">{plan.notes}</p>
+        <div className="glass-card p-6">
+          <h3 className="text-lg font-semibold text-white mb-2">Notes</h3>
+          <p className="text-white/60">{plan.notes}</p>
         </div>
       )}
 
       {/* Allocations */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">Allocations</h3>
-          <p className="text-sm text-gray-500 mt-1">Order allocations for this distribution plan</p>
+      <div className="glass-card overflow-hidden">
+        <div className="p-6 border-b border-white/10">
+          <h3 className="text-lg font-semibold text-white">Allocations</h3>
+          <p className="text-sm text-white/60 mt-1">Order allocations for this distribution plan</p>
         </div>
 
         {allocations.length === 0 ? (
-          <div className="p-12 text-center text-gray-500">
-            <CubeIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+          <div className="p-12 text-center text-white/60">
+            <CubeIcon className="h-12 w-12 mx-auto mb-4 text-white/40" />
             <p>No allocations yet. Execute the plan to create allocations.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="glass-table">
+              <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                     Order
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                     Client
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                     Warehouse
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                     Priority
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                     Allocated At
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-white/10">
                 {allocations.map((allocation) => (
-                  <tr key={allocation.id} className="hover:bg-gray-50">
+                  <tr key={allocation.id} className="hover:bg-white/5">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-gray-900">{allocation.order_number}</span>
+                      <span className="text-sm font-medium text-white">{allocation.order_number}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-600">{allocation.client_name}</span>
+                      <span className="text-sm text-white/60">{allocation.client_name}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-600">{allocation.warehouse_name}</span>
+                      <span className="text-sm text-white/60">{allocation.warehouse_name}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-600">{allocation.priority_score?.toFixed(2)}</span>
+                      <span className="text-sm text-white/60">{allocation.priority_score?.toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${allocationStatusColors[allocation.status]}`}>
                         {allocation.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
                       {allocation.allocated_at 
                         ? new Date(allocation.allocated_at).toLocaleString('en-PH')
                         : '-'}

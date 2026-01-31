@@ -68,10 +68,10 @@ export default function Inventory() {
 
   const getStockStatus = (item) => {
     const available = item.quantity - item.reserved_quantity;
-    if (available <= 0) return { label: 'Out of Stock', color: 'bg-red-100 text-red-700' };
-    if (available <= item.min_stock_level) return { label: 'Critical', color: 'bg-red-100 text-red-700' };
-    if (available <= item.reorder_point) return { label: 'Low Stock', color: 'bg-yellow-100 text-yellow-700' };
-    return { label: 'In Stock', color: 'bg-green-100 text-green-700' };
+    if (available <= 0) return { label: 'Out of Stock', color: 'badge-danger' };
+    if (available <= item.min_stock_level) return { label: 'Critical', color: 'badge-danger' };
+    if (available <= item.reorder_point) return { label: 'Low Stock', color: 'badge-warning' };
+    return { label: 'In Stock', color: 'badge-success' };
   };
 
   return (
@@ -79,19 +79,19 @@ export default function Inventory() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Inventory</h1>
-          <p className="text-gray-600 mt-1">Manage warehouse stock levels</p>
+          <h1 className="text-2xl font-bold text-white">Inventory</h1>
+          <p className="text-white/60 mt-1">Manage warehouse stock levels</p>
         </div>
         <div className="flex gap-2">
           <Link
             to="/inventory/transactions"
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            className="px-4 py-2 border border-white/10 text-white/60 rounded-lg hover:text-white"
           >
             Transactions
           </Link>
           <Link
             to="/inventory/alerts"
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            className="px-4 py-2 border border-white/10 text-white/60 rounded-lg hover:text-white"
           >
             <ExclamationTriangleIcon className="h-5 w-5 inline mr-1" />
             Alerts
@@ -100,22 +100,22 @@ export default function Inventory() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="glass-card rounded-xl p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
             <input
               type="text"
               placeholder="Search by product name or SKU..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="form-input w-full pl-10"
             />
           </div>
           <select
             value={warehouseFilter}
             onChange={(e) => { setWarehouseFilter(e.target.value); setPage(1); }}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="form-input"
           >
             <option value="">All Warehouses</option>
             {warehouses.map(wh => (
@@ -125,7 +125,7 @@ export default function Inventory() {
           <select
             value={categoryFilter}
             onChange={(e) => { setCategoryFilter(e.target.value); setPage(1); }}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="form-input"
           >
             <option value="">All Categories</option>
             {categories.map(cat => (
@@ -134,7 +134,7 @@ export default function Inventory() {
           </select>
           <button
             onClick={fetchInventory}
-            className="px-4 py-2 text-gray-600 hover:text-gray-900"
+            className="px-4 py-2 text-white/60 hover:text-white"
           >
             <ArrowPathIcon className="h-5 w-5" />
           </button>
@@ -142,58 +142,58 @@ export default function Inventory() {
       </div>
 
       {/* Inventory Table */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="glass-card rounded-xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="spinner"></div>
           </div>
         ) : filteredInventory.length === 0 ? (
           <div className="p-12 text-center">
-            <CubeIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-            <p className="text-gray-500">No inventory items found</p>
+            <CubeIcon className="h-12 w-12 mx-auto mb-4 text-white/40" />
+            <p className="text-white/60">No inventory items found</p>
           </div>
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="glass-table">
+                <thead>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Warehouse</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reserved</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Available</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Batch</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Expiry</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Product</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Warehouse</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Location</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Quantity</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Reserved</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Available</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Batch</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Expiry</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody>
                   {filteredInventory.map((item) => {
                     const status = getStockStatus(item);
                     const available = item.quantity - item.reserved_quantity;
                     return (
-                      <tr key={item.id} className="hover:bg-gray-50">
+                      <tr key={item.id}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
-                            <p className="text-sm font-medium text-gray-900">{item.product_name}</p>
-                            <p className="text-xs text-gray-500">{item.sku}</p>
+                            <p className="text-sm font-medium text-white">{item.product_name}</p>
+                            <p className="text-xs text-white/60">{item.sku}</p>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
                           {item.warehouse_name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
                           {item.location_code || '-'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
                           {item.quantity}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
                           {item.reserved_quantity}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
                           {available}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -201,10 +201,10 @@ export default function Inventory() {
                             {status.label}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
                           {item.batch_number || '-'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
                           {item.expiry_date 
                             ? new Date(item.expiry_date).toLocaleDateString('en-PH')
                             : '-'}
@@ -217,22 +217,22 @@ export default function Inventory() {
             </div>
 
             {/* Pagination */}
-            <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-              <p className="text-sm text-gray-500">
+            <div className="px-6 py-4 border-t border-white/10 flex items-center justify-between">
+              <p className="text-sm text-white/60">
                 Page {page} of {totalPages}
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
+                  className="px-3 py-1 border border-white/10 rounded text-sm text-white/60 hover:text-white disabled:opacity-50"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
+                  className="px-3 py-1 border border-white/10 rounded text-sm text-white/60 hover:text-white disabled:opacity-50"
                 >
                   Next
                 </button>

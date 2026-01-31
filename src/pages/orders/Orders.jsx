@@ -5,14 +5,14 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const statusColors = {
-  pending: 'bg-gray-100 text-gray-700',
-  confirmed: 'bg-blue-100 text-blue-700',
-  processing: 'bg-yellow-100 text-yellow-700',
-  picking: 'bg-orange-100 text-orange-700',
-  packed: 'bg-purple-100 text-purple-700',
-  shipped: 'bg-indigo-100 text-indigo-700',
-  delivered: 'bg-green-100 text-green-700',
-  cancelled: 'bg-red-100 text-red-700'
+  pending: 'bg-yellow-500/20 text-yellow-400',
+  confirmed: 'bg-blue-500/20 text-blue-400',
+  processing: 'bg-orange-500/20 text-orange-400',
+  picking: 'bg-purple-500/20 text-purple-400',
+  packed: 'bg-indigo-500/20 text-indigo-400',
+  shipped: 'bg-cyan-500/20 text-cyan-400',
+  delivered: 'bg-green-500/20 text-green-400',
+  cancelled: 'bg-red-500/20 text-red-400'
 };
 
 export default function Orders() {
@@ -58,12 +58,12 @@ export default function Orders() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
-          <p className="text-gray-600 mt-1">Manage sales orders</p>
+          <h1 className="text-2xl font-bold text-white">Orders</h1>
+          <p className="text-white/60 mt-1">Manage sales orders</p>
         </div>
         <Link
           to="/orders/create"
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="btn-primary inline-flex items-center"
         >
           <PlusIcon className="h-5 w-5 mr-2" />
           New Order
@@ -71,22 +71,22 @@ export default function Orders() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="glass-card p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
             <input
               type="text"
               placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="form-input pl-10"
             />
           </div>
           <select
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="form-select"
           >
             <option value="">All Status</option>
             <option value="pending">Pending</option>
@@ -102,51 +102,51 @@ export default function Orders() {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="glass-card overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="spinner h-12 w-12"></div>
           </div>
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="glass-table">
+                <thead>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    <th>Order #</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th className="text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody>
                   {filteredOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <tr key={order.id}>
+                      <td className="font-medium text-white">
                         {order.order_number}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td>
                         {order.client_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td>
                         {new Date(order.order_date).toLocaleDateString('en-PH')}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td>
                         {order.total_items}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="font-medium text-green-400">
                         {formatCurrency(order.total_amount)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${statusColors[order.status]}`}>
+                      <td>
+                        <span className={`badge ${statusColors[order.status]}`}>
                           {order.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right">
-                        <Link to={`/orders/${order.id}`} className="text-blue-600 hover:text-blue-800">
+                      <td className="text-right">
+                        <Link to={`/orders/${order.id}`} className="text-purple-400 hover:text-purple-300">
                           <EyeIcon className="h-5 w-5 inline" />
                         </Link>
                       </td>
@@ -156,20 +156,20 @@ export default function Orders() {
               </table>
             </div>
 
-            <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-              <p className="text-sm text-gray-500">Page {page} of {totalPages}</p>
+            <div className="px-6 py-4 border-t border-white/10 flex items-center justify-between">
+              <p className="text-sm text-white/50">Page {page} of {totalPages}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
+                  className="btn-secondary text-sm disabled:opacity-50"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
+                  className="btn-secondary text-sm disabled:opacity-50"
                 >
                   Next
                 </button>

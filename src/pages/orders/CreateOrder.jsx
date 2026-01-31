@@ -122,40 +122,40 @@ export default function CreateOrder() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <button onClick={() => navigate('/orders')} className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg">
+        <button onClick={() => navigate('/orders')} className="p-2 text-white/60 hover:text-white hover:bg-white/5 rounded-lg">
           <ArrowLeftIcon className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Create Order</h1>
-          <p className="text-gray-600 mt-1">Create a new sales order</p>
+          <h1 className="text-2xl font-bold text-white">Create Order</h1>
+          <p className="text-white/60 mt-1">Create a new sales order</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Client Selection */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Customer Details</h2>
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">Customer Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Client *</label>
+              <label className="block text-sm font-medium text-white/80 mb-1">Client *</label>
               <select
                 {...register('client_id', { required: 'Client is required' })}
                 onChange={(e) => handleClientChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="form-select"
               >
                 <option value="">Select a client...</option>
                 {clients.map(client => (
                   <option key={client.id} value={client.id}>{client.business_name}</option>
                 ))}
               </select>
-              {errors.client_id && <p className="mt-1 text-sm text-red-500">{errors.client_id.message}</p>}
+              {errors.client_id && <p className="mt-1 text-sm text-red-400">{errors.client_id.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Payment Terms</label>
+              <label className="block text-sm font-medium text-white/80 mb-1">Payment Terms</label>
               <select
                 {...register('payment_terms')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="form-select"
               >
                 <option value="cod">Cash on Delivery</option>
                 <option value="net_7">Net 7</option>
@@ -166,23 +166,23 @@ export default function CreateOrder() {
             </div>
 
             {selectedClient && (
-              <div className="md:col-span-2 p-4 bg-gray-50 rounded-lg">
+              <div className="md:col-span-2 p-4 bg-white/5 rounded-lg border border-white/10">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-500">Code:</span>
-                    <p className="font-medium">{selectedClient.code}</p>
+                    <span className="text-white/60">Code:</span>
+                    <p className="font-medium text-white">{selectedClient.code}</p>
                   </div>
                   <div>
-                    <span className="text-gray-500">Pricing Tier:</span>
-                    <p className="font-medium">{selectedClient.pricing_tier_name || 'Standard'}</p>
+                    <span className="text-white/60">Pricing Tier:</span>
+                    <p className="font-medium text-white">{selectedClient.pricing_tier_name || 'Standard'}</p>
                   </div>
                   <div>
-                    <span className="text-gray-500">Credit Limit:</span>
-                    <p className="font-medium">{formatCurrency(selectedClient.credit_limit)}</p>
+                    <span className="text-white/60">Credit Limit:</span>
+                    <p className="font-medium text-white">{formatCurrency(selectedClient.credit_limit)}</p>
                   </div>
                   <div>
-                    <span className="text-gray-500">Balance:</span>
-                    <p className="font-medium">{formatCurrency(selectedClient.current_balance)}</p>
+                    <span className="text-white/60">Balance:</span>
+                    <p className="font-medium text-white">{formatCurrency(selectedClient.current_balance)}</p>
                   </div>
                 </div>
               </div>
@@ -191,30 +191,30 @@ export default function CreateOrder() {
         </div>
 
         {/* Order Items */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Order Items</h2>
+            <h2 className="text-lg font-semibold text-white">Order Items</h2>
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setShowProductSearch(!showProductSearch)}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="btn-primary"
               >
                 <PlusIcon className="h-5 w-5 mr-2" />
                 Add Product
               </button>
 
               {showProductSearch && (
-                <div className="absolute right-0 top-full mt-2 w-96 bg-white rounded-lg shadow-lg border z-50">
-                  <div className="p-3 border-b">
+                <div className="absolute right-0 top-full mt-2 w-96 glass-card border border-white/10 z-50">
+                  <div className="p-3 border-b border-white/10">
                     <div className="relative">
-                      <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                      <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
                       <input
                         type="text"
                         placeholder="Search products..."
                         value={productSearch}
                         onChange={(e) => setProductSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
+                        className="form-input pl-10"
                         autoFocus
                       />
                     </div>
@@ -225,13 +225,13 @@ export default function CreateOrder() {
                         key={product.id}
                         type="button"
                         onClick={() => addProduct(product)}
-                        className="w-full px-4 py-3 text-left hover:bg-gray-50 flex justify-between items-center"
+                        className="w-full px-4 py-3 text-left hover:bg-white/5 flex justify-between items-center"
                       >
                         <div>
-                          <p className="text-sm font-medium text-gray-900">{product.name}</p>
-                          <p className="text-xs text-gray-500">{product.sku}</p>
+                          <p className="text-sm font-medium text-white">{product.name}</p>
+                          <p className="text-xs text-white/60">{product.sku}</p>
                         </div>
-                        <span className="text-sm font-medium text-gray-900">{formatCurrency(product.unit_price)}</span>
+                        <span className="text-sm font-medium text-white">{formatCurrency(product.unit_price)}</span>
                       </button>
                     ))}
                   </div>
@@ -241,33 +241,33 @@ export default function CreateOrder() {
           </div>
 
           {fields.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-white/60">
               No items added yet. Click "Add Product" to start.
             </div>
           ) : (
             <table className="min-w-full">
               <thead>
-                <tr className="border-b">
-                  <th className="py-2 text-left text-sm font-medium text-gray-500">Product</th>
-                  <th className="py-2 text-left text-sm font-medium text-gray-500 w-24">Qty</th>
-                  <th className="py-2 text-left text-sm font-medium text-gray-500 w-32">Price</th>
-                  <th className="py-2 text-right text-sm font-medium text-gray-500 w-32">Total</th>
+                <tr className="border-b border-white/10">
+                  <th className="py-2 text-left text-sm font-medium text-white/60">Product</th>
+                  <th className="py-2 text-left text-sm font-medium text-white/60 w-24">Qty</th>
+                  <th className="py-2 text-left text-sm font-medium text-white/60 w-32">Price</th>
+                  <th className="py-2 text-right text-sm font-medium text-white/60 w-32">Total</th>
                   <th className="py-2 w-10"></th>
                 </tr>
               </thead>
               <tbody>
                 {fields.map((field, index) => (
-                  <tr key={field.id} className="border-b">
+                  <tr key={field.id} className="border-b border-white/10">
                     <td className="py-3">
-                      <p className="font-medium text-gray-900">{field.product_name}</p>
-                      <p className="text-sm text-gray-500">{field.sku}</p>
+                      <p className="font-medium text-white">{field.product_name}</p>
+                      <p className="text-sm text-white/60">{field.sku}</p>
                     </td>
                     <td className="py-3">
                       <input
                         type="number"
                         min="1"
                         {...register(`items.${index}.quantity`, { required: true, min: 1 })}
-                        className="w-20 px-2 py-1 border border-gray-300 rounded"
+                        className="form-input w-20 px-2 py-1"
                       />
                     </td>
                     <td className="py-3">
@@ -275,14 +275,14 @@ export default function CreateOrder() {
                         type="number"
                         step="0.01"
                         {...register(`items.${index}.unit_price`, { required: true, min: 0 })}
-                        className="w-28 px-2 py-1 border border-gray-300 rounded"
+                        className="form-input w-28 px-2 py-1"
                       />
                     </td>
-                    <td className="py-3 text-right font-medium">
+                    <td className="py-3 text-right font-medium text-white">
                       {formatCurrency(items[index]?.unit_price * items[index]?.quantity)}
                     </td>
                     <td className="py-3">
-                      <button type="button" onClick={() => remove(index)} className="text-red-500 hover:text-red-700">
+                      <button type="button" onClick={() => remove(index)} className="text-red-400 hover:text-red-300">
                         <TrashIcon className="h-5 w-5" />
                       </button>
                     </td>
@@ -293,17 +293,17 @@ export default function CreateOrder() {
           )}
 
           {/* Order Summary */}
-          <div className="mt-6 pt-6 border-t">
+          <div className="mt-6 pt-6 border-t border-white/10">
             <div className="w-64 ml-auto space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Subtotal</span>
-                <span className="font-medium">{formatCurrency(subtotal)}</span>
+                <span className="text-white/60">Subtotal</span>
+                <span className="font-medium text-white">{formatCurrency(subtotal)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">VAT (12%)</span>
-                <span className="font-medium">{formatCurrency(tax)}</span>
+                <span className="text-white/60">VAT (12%)</span>
+                <span className="font-medium text-white">{formatCurrency(tax)}</span>
               </div>
-              <div className="flex justify-between text-lg font-bold border-t pt-2">
+              <div className="flex justify-between text-lg font-bold border-t border-white/10 pt-2 text-white">
                 <span>Total</span>
                 <span>{formatCurrency(total)}</span>
               </div>
@@ -312,12 +312,12 @@ export default function CreateOrder() {
         </div>
 
         {/* Notes */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Order Notes</label>
+        <div className="glass-card p-6">
+          <label className="block text-sm font-medium text-white/80 mb-1">Order Notes</label>
           <textarea
             {...register('notes')}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="form-input"
             placeholder="Add any notes or special instructions..."
           />
         </div>
@@ -327,14 +327,14 @@ export default function CreateOrder() {
           <button
             type="button"
             onClick={() => navigate('/orders')}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            className="btn-secondary"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="btn-primary disabled:opacity-50"
           >
             {submitting ? 'Creating...' : 'Create Order'}
           </button>

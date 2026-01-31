@@ -67,21 +67,21 @@ export default function DeliveryRoutes() {
   const formatDate = (d) => new Date(d).toLocaleDateString('en-PH', { weekday: 'short', month: 'short', day: 'numeric' });
 
   const statusColors = {
-    planned: 'bg-blue-100 text-blue-800',
-    'in-progress': 'bg-yellow-100 text-yellow-800',
-    completed: 'bg-green-100 text-green-800',
+    planned: 'bg-blue-500/20 text-blue-400',
+    'in-progress': 'bg-yellow-500/20 text-yellow-400',
+    completed: 'bg-green-500/20 text-green-400',
   };
 
-  if (loading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>;
+  if (loading) return <div className="flex items-center justify-center h-64"><div className="spinner h-12 w-12"></div></div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/deliveries')} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"><ArrowLeftIcon className="h-5 w-5" /></button>
-          <h1 className="text-2xl font-bold text-gray-900">Route Planning</h1>
+          <button onClick={() => navigate('/deliveries')} className="p-2 text-white/60 hover:bg-white/10 rounded-lg"><ArrowLeftIcon className="h-5 w-5" /></button>
+          <h1 className="text-2xl font-bold text-white">Route Planning</h1>
         </div>
-        <button onClick={() => setCreateModal(true)} className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+        <button onClick={() => setCreateModal(true)} className="btn-primary inline-flex items-center">
           <PlusIcon className="h-5 w-5 mr-2" />Create Route
         </button>
       </div>
@@ -89,36 +89,36 @@ export default function DeliveryRoutes() {
       {/* Today's Routes */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {routes.map(route => (
-          <div key={route.id} className="bg-white rounded-xl shadow-sm p-6">
+          <div key={route.id} className="glass-card p-6">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h3 className="font-semibold text-gray-900">{route.vehicle}</h3>
-                <p className="text-sm text-gray-500">Driver: {route.driver}</p>
+                <h3 className="font-semibold text-white">{route.vehicle}</h3>
+                <p className="text-sm text-white/60">Driver: {route.driver}</p>
               </div>
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[route.status]}`}>{route.status.replace('-', ' ')}</span>
             </div>
             <div className="grid grid-cols-3 gap-4 mb-4">
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <TruckIcon className="h-5 w-5 text-gray-400 mx-auto mb-1" />
-                <p className="text-lg font-semibold">{route.deliveries}</p>
-                <p className="text-xs text-gray-500">Stops</p>
+              <div className="text-center p-3 bg-white/5 rounded-lg">
+                <TruckIcon className="h-5 w-5 text-white/40 mx-auto mb-1" />
+                <p className="text-lg font-semibold text-white">{route.deliveries}</p>
+                <p className="text-xs text-white/60">Stops</p>
               </div>
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <MapPinIcon className="h-5 w-5 text-gray-400 mx-auto mb-1" />
-                <p className="text-lg font-semibold">{route.distance}</p>
-                <p className="text-xs text-gray-500">Distance</p>
+              <div className="text-center p-3 bg-white/5 rounded-lg">
+                <MapPinIcon className="h-5 w-5 text-white/40 mx-auto mb-1" />
+                <p className="text-lg font-semibold text-white">{route.distance}</p>
+                <p className="text-xs text-white/60">Distance</p>
               </div>
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <ClockIcon className="h-5 w-5 text-gray-400 mx-auto mb-1" />
-                <p className="text-lg font-semibold">{route.estimated_time}</p>
-                <p className="text-xs text-gray-500">Est. Time</p>
+              <div className="text-center p-3 bg-white/5 rounded-lg">
+                <ClockIcon className="h-5 w-5 text-white/40 mx-auto mb-1" />
+                <p className="text-lg font-semibold text-white">{route.estimated_time}</p>
+                <p className="text-xs text-white/60">Est. Time</p>
               </div>
             </div>
             <div className="flex gap-2">
-              <button className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">View Details</button>
+              <button className="btn-secondary flex-1">View Details</button>
               <button 
                 onClick={() => setTrackingModal(route)} 
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="btn-primary flex-1"
               >
                 Track Live
               </button>
@@ -128,26 +128,26 @@ export default function DeliveryRoutes() {
       </div>
 
       {/* Pending Deliveries */}
-      <div className="bg-white rounded-xl shadow-sm">
-        <div className="p-6 border-b">
-          <h2 className="text-lg font-semibold">Unassigned Deliveries</h2>
-          <p className="text-sm text-gray-500">{pendingDeliveries.filter(d => d.status === 'pending').length} deliveries waiting for route assignment</p>
+      <div className="glass-card">
+        <div className="p-6 border-b border-white/10">
+          <h2 className="text-lg font-semibold text-white">Unassigned Deliveries</h2>
+          <p className="text-sm text-white/60">{pendingDeliveries.filter(d => d.status === 'pending').length} deliveries waiting for route assignment</p>
         </div>
         <div className="p-6">
           {pendingDeliveries.filter(d => d.status === 'pending').length === 0 ? (
-            <p className="text-center text-gray-500 py-8">All deliveries have been assigned to routes</p>
+            <p className="text-center text-white/60 py-8">All deliveries have been assigned to routes</p>
           ) : (
             <div className="space-y-3">
               {pendingDeliveries.filter(d => d.status === 'pending').slice(0, 5).map(delivery => (
-                <div key={delivery.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                <div key={delivery.id} className="flex items-center justify-between p-4 border border-white/10 rounded-lg hover:bg-white/5">
                   <div className="flex items-center gap-4">
-                    <MapPinIcon className="h-5 w-5 text-gray-400" />
+                    <MapPinIcon className="h-5 w-5 text-white/40" />
                     <div>
-                      <p className="font-medium">{delivery.order?.client?.business_name || 'Client'}</p>
-                      <p className="text-sm text-gray-500">{delivery.delivery_address || delivery.order?.client?.address}</p>
+                      <p className="font-medium text-white">{delivery.order?.client?.business_name || 'Client'}</p>
+                      <p className="text-sm text-white/60">{delivery.delivery_address || delivery.order?.client?.address}</p>
                     </div>
                   </div>
-                  <button className="px-3 py-1 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-50">Assign</button>
+                  <button className="px-3 py-1 text-sm border border-purple-400 text-purple-400 rounded hover:bg-purple-400/10">Assign</button>
                 </div>
               ))}
             </div>
@@ -160,25 +160,25 @@ export default function DeliveryRoutes() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4">
             <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setCreateModal(false)}></div>
-            <div className="relative bg-white rounded-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-              <h2 className="text-xl font-bold mb-6">Create Delivery Route</h2>
+            <div className="relative glass-card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl font-bold text-white mb-6">Create Delivery Route</h2>
               
               <div className="space-y-4 mb-6">
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <input type="date" value={newRoute.date} onChange={(e) => setNewRoute({ ...newRoute, date: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                    <label className="block text-sm font-medium text-white/60 mb-1">Date</label>
+                    <input type="date" value={newRoute.date} onChange={(e) => setNewRoute({ ...newRoute, date: e.target.value })} className="form-input w-full" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle</label>
-                    <select value={newRoute.vehicle_id} onChange={(e) => setNewRoute({ ...newRoute, vehicle_id: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <label className="block text-sm font-medium text-white/60 mb-1">Vehicle</label>
+                    <select value={newRoute.vehicle_id} onChange={(e) => setNewRoute({ ...newRoute, vehicle_id: e.target.value })} className="form-input w-full">
                       <option value="">Select vehicle</option>
                       {vehicles.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Driver</label>
-                    <select value={newRoute.driver_id} onChange={(e) => setNewRoute({ ...newRoute, driver_id: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <label className="block text-sm font-medium text-white/60 mb-1">Driver</label>
+                    <select value={newRoute.driver_id} onChange={(e) => setNewRoute({ ...newRoute, driver_id: e.target.value })} className="form-input w-full">
                       <option value="">Select driver</option>
                       {drivers.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
                     </select>
@@ -188,30 +188,30 @@ export default function DeliveryRoutes() {
 
               <div className="mb-6">
                 <div className="flex justify-between items-center mb-3">
-                  <label className="block text-sm font-medium text-gray-700">Select Deliveries ({newRoute.deliveries.length} selected)</label>
-                  <button onClick={optimizeRoute} disabled={newRoute.deliveries.length < 2} className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 disabled:text-gray-400">
+                  <label className="block text-sm font-medium text-white/60">Select Deliveries ({newRoute.deliveries.length} selected)</label>
+                  <button onClick={optimizeRoute} disabled={newRoute.deliveries.length < 2} className="inline-flex items-center text-sm text-purple-400 hover:text-purple-300 disabled:text-white/40">
                     <ArrowsUpDownIcon className="h-4 w-4 mr-1" />Optimize Order
                   </button>
                 </div>
-                <div className="border rounded-lg max-h-64 overflow-y-auto">
+                <div className="border border-white/10 rounded-lg max-h-64 overflow-y-auto">
                   {pendingDeliveries.filter(d => d.status === 'pending').map(delivery => (
-                    <label key={delivery.id} className="flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0">
-                      <input type="checkbox" checked={newRoute.deliveries.includes(delivery.id)} onChange={() => toggleDeliverySelection(delivery.id)} className="h-4 w-4 text-blue-600 rounded mr-3" />
+                    <label key={delivery.id} className="flex items-center p-3 hover:bg-white/5 cursor-pointer border-b border-white/10 last:border-b-0">
+                      <input type="checkbox" checked={newRoute.deliveries.includes(delivery.id)} onChange={() => toggleDeliverySelection(delivery.id)} className="h-4 w-4 text-purple-600 rounded mr-3" />
                       <div className="flex-1">
-                        <p className="font-medium text-sm">{delivery.order?.client?.business_name || 'Client'}</p>
-                        <p className="text-xs text-gray-500">{delivery.delivery_address || 'Address'}</p>
+                        <p className="font-medium text-sm text-white">{delivery.order?.client?.business_name || 'Client'}</p>
+                        <p className="text-xs text-white/60">{delivery.delivery_address || 'Address'}</p>
                       </div>
                     </label>
                   ))}
                   {pendingDeliveries.filter(d => d.status === 'pending').length === 0 && (
-                    <p className="p-4 text-center text-gray-500 text-sm">No pending deliveries available</p>
+                    <p className="p-4 text-center text-white/60 text-sm">No pending deliveries available</p>
                   )}
                 </div>
               </div>
 
               <div className="flex justify-end gap-4">
-                <button onClick={() => setCreateModal(false)} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancel</button>
-                <button onClick={handleCreateRoute} disabled={submitting} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{submitting ? 'Creating...' : 'Create Route'}</button>
+                <button onClick={() => setCreateModal(false)} className="btn-secondary">Cancel</button>
+                <button onClick={handleCreateRoute} disabled={submitting} className="btn-primary disabled:opacity-50">{submitting ? 'Creating...' : 'Create Route'}</button>
               </div>
             </div>
           </div>
@@ -299,12 +299,12 @@ export default function DeliveryRoutes() {
                 </div>
 
                 {/* Stops List */}
-                <div className="border-l overflow-y-auto max-h-96">
-                  <div className="p-4 border-b bg-gray-50">
-                    <h3 className="font-semibold text-gray-900">Delivery Stops</h3>
-                    <p className="text-sm text-gray-500">2 of {trackingModal.deliveries} completed</p>
+                <div className="border-l border-white/10 overflow-y-auto max-h-96 bg-slate-900/50">
+                  <div className="p-4 border-b border-white/10">
+                    <h3 className="font-semibold text-white">Delivery Stops</h3>
+                    <p className="text-sm text-white/60">2 of {trackingModal.deliveries} completed</p>
                   </div>
-                  <div className="divide-y">
+                  <div className="divide-y divide-white/10">
                     {[
                       { name: 'Warehouse (Start)', address: 'San Fernando City', status: 'completed', time: '8:00 AM' },
                       { name: 'Sari-Sari Store ni Aling Nena', address: '123 Rizal St, San Fernando', status: 'completed', time: '8:45 AM' },
@@ -312,18 +312,18 @@ export default function DeliveryRoutes() {
                       { name: 'Northpoint Supermarket', address: '789 National Highway', status: 'current', time: '~10:15 AM' },
                       { name: 'Metro Fresh Mart', address: '654 Governor Luna St', status: 'pending', time: '~11:00 AM' },
                     ].map((stop, idx) => (
-                      <div key={idx} className={`p-4 ${stop.status === 'current' ? 'bg-blue-50' : ''}`}>
+                      <div key={idx} className={`p-4 ${stop.status === 'current' ? 'bg-blue-500/20' : ''}`}>
                         <div className="flex items-start gap-3">
                           <div className={`mt-1 h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                            stop.status === 'completed' ? 'bg-green-100 text-green-600' :
-                            stop.status === 'current' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'
+                            stop.status === 'completed' ? 'bg-green-500/20 text-green-400' :
+                            stop.status === 'current' ? 'bg-blue-500/20 text-blue-400' : 'bg-white/10 text-white/40'
                           }`}>
                             {stop.status === 'completed' ? <CheckCircleIcon className="h-4 w-4" /> : <span className="text-xs font-medium">{idx + 1}</span>}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className={`text-sm font-medium ${stop.status === 'current' ? 'text-blue-900' : 'text-gray-900'}`}>{stop.name}</p>
-                            <p className="text-xs text-gray-500 truncate">{stop.address}</p>
-                            <p className="text-xs text-gray-400 mt-1">{stop.time}</p>
+                            <p className={`text-sm font-medium ${stop.status === 'current' ? 'text-blue-400' : 'text-white'}`}>{stop.name}</p>
+                            <p className="text-xs text-white/60 truncate">{stop.address}</p>
+                            <p className="text-xs text-white/40 mt-1">{stop.time}</p>
                           </div>
                         </div>
                       </div>
@@ -333,7 +333,7 @@ export default function DeliveryRoutes() {
               </div>
 
               {/* Footer */}
-              <div className="p-4 border-t bg-gray-50 flex items-center justify-between">
+              <div className="p-4 border-t border-white/10 bg-slate-900/80 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <a 
                     href="tel:+639171234567" 
@@ -343,11 +343,11 @@ export default function DeliveryRoutes() {
                     <PhoneIcon className="h-4 w-4 mr-2" />
                     Call Driver
                   </a>
-                  <span className="text-sm text-gray-500">Driver's phone: +63 917 123 4567</span>
+                  <span className="text-sm text-white/60">Driver's phone: +63 917 123 4567</span>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-500">Total Progress</p>
-                  <p className="font-semibold text-gray-900">2/{trackingModal.deliveries} deliveries • 40% complete</p>
+                  <p className="text-sm text-white/60">Total Progress</p>
+                  <p className="font-semibold text-white">2/{trackingModal.deliveries} deliveries • 40% complete</p>
                 </div>
               </div>
             </div>

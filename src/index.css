@@ -16,23 +16,173 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar for dark theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===================
+   DARK THEME GLASS COMPONENTS
+   =================== */
+
+@layer components {
+  /* Glass Card */
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl;
+  }
+
+  /* Glass Card Hover */
+  .glass-card-hover {
+    @apply glass-card hover:bg-white/15 transition-all duration-200;
+  }
+
+  /* Page Title */
+  .page-title {
+    @apply text-2xl font-bold text-white;
+  }
+
+  /* Page Subtitle */
+  .page-subtitle {
+    @apply text-white/60 text-sm;
+  }
+
+  /* Section Title */
+  .section-title {
+    @apply text-lg font-semibold text-white;
+  }
+
+  /* Form Label */
+  .form-label {
+    @apply block text-sm font-medium text-white/80 mb-1;
+  }
+
+  /* Form Input */
+  .form-input {
+    @apply w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all;
+  }
+
+  /* Form Select */
+  .form-select {
+    @apply w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all appearance-none cursor-pointer;
+  }
+
+  /* Primary Button */
+  .btn-primary {
+    @apply px-4 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg shadow-purple-500/30;
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    @apply px-4 py-2.5 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 border border-white/20 transition-all duration-200;
+  }
+
+  /* Success Button */
+  .btn-success {
+    @apply px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-lg shadow-green-500/30;
+  }
+
+  /* Danger Button */
+  .btn-danger {
+    @apply px-4 py-2.5 bg-gradient-to-r from-red-500 to-pink-600 text-white font-medium rounded-xl hover:from-red-600 hover:to-pink-700 transition-all duration-200 shadow-lg shadow-red-500/30;
+  }
+
+  /* Table Styles */
+  .glass-table {
+    @apply w-full;
+  }
+
+  .glass-table thead {
+    @apply border-b border-white/10;
+  }
+
+  .glass-table th {
+    @apply text-left py-3 px-4 text-white/60 text-xs font-medium uppercase tracking-wider;
+  }
+
+  .glass-table tbody tr {
+    @apply border-b border-white/5 hover:bg-white/5 transition-colors;
+  }
+
+  .glass-table td {
+    @apply py-3 px-4 text-white/80 text-sm;
+  }
+
+  /* Status Badges */
+  .badge {
+    @apply inline-flex px-2.5 py-1 text-xs font-medium rounded-full;
+  }
+
+  .badge-success {
+    @apply bg-green-500/20 text-green-400;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-500/20 text-yellow-400;
+  }
+
+  .badge-danger {
+    @apply bg-red-500/20 text-red-400;
+  }
+
+  .badge-info {
+    @apply bg-blue-500/20 text-blue-400;
+  }
+
+  .badge-purple {
+    @apply bg-purple-500/20 text-purple-400;
+  }
+
+  /* Stat Card */
+  .stat-card {
+    @apply glass-card p-5;
+  }
+
+  .stat-card-icon {
+    @apply h-10 w-10 rounded-xl flex items-center justify-center;
+  }
+
+  /* Modal Overlay */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+  }
+
+  /* Modal Content */
+  .modal-content {
+    @apply glass-card p-6 w-full max-w-lg;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    @apply animate-spin rounded-full border-4 border-purple-500 border-t-transparent;
+  }
+
+  /* Text colors */
+  .text-primary {
+    @apply text-white;
+  }
+
+  .text-secondary {
+    @apply text-white/60;
+  }
+
+  .text-muted {
+    @apply text-white/40;
+  }
 }

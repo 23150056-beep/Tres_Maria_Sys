@@ -131,35 +131,35 @@ export default function CreateDistributionPlan() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate('/distribution')}
-          className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+          className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg"
         >
           <ArrowLeftIcon className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Create Distribution Plan</h1>
-          <p className="text-gray-600 mt-1">Optimize and allocate orders for distribution</p>
+          <h1 className="text-2xl font-bold text-white">Create Distribution Plan</h1>
+          <p className="text-white/60 mt-1">Optimize and allocate orders for distribution</p>
         </div>
       </div>
 
       {/* Steps */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="glass-card p-4">
         <div className="flex items-center">
-          <div className={`flex items-center ${step >= 1 ? 'text-blue-600' : 'text-gray-400'}`}>
-            <div className={`h-8 w-8 rounded-full flex items-center justify-center ${step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+          <div className={`flex items-center ${step >= 1 ? 'text-purple-400' : 'text-white/40'}`}>
+            <div className={`h-8 w-8 rounded-full flex items-center justify-center ${step >= 1 ? 'bg-purple-600 text-white' : 'bg-white/10'}`}>
               1
             </div>
             <span className="ml-2 font-medium">Plan Details</span>
           </div>
-          <div className={`flex-1 h-0.5 mx-4 ${step >= 2 ? 'bg-blue-600' : 'bg-gray-200'}`} />
-          <div className={`flex items-center ${step >= 2 ? 'text-blue-600' : 'text-gray-400'}`}>
-            <div className={`h-8 w-8 rounded-full flex items-center justify-center ${step >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+          <div className={`flex-1 h-0.5 mx-4 ${step >= 2 ? 'bg-purple-600' : 'bg-white/10'}`} />
+          <div className={`flex items-center ${step >= 2 ? 'text-purple-400' : 'text-white/40'}`}>
+            <div className={`h-8 w-8 rounded-full flex items-center justify-center ${step >= 2 ? 'bg-purple-600 text-white' : 'bg-white/10'}`}>
               2
             </div>
             <span className="ml-2 font-medium">Select Orders</span>
           </div>
-          <div className={`flex-1 h-0.5 mx-4 ${step >= 3 ? 'bg-blue-600' : 'bg-gray-200'}`} />
-          <div className={`flex items-center ${step >= 3 ? 'text-blue-600' : 'text-gray-400'}`}>
-            <div className={`h-8 w-8 rounded-full flex items-center justify-center ${step >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+          <div className={`flex-1 h-0.5 mx-4 ${step >= 3 ? 'bg-purple-600' : 'bg-white/10'}`} />
+          <div className={`flex items-center ${step >= 3 ? 'text-purple-400' : 'text-white/40'}`}>
+            <div className={`h-8 w-8 rounded-full flex items-center justify-center ${step >= 3 ? 'bg-purple-600 text-white' : 'bg-white/10'}`}>
               3
             </div>
             <span className="ml-2 font-medium">Review & Create</span>
@@ -170,31 +170,31 @@ export default function CreateDistributionPlan() {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Step 1: Plan Details */}
         {step === 1 && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">Plan Details</h2>
+          <div className="glass-card p-6">
+            <h2 className="text-lg font-semibold text-white mb-6">Plan Details</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white/60 mb-1">
                   Plan Date
                 </label>
                 <input
                   type="date"
                   {...register('plan_date', { required: 'Plan date is required' })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="form-input"
                 />
                 {errors.plan_date && (
-                  <p className="mt-1 text-sm text-red-500">{errors.plan_date.message}</p>
+                  <p className="mt-1 text-sm text-red-400">{errors.plan_date.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white/60 mb-1">
                   Warehouse (Optional)
                 </label>
                 <select
                   {...register('warehouse_id')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="form-select"
                 >
                   <option value="">All Warehouses</option>
                   {warehouses.map(wh => (
@@ -204,12 +204,12 @@ export default function CreateDistributionPlan() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white/60 mb-1">
                   Priority
                 </label>
                 <select
                   {...register('priority')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="form-select"
                 >
                   <option value="low">Low</option>
                   <option value="normal">Normal</option>
@@ -219,13 +219,13 @@ export default function CreateDistributionPlan() {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white/60 mb-1">
                   Notes
                 </label>
                 <textarea
                   {...register('notes')}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="form-input"
                   placeholder="Add any notes or special instructions..."
                 />
               </div>
@@ -235,7 +235,7 @@ export default function CreateDistributionPlan() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="btn-primary"
               >
                 Next: Select Orders
               </button>
@@ -245,14 +245,14 @@ export default function CreateDistributionPlan() {
 
         {/* Step 2: Select Orders */}
         {step === 2 && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="glass-card p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-gray-900">Select Orders</h2>
+              <h2 className="text-lg font-semibold text-white">Select Orders</h2>
               <div className="flex items-center gap-4">
                 <button
                   type="button"
                   onClick={selectAllOrders}
-                  className="text-sm text-blue-600 hover:text-blue-800"
+                  className="text-sm text-purple-400 hover:text-purple-300"
                 >
                   {selectedOrders.length === pendingOrders.length ? 'Deselect All' : 'Select All'}
                 </button>
@@ -268,16 +268,16 @@ export default function CreateDistributionPlan() {
               </div>
             </div>
 
-            <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+            <div className="mb-4 p-4 bg-purple-500/20 rounded-lg">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-blue-700">Selected: {selectedOrders.length} orders</span>
-                <span className="text-blue-700 font-medium">Total Value: {formatCurrency(totalValue)}</span>
+                <span className="text-purple-400">Selected: {selectedOrders.length} orders</span>
+                <span className="text-purple-400 font-medium">Total Value: {formatCurrency(totalValue)}</span>
               </div>
             </div>
 
             {pendingOrders.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
-                <CubeIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <div className="text-center py-12 text-white/60">
+                <CubeIcon className="h-12 w-12 mx-auto mb-4 text-white/40" />
                 <p>No pending orders available for distribution</p>
               </div>
             ) : (
@@ -288,29 +288,29 @@ export default function CreateDistributionPlan() {
                     onClick={() => toggleOrderSelection(order.id)}
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                       selectedOrders.includes(order.id)
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-purple-500 bg-purple-500/20'
+                        : 'border-white/10 hover:border-white/20'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <div className={`h-5 w-5 rounded border flex items-center justify-center mr-3 ${
                           selectedOrders.includes(order.id)
-                            ? 'bg-blue-600 border-blue-600'
-                            : 'border-gray-300'
+                            ? 'bg-purple-600 border-purple-600'
+                            : 'border-white/20'
                         }`}>
                           {selectedOrders.includes(order.id) && (
                             <CheckCircleIcon className="h-4 w-4 text-white" />
                           )}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{order.order_number}</p>
-                          <p className="text-sm text-gray-500">{order.client_name}</p>
+                          <p className="font-medium text-white">{order.order_number}</p>
+                          <p className="text-sm text-white/60">{order.client_name}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium text-gray-900">{formatCurrency(order.total_amount)}</p>
-                        <p className="text-sm text-gray-500">{order.total_items} items</p>
+                        <p className="font-medium text-white">{formatCurrency(order.total_amount)}</p>
+                        <p className="text-sm text-white/60">{order.total_items} items</p>
                       </div>
                     </div>
                   </div>
@@ -322,7 +322,7 @@ export default function CreateDistributionPlan() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                className="btn-secondary"
               >
                 Back
               </button>
@@ -330,7 +330,7 @@ export default function CreateDistributionPlan() {
                 type="button"
                 onClick={() => setStep(3)}
                 disabled={selectedOrders.length === 0}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="btn-primary disabled:opacity-50"
               >
                 Next: Review
               </button>
@@ -340,43 +340,43 @@ export default function CreateDistributionPlan() {
 
         {/* Step 3: Review */}
         {step === 3 && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">Review & Create</h2>
+          <div className="glass-card p-6">
+            <h2 className="text-lg font-semibold text-white mb-6">Review & Create</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="bg-blue-50 rounded-lg p-4">
+              <div className="bg-blue-500/20 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <CubeIcon className="h-5 w-5 text-blue-600 mr-2" />
-                  <span className="text-sm font-medium text-blue-900">Orders</span>
+                  <CubeIcon className="h-5 w-5 text-blue-400 mr-2" />
+                  <span className="text-sm font-medium text-blue-400">Orders</span>
                 </div>
-                <p className="text-2xl font-bold text-blue-600">{selectedOrders.length}</p>
+                <p className="text-2xl font-bold text-blue-400">{selectedOrders.length}</p>
               </div>
-              <div className="bg-green-50 rounded-lg p-4">
+              <div className="bg-green-500/20 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <TruckIcon className="h-5 w-5 text-green-600 mr-2" />
-                  <span className="text-sm font-medium text-green-900">Total Value</span>
+                  <TruckIcon className="h-5 w-5 text-green-400 mr-2" />
+                  <span className="text-sm font-medium text-green-400">Total Value</span>
                 </div>
-                <p className="text-2xl font-bold text-green-600">{formatCurrency(totalValue)}</p>
+                <p className="text-2xl font-bold text-green-400">{formatCurrency(totalValue)}</p>
               </div>
-              <div className="bg-purple-50 rounded-lg p-4">
+              <div className="bg-purple-500/20 rounded-lg p-4">
                 <div className="flex items-center mb-2">
-                  <SparklesIcon className="h-5 w-5 text-purple-600 mr-2" />
-                  <span className="text-sm font-medium text-purple-900">Status</span>
+                  <SparklesIcon className="h-5 w-5 text-purple-400 mr-2" />
+                  <span className="text-sm font-medium text-purple-400">Status</span>
                 </div>
-                <p className="text-2xl font-bold text-purple-600">Ready</p>
+                <p className="text-2xl font-bold text-purple-400">Ready</p>
               </div>
             </div>
 
-            <div className="border-t border-gray-200 pt-6">
-              <h3 className="text-sm font-medium text-gray-900 mb-4">Selected Orders</h3>
+            <div className="border-t border-white/10 pt-6">
+              <h3 className="text-sm font-medium text-white mb-4">Selected Orders</h3>
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {pendingOrders
                   .filter(o => selectedOrders.includes(o.id))
                   .map(order => (
-                    <div key={order.id} className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded">
-                      <span className="text-sm font-medium text-gray-900">{order.order_number}</span>
-                      <span className="text-sm text-gray-600">{order.client_name}</span>
-                      <span className="text-sm font-medium text-gray-900">{formatCurrency(order.total_amount)}</span>
+                    <div key={order.id} className="flex items-center justify-between py-2 px-3 bg-white/5 rounded">
+                      <span className="text-sm font-medium text-white">{order.order_number}</span>
+                      <span className="text-sm text-white/60">{order.client_name}</span>
+                      <span className="text-sm font-medium text-white">{formatCurrency(order.total_amount)}</span>
                     </div>
                   ))}
               </div>
@@ -386,7 +386,7 @@ export default function CreateDistributionPlan() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                className="btn-secondary"
               >
                 Back
               </button>

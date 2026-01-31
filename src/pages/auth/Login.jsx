@@ -32,28 +32,28 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         {/* Logo and Title */}
         <div className="text-center mb-8">
-          <div className="mx-auto h-20 w-20 bg-white rounded-2xl shadow-lg flex items-center justify-center mb-4">
-            <span className="text-blue-600 font-bold text-3xl">TM</span>
+          <div className="mx-auto h-20 w-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl shadow-lg shadow-purple-500/30 flex items-center justify-center mb-4">
+            <span className="text-white font-bold text-3xl">TM</span>
           </div>
           <h1 className="text-3xl font-bold text-white">Tres Marias Marketing</h1>
-          <p className="mt-2 text-blue-200">Warehouse Distribution Management System</p>
-          <p className="text-blue-300 text-sm">San Fernando City, La Union</p>
+          <p className="mt-2 text-white/60">Warehouse Distribution Management System</p>
+          <p className="text-white/40 text-sm">San Fernando City, La Union</p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">
+        <div className="glass-card p-8">
+          <h2 className="text-2xl font-semibold text-white text-center mb-6">
             Sign in to your account
           </h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="form-label">
                 Email address
               </label>
               <input
@@ -67,19 +67,17 @@ export default function Login() {
                     message: 'Invalid email address'
                   }
                 })}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`form-input ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
                 placeholder="you@example.com"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
               )}
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="form-label">
                 Password
               </label>
               <div className="relative">
@@ -94,15 +92,13 @@ export default function Login() {
                       message: 'Password must be at least 6 characters'
                     }
                   })}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.password ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`form-input pr-12 ${errors.password ? 'border-red-500 focus:ring-red-500' : ''}`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
                 >
                   {showPassword ? (
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -117,7 +113,7 @@ export default function Login() {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
               )}
             </div>
 
@@ -125,7 +121,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full btn-primary py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center">
@@ -142,17 +138,17 @@ export default function Login() {
           </form>
 
           {/* Demo credentials */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 text-center mb-2">Demo Credentials</p>
-            <div className="text-xs text-gray-500 text-center">
-              <p>Email: <span className="font-mono">admin@tresmarias.ph</span></p>
-              <p>Password: <span className="font-mono">admin123</span></p>
+          <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
+            <p className="text-sm text-white/60 text-center mb-2">Demo Credentials</p>
+            <div className="text-xs text-white/40 text-center">
+              <p>Email: <span className="font-mono text-purple-400">admin@tresmarias.ph</span></p>
+              <p>Password: <span className="font-mono text-purple-400">admin123</span></p>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-blue-200 text-sm">
+        <p className="mt-6 text-center text-white/40 text-sm">
           © 2024 Tres Marias Marketing. All rights reserved.
         </p>
       </div>

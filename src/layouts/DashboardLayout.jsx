@@ -17,7 +17,9 @@ import {
   BuildingOffice2Icon,
   DocumentTextIcon,
   UserGroupIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  BellIcon,
+  MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import useAuthStore from '../stores/authStore';
 
@@ -119,14 +121,14 @@ function NavItem({ item }) {
       <div>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors"
+          className="w-full flex items-center justify-between px-4 py-2.5 text-white/70 hover:bg-white/10 hover:text-white rounded-xl transition-all duration-200"
         >
           <div className="flex items-center">
             <item.icon className="h-5 w-5 mr-3" />
             <span className="text-sm font-medium">{item.name}</span>
           </div>
           <ChevronDownIcon
-            className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
           />
         </button>
         {isOpen && (
@@ -136,10 +138,10 @@ function NavItem({ item }) {
                 key={child.href}
                 to={child.href}
                 className={({ isActive }) =>
-                  `block px-4 py-2 text-sm rounded-lg transition-colors ${
+                  `block px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
                     isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30'
+                      : 'text-white/60 hover:bg-white/10 hover:text-white'
                   }`
                 }
               >
@@ -157,10 +159,10 @@ function NavItem({ item }) {
       to={item.href}
       end={item.href === '/'}
       className={({ isActive }) =>
-        `flex items-center px-4 py-2.5 rounded-lg transition-colors ${
+        `flex items-center px-4 py-2.5 rounded-xl transition-all duration-200 ${
           isActive
-            ? 'bg-blue-600 text-white'
-            : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+            ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30'
+            : 'text-white/70 hover:bg-white/10 hover:text-white'
         }`
       }
     >
@@ -181,34 +183,34 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900/80 backdrop-blur-xl border-r border-white/10 transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between h-16 px-4 bg-gray-800 flex-shrink-0">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-white/10 flex-shrink-0">
           <div className="flex items-center">
-            <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="h-10 w-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
               <span className="text-white font-bold text-xl">TM</span>
             </div>
             <div className="ml-3">
               <h1 className="text-white font-semibold text-sm">Tres Marias</h1>
-              <p className="text-gray-400 text-xs">Distribution System</p>
+              <p className="text-white/50 text-xs">Distribution System</p>
             </div>
           </div>
           <button
-            className="lg:hidden text-gray-400 hover:text-white"
+            className="lg:hidden text-white/60 hover:text-white"
             onClick={() => setSidebarOpen(false)}
           >
             <XMarkIcon className="h-6 w-6" />
@@ -223,10 +225,10 @@ export default function DashboardLayout() {
         </nav>
 
         {/* User section */}
-        <div className="border-t border-gray-700 p-4 flex-shrink-0">
+        <div className="border-t border-white/10 p-4 flex-shrink-0">
           <div className="flex items-center">
-            <div className="h-10 w-10 bg-gray-700 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">
+            <div className="h-10 w-10 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white text-sm font-bold">
                 {user?.first_name?.[0]}{user?.last_name?.[0]}
               </span>
             </div>
@@ -234,11 +236,11 @@ export default function DashboardLayout() {
               <p className="text-white text-sm font-medium">
                 {user?.first_name} {user?.last_name}
               </p>
-              <p className="text-gray-400 text-xs">{user?.role_name}</p>
+              <p className="text-white/50 text-xs">{user?.role_name}</p>
             </div>
             <button
               onClick={handleLogout}
-              className="text-gray-400 hover:text-white p-2"
+              className="text-white/50 hover:text-red-400 p-2 rounded-lg hover:bg-white/10 transition-colors"
               title="Logout"
             >
               <ArrowRightOnRectangleIcon className="h-5 w-5" />
@@ -250,18 +252,34 @@ export default function DashboardLayout() {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top header */}
-        <header className="sticky top-0 z-40 bg-white shadow-sm">
+        <header className="sticky top-0 z-40 bg-slate-900/50 backdrop-blur-xl border-b border-white/10">
           <div className="flex items-center justify-between h-16 px-4 lg:px-6">
             <button
-              className="lg:hidden text-gray-600 hover:text-gray-900"
+              className="lg:hidden text-white/70 hover:text-white"
               onClick={() => setSidebarOpen(true)}
             >
               <Bars3Icon className="h-6 w-6" />
             </button>
 
-            <div className="flex-1 flex items-center justify-end space-x-4">
-              {/* Quick actions */}
-              <button className="text-gray-500 hover:text-gray-700">
+            <div className="flex-1 flex items-center justify-end space-x-3">
+              {/* Search */}
+              <div className="hidden md:flex items-center bg-white/10 rounded-xl px-3 py-2">
+                <MagnifyingGlassIcon className="h-5 w-5 text-white/50" />
+                <input 
+                  type="text" 
+                  placeholder="Search..." 
+                  className="bg-transparent border-none outline-none text-white text-sm ml-2 w-40 placeholder-white/50"
+                />
+              </div>
+              
+              {/* Notifications */}
+              <button className="text-white/60 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors relative">
+                <BellIcon className="h-6 w-6" />
+                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+              </button>
+              
+              {/* Settings */}
+              <button className="text-white/60 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors">
                 <Cog6ToothIcon className="h-6 w-6" />
               </button>
             </div>

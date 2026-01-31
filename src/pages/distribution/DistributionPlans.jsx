@@ -14,11 +14,11 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const statusColors = {
-  draft: 'bg-gray-100 text-gray-700',
-  approved: 'bg-blue-100 text-blue-700',
-  executing: 'bg-yellow-100 text-yellow-700',
-  completed: 'bg-green-100 text-green-700',
-  cancelled: 'bg-red-100 text-red-700'
+  draft: 'bg-gray-500/20 text-gray-400',
+  approved: 'bg-blue-500/20 text-blue-400',
+  executing: 'bg-yellow-500/20 text-yellow-400',
+  completed: 'bg-green-500/20 text-green-400',
+  cancelled: 'bg-red-500/20 text-red-400'
 };
 
 const statusIcons = {
@@ -70,12 +70,12 @@ export default function DistributionPlans() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Distribution Plans</h1>
-          <p className="text-gray-600 mt-1">Dynamic Centralized Distribution System</p>
+          <h1 className="text-2xl font-bold text-white">Distribution Plans</h1>
+          <p className="text-white/60 mt-1">Dynamic Centralized Distribution System</p>
         </div>
         <Link
           to="/distribution/create"
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="btn-primary"
         >
           <PlusIcon className="h-5 w-5 mr-2" />
           Create Plan
@@ -83,24 +83,24 @@ export default function DistributionPlans() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="glass-card p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
             <input
               type="text"
               placeholder="Search plans..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="form-input pl-10"
             />
           </div>
           <div className="flex items-center gap-2">
-            <FunnelIcon className="h-5 w-5 text-gray-400" />
+            <FunnelIcon className="h-5 w-5 text-white/40" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="form-select"
             >
               <option value="">All Status</option>
               <option value="draft">Draft</option>
@@ -112,7 +112,7 @@ export default function DistributionPlans() {
           </div>
           <button
             onClick={fetchPlans}
-            className="px-4 py-2 text-gray-600 hover:text-gray-900"
+            className="px-4 py-2 text-white/60 hover:text-white"
           >
             <ArrowPathIcon className="h-5 w-5" />
           </button>
@@ -122,18 +122,18 @@ export default function DistributionPlans() {
       {/* Plans Grid */}
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="spinner h-12 w-12"></div>
         </div>
       ) : filteredPlans.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-          <div className="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ClockIcon className="h-8 w-8 text-gray-400" />
+        <div className="glass-card p-12 text-center">
+          <div className="h-16 w-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ClockIcon className="h-8 w-8 text-white/40" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No distribution plans found</h3>
-          <p className="text-gray-500 mb-4">Get started by creating your first distribution plan</p>
+          <h3 className="text-lg font-medium text-white mb-2">No distribution plans found</h3>
+          <p className="text-white/60 mb-4">Get started by creating your first distribution plan</p>
           <Link
             to="/distribution/create"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="btn-primary"
           >
             <PlusIcon className="h-5 w-5 mr-2" />
             Create Plan
@@ -147,37 +147,37 @@ export default function DistributionPlans() {
               <Link
                 key={plan.id}
                 to={`/distribution/${plan.id}`}
-                className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="glass-card p-6 hover:bg-white/10 transition-colors"
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[plan.status]}`}>
                     <StatusIcon className="h-3.5 w-3.5 mr-1" />
                     {plan.status.charAt(0).toUpperCase() + plan.status.slice(1)}
                   </span>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-white/60">
                     {new Date(plan.plan_date).toLocaleDateString('en-PH')}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{plan.plan_number}</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">{plan.plan_number}</h3>
                 
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Total Orders</span>
-                    <span className="font-medium text-gray-900">{plan.total_orders || 0}</span>
+                    <span className="text-white/60">Total Orders</span>
+                    <span className="font-medium text-white">{plan.total_orders || 0}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Total Value</span>
-                    <span className="font-medium text-gray-900">{formatCurrency(plan.total_value)}</span>
+                    <span className="text-white/60">Total Value</span>
+                    <span className="font-medium text-white">{formatCurrency(plan.total_value)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Warehouse</span>
-                    <span className="font-medium text-gray-900">{plan.warehouse_name || 'All'}</span>
+                    <span className="text-white/60">Warehouse</span>
+                    <span className="font-medium text-white">{plan.warehouse_name || 'All'}</span>
                   </div>
                 </div>
 
                 {plan.status === 'approved' && (
-                  <div className="mt-4 pt-4 border-t border-gray-100">
+                  <div className="mt-4 pt-4 border-t border-white/10">
                     <button className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
                       <PlayIcon className="h-4 w-4 mr-2" />
                       Execute Plan
