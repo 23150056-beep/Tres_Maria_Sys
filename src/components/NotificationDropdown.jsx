@@ -23,75 +23,105 @@ const notificationConfig = {
     icon: ExclamationTriangleIcon,
     color: 'text-amber-400',
     bg: 'bg-amber-500/20',
-    link: '/inventory/alerts',
+    baseLink: '/inventory/alerts',
   },
   out_of_stock: {
     icon: CubeIcon,
     color: 'text-red-400',
     bg: 'bg-red-500/20',
-    link: '/inventory/alerts',
+    baseLink: '/inventory/alerts',
   },
   new_order: {
     icon: ShoppingCartIcon,
     color: 'text-blue-400',
     bg: 'bg-blue-500/20',
-    link: '/orders',
+    baseLink: '/orders',
   },
   order_completed: {
     icon: CheckCircleIcon,
     color: 'text-green-400',
     bg: 'bg-green-500/20',
-    link: '/orders',
+    baseLink: '/orders',
   },
   delivery_scheduled: {
     icon: TruckIcon,
     color: 'text-purple-400',
     bg: 'bg-purple-500/20',
-    link: '/deliveries',
+    baseLink: '/deliveries',
   },
   delivery_completed: {
     icon: TruckIcon,
     color: 'text-green-400',
     bg: 'bg-green-500/20',
-    link: '/deliveries',
+    baseLink: '/deliveries',
   },
   delivery_failed: {
     icon: TruckIcon,
     color: 'text-red-400',
     bg: 'bg-red-500/20',
-    link: '/deliveries',
+    baseLink: '/deliveries',
   },
   payment_received: {
     icon: BanknotesIcon,
     color: 'text-green-400',
     bg: 'bg-green-500/20',
-    link: '/reports/financial',
+    baseLink: '/orders',
   },
   payment_due: {
     icon: BanknotesIcon,
     color: 'text-amber-400',
     bg: 'bg-amber-500/20',
-    link: '/orders',
+    baseLink: '/orders',
   },
   new_client: {
     icon: UserGroupIcon,
     color: 'text-blue-400',
     bg: 'bg-blue-500/20',
-    link: '/clients',
+    baseLink: '/clients',
   },
   system: {
     icon: BellIcon,
     color: 'text-purple-400',
     bg: 'bg-purple-500/20',
-    link: null,
+    baseLink: null,
   },
   reminder: {
     icon: ClockIcon,
     color: 'text-cyan-400',
     bg: 'bg-cyan-500/20',
-    link: null,
+    baseLink: null,
   },
 };
+
+// Generate specific link based on notification type and data
+function getNotificationLink(notification) {
+  const config = notificationConfig[notification.type] || notificationConfig.system;
+  const data = notification.data || {};
+  
+  switch (notification.type) {
+    case 'new_order':
+    case 'order_completed':
+    case 'payment_due':
+    case 'payment_received':
+      return data.orderId ? `/orders/${data.orderId}` : config.baseLink;
+    
+    case 'delivery_scheduled':
+    case 'delivery_completed':
+    case 'delivery_failed':
+      return data.deliveryId ? `/deliveries/${data.deliveryId}` : config.baseLink;
+    
+    case 'low_stock':
+    case 'out_of_stock':
+      // Link to inventory alerts page - could be enhanced to show specific product
+      return data.productId ? `/inventory?product=${data.productId}` : config.baseLink;
+    
+    case 'new_client':
+      return data.clientId ? `/clients/${data.clientId}` : config.baseLink;
+    
+    default:
+      return config.baseLink;
+  }
+}
 
 function formatTimeAgo(dateString) {
   const date = new Date(dateString);
@@ -105,13 +135,21 @@ function formatTimeAgo(dateString) {
   return date.toLocaleDateString('en-PH', { month: 'short', day: 'numeric' });
 }
 
-function NotificationItem({ notification, onMarkRead, onDelete }) {
+function NotificationItem({ notification, onMarkRead, onDelete, onClose }) {
   const config = notificationConfig[notification.type] || notificationConfig.system;
   const Icon = config.icon;
+  const link = getNotificationLink(notification);
+
+  const handleClick = () => {
+    if (!notification.read) {
+      onMarkRead(notification.id);
+    }
+    onClose(); // Close dropdown when navigating
+  };
 
   const content = (
     <div
-      className={`flex items-start gap-3 p-3 rounded-xl transition-all duration-200 ${
+      className={`flex items-start gap-3 p-3 rounded-xl transition-all duration-200 cursor-pointer ${
         notification.read 
           ? 'bg-white/5 hover:bg-white/10' 
           : 'bg-purple-500/10 hover:bg-purple-500/20 border-l-2 border-purple-500'
@@ -125,7 +163,12 @@ function NotificationItem({ notification, onMarkRead, onDelete }) {
           {notification.title}
         </p>
         <p className="text-xs text-white/50 mt-0.5 line-clamp-2">{notification.message}</p>
-        <p className="text-xs text-white/40 mt-1">{formatTimeAgo(notification.timestamp)}</p>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-xs text-white/40">{formatTimeAgo(notification.timestamp)}</p>
+          {link && (
+            <span className="text-xs text-purple-400/70">Click to view →</span>
+          )}
+        </div>
       </div>
       <div className="flex flex-col gap-1 flex-shrink-0">
         {!notification.read && (
@@ -156,11 +199,12 @@ function NotificationItem({ notification, onMarkRead, onDelete }) {
     </div>
   );
 
-  if (config.link && !notification.read) {
+  // Always make clickable if there's a link
+  if (link) {
     return (
       <Link 
-        to={config.link} 
-        onClick={() => onMarkRead(notification.id)}
+        to={link} 
+        onClick={handleClick}
         className="block"
       >
         {content}
@@ -273,6 +317,7 @@ export default function NotificationDropdown() {
                     notification={notification}
                     onMarkRead={markAsRead}
                     onDelete={deleteNotification}
+                    onClose={() => setIsOpen(false)}
                   />
                 ))}
               </div>
