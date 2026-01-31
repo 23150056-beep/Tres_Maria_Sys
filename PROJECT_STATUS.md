@@ -4,6 +4,24 @@
 
 ---
 
+## 📐 UI Design Principles (Knowledge Reference)
+
+### The 7 Golden Rules of UI Design (Ben Shneiderman)
+
+1. **Consistency** - Maintain uniform actions, terminology, and visual elements
+2. **Shortcuts for Experts** - Allow experienced users to speed up interactions
+3. **Informative Feedback** - Provide meaningful responses to user actions
+4. **Closure in Dialogues** - Design sequences with clear beginning, middle, and end
+5. **Error Prevention** - Design to prevent errors before they occur
+6. **Easy Reversal of Actions** - Allow users to undo/redo actions easily
+7. **Internal Locus of Control** - Support user's sense of mastery and control
+
+**Modern Additions:** Accessibility, Clarity, Visual Hierarchy
+
+**Goal:** Reduce cognitive load and improve user satisfaction.
+
+---
+
 ## 🤖 AI ASSISTANT INSTRUCTIONS
 
 > **READ THIS FIRST** when starting a new session with this project.

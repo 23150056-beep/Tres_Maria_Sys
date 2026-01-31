@@ -146,11 +146,55 @@ const mockGet = async (url) => {
     return { data: sorted.length ? sorted : mockDashboardData.topProducts };
   }
   if (url.includes('/dashboard/recent-activity')) {
-    // Generate from recent orders and deliveries
+    // Generate from recent orders and deliveries with proper structure
     const activities = [];
-    mockStore.orders.slice(0, 3).forEach((o, i) => activities.push({ id: i + 1, type: 'order', message: `Order ${o.order_number} - ${o.client?.business_name || 'Client'}`, time: `${i * 2 + 5} minutes ago` }));
-    mockStore.deliveries.slice(0, 2).forEach((d, i) => activities.push({ id: i + 4, type: 'delivery', message: `Delivery ${d.delivery_number} - ${d.status}`, time: `${i + 1} hour ago` }));
-    return { data: activities };
+    const now = new Date();
+    
+    // Add recent orders
+    mockStore.orders.slice(0, 5).forEach((o, i) => {
+      const orderDate = o.order_date ? new Date(o.order_date) : new Date(now - (i * 2 + 5) * 60000);
+      activities.push({ 
+        id: `order-${o.id}`, 
+        type: 'order', 
+        reference: o.order_number || `ORD-${String(o.id).padStart(4, '0')}`,
+        client_name: o.client?.business_name || mockStore.clients.find(c => c.id === o.client_id)?.business_name || 'Walk-in Customer',
+        status: o.status || 'pending',
+        timestamp: orderDate.toISOString()
+      });
+    });
+    
+    // Add recent deliveries
+    mockStore.deliveries.slice(0, 3).forEach((d, i) => {
+      const deliveryDate = d.scheduled_date ? new Date(d.scheduled_date) : new Date(now - (i + 1) * 3600000);
+      const driver = mockStore.drivers?.find(dr => dr.id === d.driver_id);
+      activities.push({ 
+        id: `delivery-${d.id}`, 
+        type: 'delivery', 
+        reference: d.delivery_number || `DEL-${String(d.id).padStart(4, '0')}`,
+        driver_name: driver?.name || d.driver_name || 'Assigned Driver',
+        status: d.status || 'pending',
+        timestamp: deliveryDate.toISOString()
+      });
+    });
+    
+    // Add recent purchase orders
+    mockStore.purchaseOrders.slice(0, 2).forEach((po, i) => {
+      const poDate = po.order_date ? new Date(po.order_date) : new Date(now - (i + 2) * 3600000);
+      const supplier = mockStore.suppliers.find(s => s.id === po.supplier_id);
+      activities.push({ 
+        id: `po-${po.id}`, 
+        type: 'purchase_order', 
+        reference: po.po_number || `PO-${String(po.id).padStart(4, '0')}`,
+        supplier_name: supplier?.company_name || 'Supplier',
+        status: po.status || 'pending',
+        timestamp: poDate.toISOString()
+      });
+    });
+    
+    // Sort by timestamp descending (most recent first)
+    activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    return { data: activities.slice(0, 10) };
   }
   if (url.includes('/dashboard/category-distribution')) {
     // Calculate actual product count per category
