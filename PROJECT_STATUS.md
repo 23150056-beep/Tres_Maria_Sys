@@ -2,6 +2,8 @@
 
 ## Last Updated: January 31, 2026
 
+> **📌 IMPORTANT FOR AI ASSISTANTS**: When making any changes or fixes to this project, **automatically update this PROJECT_STATUS.md file** to document the changes in the "Recent Changes" section.
+
 ## Project Overview
 A full-stack Warehouse Distribution Management System for **Tres Marias Marketing**, a wholesale distribution warehouse in San Fernando City, La Union, Philippines.
 
