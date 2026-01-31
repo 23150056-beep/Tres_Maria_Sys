@@ -22,6 +22,7 @@ import {
 } from '@heroicons/react/24/outline';
 import useAuthStore from '../stores/authStore';
 import NotificationDropdown from '../components/NotificationDropdown';
+import MobileBottomNav from '../components/MobileBottomNav';
 import { startNotificationPolling, stopNotificationPolling } from '../services/notificationService';
 
 const navigation = [
@@ -294,10 +295,13 @@ export default function DashboardLayout() {
         </header>
 
         {/* Page content */}
-        <main className="p-4 lg:p-6">
+        <main className="p-4 lg:p-6 pb-24 lg:pb-6">
           <Outlet />
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav onMenuClick={() => setSidebarOpen(true)} />
     </div>
   );
 }

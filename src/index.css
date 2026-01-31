@@ -203,3 +203,113 @@ body {
     @apply text-white/40;
   }
 }
+
+/* ===================
+   PWA & MOBILE OPTIMIZATIONS
+   =================== */
+
+/* iOS Safe Area Support */
+@supports (padding: max(0px)) {
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  
+  .safe-area-top {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase tap targets on mobile */
+  button, 
+  a, 
+  input[type="checkbox"], 
+  input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Disable hover effects on touch devices */
+  .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Active state for touch feedback */
+  button:active,
+  a:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  /* Compact cards on mobile */
+  .glass-card {
+    @apply rounded-xl;
+  }
+  
+  /* Smaller text on mobile */
+  .page-title {
+    @apply text-xl;
+  }
+  
+  /* Full-width modals on mobile */
+  .modal-content {
+    @apply max-w-full mx-2 rounded-xl;
+  }
+  
+  /* Adjust tables for mobile */
+  table {
+    font-size: 0.875rem;
+  }
+  
+  th, td {
+    padding: 0.5rem;
+  }
+}
+
+/* Prevent pull-to-refresh on PWA */
+html {
+  overscroll-behavior-y: contain;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar on mobile for cleaner look */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* PWA Standalone mode styles */
+@media (display-mode: standalone) {
+  /* Add extra padding when in standalone mode */
+  body {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Prevent text selection on UI elements */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Touch action for better scrolling */
+.touch-pan {
+  touch-action: pan-y;
+}
+
