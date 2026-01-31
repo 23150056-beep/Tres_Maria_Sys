@@ -2,7 +2,52 @@
 
 ## Last Updated: January 31, 2026
 
-> **📌 IMPORTANT FOR AI ASSISTANTS**: When making any changes or fixes to this project, **automatically update this PROJECT_STATUS.md file** to document the changes in the "Recent Changes" section.
+---
+
+## 🤖 AI ASSISTANT INSTRUCTIONS
+
+> **READ THIS FIRST** when starting a new session with this project.
+
+### Automatic Workflow - ALWAYS DO THESE:
+
+1. **After making ANY code changes:**
+   ```
+   git add . ; git commit -m "Description of change" ; git push
+   ```
+
+2. **After fixing bugs or adding features:**
+   - Update the "Recent Changes" section in this file
+   - Update the "Last Updated" date at the top
+   - Commit and push the updated PROJECT_STATUS.md
+
+3. **When user reports an error:**
+   - Check if dev server is running (`npm run dev`)
+   - If not running, start it
+   - Check browser console for errors
+   - Fix and push to GitHub
+
+4. **Project uses MOCK DATA (no real database):**
+   - All API calls are intercepted in `src/services/api.js`
+   - Data persists in memory during session only
+   - No PostgreSQL needed
+
+5. **GitHub Repository:**
+   - URL: https://github.com/23150056-beep/Tres_Maria_Sys
+   - Always push after changes
+
+### Key Commands:
+```bash
+# Start dev server
+npm run dev
+
+# Push to GitHub
+git add . ; git commit -m "message" ; git push
+
+# Check git status
+git status
+```
+
+---
 
 ## Project Overview
 A full-stack Warehouse Distribution Management System for **Tres Marias Marketing**, a wholesale distribution warehouse in San Fernando City, La Union, Philippines.
