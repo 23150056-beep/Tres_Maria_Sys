@@ -82,13 +82,82 @@ const mockGet = async (url) => {
     throw error;
   }
   
-  // === DASHBOARD ===
-  if (url.includes('/dashboard/kpis')) return { data: mockDashboardData.kpis };
-  if (url.includes('/dashboard/revenue-chart')) return { data: mockDashboardData.revenueChart };
-  if (url.includes('/dashboard/top-products')) return { data: mockDashboardData.topProducts };
-  if (url.includes('/dashboard/recent-activity')) return { data: mockDashboardData.recentActivity };
-  if (url.includes('/dashboard/category-distribution')) return { data: mockStore.categories.map(c => ({ name: c.name, value: c.product_count || 10 })) };
-  if (url.includes('/dashboard/inventory-status')) return { data: { healthy: 7, low: 2, out: 1 } };
+  // === DASHBOARD (DYNAMIC - calculated from actual data) ===
+  if (url.includes('/dashboard/kpis')) {
+    const today = new Date().toISOString().split('T')[0];
+    const todayOrders = mockStore.orders.filter(o => o.order_date === today);
+    const todayRevenue = todayOrders.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
+    const todayDeliveries = mockStore.deliveries.filter(d => d.scheduled_date?.startsWith(today));
+    const completedToday = todayDeliveries.filter(d => d.status === 'delivered').length;
+    
+    const monthStart = today.substring(0, 7); // YYYY-MM
+    const monthOrders = mockStore.orders.filter(o => o.order_date?.startsWith(monthStart));
+    const monthRevenue = monthOrders.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
+    
+    const lowStockCount = mockStore.inventory.filter(i => i.quantity > 0 && i.quantity <= i.reorder_level).length;
+    const outOfStockCount = mockStore.inventory.filter(i => i.quantity === 0).length;
+    const pendingOrders = mockStore.orders.filter(o => o.status === 'pending').length;
+    
+    return { data: {
+      today: { orders_today: todayOrders.length, revenue_today: todayRevenue || 156500, deliveries_today: todayDeliveries.length || 5, completed_deliveries_today: completedToday || 3 },
+      thisMonth: { orders_this_month: monthOrders.length || mockStore.orders.length, revenue_this_month: monthRevenue || 2450000 },
+      pendingOrders: { pending: pendingOrders },
+      activeClients: mockStore.clients.length,
+      activeProducts: mockStore.products.filter(p => p.is_active).length,
+      low_stock_alerts: lowStockCount,
+      expiring_alerts: 2,
+      out_of_stock_alerts: outOfStockCount
+    }};
+  }
+  if (url.includes('/dashboard/revenue-chart')) {
+    // Generate last 7 days of revenue from orders
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(); date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      const dayOrders = mockStore.orders.filter(o => o.order_date === dateStr);
+      const revenue = dayOrders.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
+      days.push({ date: dateStr, label: date.toLocaleDateString('en-PH', { weekday: 'short' }), revenue: revenue || (Math.random() * 100000 + 150000) });
+    }
+    return { data: days };
+  }
+  if (url.includes('/dashboard/top-products')) {
+    // Calculate from order items
+    const productSales = {};
+    mockStore.orders.forEach(order => {
+      (order.items || []).forEach(item => {
+        const name = item.product?.name || 'Unknown';
+        if (!productSales[name]) productSales[name] = { name, quantity: 0, revenue: 0, total: 0 };
+        productSales[name].quantity += item.quantity || 0;
+        productSales[name].revenue += (item.quantity || 0) * (item.unit_price || 0);
+        productSales[name].total = productSales[name].revenue;
+      });
+    });
+    const sorted = Object.values(productSales).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
+    return { data: sorted.length ? sorted : mockDashboardData.topProducts };
+  }
+  if (url.includes('/dashboard/recent-activity')) {
+    // Generate from recent orders and deliveries
+    const activities = [];
+    mockStore.orders.slice(0, 3).forEach((o, i) => activities.push({ id: i + 1, type: 'order', message: `Order ${o.order_number} - ${o.client?.business_name || 'Client'}`, time: `${i * 2 + 5} minutes ago` }));
+    mockStore.deliveries.slice(0, 2).forEach((d, i) => activities.push({ id: i + 4, type: 'delivery', message: `Delivery ${d.delivery_number} - ${d.status}`, time: `${i + 1} hour ago` }));
+    return { data: activities };
+  }
+  if (url.includes('/dashboard/category-distribution')) {
+    // Calculate actual product count per category
+    const catCounts = mockStore.categories.map(c => {
+      const count = mockStore.products.filter(p => p.category_id === c.id).length;
+      const revenue = mockStore.products.filter(p => p.category_id === c.id).reduce((sum, p) => sum + (p.selling_price || 0) * 100, 0);
+      return { name: c.name, value: count || c.product_count || 5, revenue };
+    });
+    return { data: catCounts };
+  }
+  if (url.includes('/dashboard/inventory-status')) {
+    const healthy = mockStore.inventory.filter(i => i.quantity > i.reorder_level).length;
+    const low = mockStore.inventory.filter(i => i.quantity > 0 && i.quantity <= i.reorder_level).length;
+    const out = mockStore.inventory.filter(i => i.quantity === 0).length;
+    return { data: { healthy, low, out } };
+  }
   
   // === DISTRIBUTION PLANS ===
   if (url.includes('/distribution/plans')) {
@@ -249,35 +318,125 @@ const mockGet = async (url) => {
     return { data: { users: mockStore.users.map(({ password, ...u }) => u), total: mockStore.users.length } };
   }
   
-  // === REPORTS ===
+  // === REPORTS (DYNAMIC - calculated from actual data) ===
   if (url.includes('/reports/sales')) {
+    // Calculate from actual orders
+    const totalSales = mockStore.orders.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
+    const totalOrders = mockStore.orders.length;
+    const avgOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
+    const totalItems = mockStore.orders.reduce((sum, o) => sum + (o.items?.length || 2), 0);
+    
+    // Daily sales from orders
+    const salesByDate = {};
+    mockStore.orders.forEach(o => {
+      const date = o.order_date || '2026-01-31';
+      salesByDate[date] = (salesByDate[date] || 0) + parseFloat(o.total_amount || 0);
+    });
+    const dailySales = Object.entries(salesByDate).map(([date, total]) => ({ date, total })).sort((a, b) => a.date.localeCompare(b.date));
+    
+    // Top products from order items
+    const productSales = {};
+    mockStore.orders.forEach(order => {
+      (order.items || []).forEach(item => {
+        const name = item.product?.name || 'Unknown';
+        if (!productSales[name]) productSales[name] = { name, quantity: 0, total: 0 };
+        productSales[name].quantity += item.quantity || 0;
+        productSales[name].total += (item.quantity || 0) * (item.unit_price || 0);
+      });
+    });
+    const topProducts = Object.values(productSales).sort((a, b) => b.total - a.total).slice(0, 10);
+    
+    // Top clients from orders
+    const clientSales = {};
+    mockStore.orders.forEach(o => {
+      const name = o.client?.business_name || 'Unknown';
+      if (!clientSales[name]) clientSales[name] = { name, orders: 0, total: 0 };
+      clientSales[name].orders++;
+      clientSales[name].total += parseFloat(o.total_amount || 0);
+    });
+    const topClients = Object.values(clientSales).sort((a, b) => b.total - a.total).slice(0, 10);
+    
+    // Sales by category
+    const catSales = {};
+    mockStore.orders.forEach(order => {
+      (order.items || []).forEach(item => {
+        const cat = item.product?.category?.name || 'Uncategorized';
+        catSales[cat] = (catSales[cat] || 0) + (item.quantity || 0) * (item.unit_price || 0);
+      });
+    });
+    const byCategory = Object.entries(catSales).map(([category, total]) => ({ category, total }));
+    
     return { data: { 
-      summary: { totalSales: 2450000, totalOrders: 156, avgOrderValue: 15705, totalItems: 4520 }, 
-      dailySales: mockDashboardData.revenueChart.map(d => ({ date: d.date, total: d.revenue })), 
-      topProducts: mockDashboardData.topProducts, 
-      topClients: mockStore.clients.slice(0, 5).map(c => ({ name: c.business_name, orders: Math.floor(Math.random() * 20) + 5, total: Math.floor(Math.random() * 100000) + 20000 })), 
-      byCategory: mockStore.categories.map(c => ({ category: c.name, total: Math.floor(Math.random() * 500000) + 100000 })) 
+      summary: { totalSales: totalSales || 220500, totalOrders, avgOrderValue: avgOrderValue || 31500, totalItems }, 
+      dailySales: dailySales.length ? dailySales : mockDashboardData.revenueChart.map(d => ({ date: d.date, total: d.revenue })), 
+      topProducts: topProducts.length ? topProducts : mockDashboardData.topProducts, 
+      topClients: topClients.length ? topClients : mockStore.clients.slice(0, 5).map(c => ({ name: c.business_name, orders: 5, total: 50000 })), 
+      byCategory: byCategory.length ? byCategory : mockStore.categories.map(c => ({ category: c.name, total: 100000 })) 
     }};
   }
   if (url.includes('/reports/inventory')) {
+    // Calculate from actual inventory
+    const totalUnits = mockStore.inventory.reduce((sum, i) => sum + i.quantity, 0);
+    const totalValue = mockStore.inventory.reduce((sum, i) => sum + (i.quantity * i.unit_cost), 0);
+    const lowStock = mockStore.inventory.filter(i => i.quantity > 0 && i.quantity <= i.reorder_level).length;
+    const outOfStock = mockStore.inventory.filter(i => i.quantity === 0).length;
+    const healthyStock = mockStore.inventory.filter(i => i.quantity > i.reorder_level).length;
+    
+    // Value by category
+    const catValue = {};
+    mockStore.inventory.forEach(i => {
+      const cat = i.product?.category?.name || 'Uncategorized';
+      catValue[cat] = (catValue[cat] || 0) + (i.quantity * i.unit_cost);
+    });
+    const byCategory = Object.entries(catValue).map(([name, value]) => ({ name, value }));
+    
     return { data: { 
-      summary: { totalProducts: mockStore.products.length, totalUnits: 2905, totalValue: 1850000, lowStock: 3, outOfStock: 1, healthyStock: 6 }, 
-      byCategory: mockStore.categories.map(c => ({ name: c.name, value: Math.floor(Math.random() * 500000) + 50000 })), 
-      lowStockItems: mockStore.inventory.filter(i => i.quantity < i.reorder_level).map(i => ({ product: i.product.name, category: i.product.category?.name || 'N/A', quantity: i.quantity, reorder_level: i.reorder_level })) 
+      summary: { totalProducts: mockStore.products.length, totalUnits, totalValue, lowStock, outOfStock, healthyStock }, 
+      byCategory: byCategory.length ? byCategory : mockStore.categories.map(c => ({ name: c.name, value: 100000 })), 
+      lowStockItems: mockStore.inventory.filter(i => i.quantity <= i.reorder_level).map(i => ({ product: i.product?.name || 'Unknown', category: i.product?.category?.name || 'N/A', quantity: i.quantity, reorder_level: i.reorder_level })) 
     }};
   }
   if (url.includes('/reports/delivery') || url.includes('/reports/delivery-performance')) {
+    // Calculate from actual deliveries
+    const total = mockStore.deliveries.length;
+    const delivered = mockStore.deliveries.filter(d => d.status === 'delivered').length;
+    const inTransit = mockStore.deliveries.filter(d => d.status === 'in-transit').length;
+    const pending = mockStore.deliveries.filter(d => ['pending', 'assigned'].includes(d.status)).length;
+    const failed = mockStore.deliveries.filter(d => d.status === 'failed').length;
+    const successRate = total > 0 ? Math.round((delivered / total) * 100) : 0;
+    
+    // Driver performance
+    const driverStats = {};
+    mockStore.deliveries.forEach(d => {
+      const name = d.driver_name || 'Unknown';
+      if (!driverStats[name]) driverStats[name] = { name, total: 0, delivered: 0, failed: 0, avgTime: 40 };
+      driverStats[name].total++;
+      if (d.status === 'delivered') driverStats[name].delivered++;
+      if (d.status === 'failed') driverStats[name].failed++;
+    });
+    
     return { data: { 
-      summary: { total: 45, delivered: 38, failed: 2, inTransit: 3, pending: 2, successRate: 95, avgDeliveryTime: 42 }, 
-      dailyDeliveries: mockDashboardData.revenueChart.map(d => ({ date: d.date, delivered: Math.floor(Math.random() * 10) + 3, failed: Math.floor(Math.random() * 2) })), 
-      driverPerformance: [{ name: 'Pedro Reyes', total: 18, delivered: 17, failed: 1, avgTime: 38 }, { name: 'Juan Santos', total: 15, delivered: 14, failed: 1, avgTime: 45 }] 
+      summary: { total: total || 3, delivered: delivered || 1, failed, inTransit: inTransit || 1, pending: pending || 1, successRate: successRate || 33, avgDeliveryTime: 42 }, 
+      dailyDeliveries: mockDashboardData.revenueChart.map(d => ({ date: d.date, delivered: Math.floor(Math.random() * 5) + 1, failed: 0 })), 
+      driverPerformance: Object.values(driverStats).length ? Object.values(driverStats) : [{ name: 'Pedro Reyes', total: 2, delivered: 1, failed: 0, avgTime: 38 }] 
     }};
   }
   if (url.includes('/reports/financial')) {
+    // Calculate from actual orders and purchase orders
+    const totalRevenue = mockStore.orders.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
+    const totalExpenses = mockStore.purchaseOrders.reduce((sum, po) => sum + parseFloat(po.total_amount || 0), 0);
+    const grossProfit = totalRevenue - totalExpenses;
+    const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
+    const netProfit = grossProfit * 0.75; // Assume 75% after operating expenses
+    const netMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
+    
+    // Receivables from client balances
+    const receivables = mockStore.clients.reduce((sum, c) => sum + (c.current_balance || 0), 0);
+    
     return { data: { 
-      summary: { totalRevenue: 2450000, totalExpenses: 1850000, grossProfit: 600000, netProfit: 450000, grossMargin: 24.5, netMargin: 18.4 }, 
+      summary: { totalRevenue: totalRevenue || 220500, totalExpenses: totalExpenses || 255000, grossProfit: grossProfit || -34500, netProfit: netProfit || -25875, grossMargin: grossMargin.toFixed(1), netMargin: netMargin.toFixed(1) }, 
       trend: mockDashboardData.revenueChart.map(d => ({ date: d.date, revenue: d.revenue, expenses: d.revenue * 0.75, profitMargin: 25 })), 
-      receivables: { total: 125000, current: 80000, days30: 30000, days60: 15000 }, 
+      receivables: { total: receivables || 90500, current: Math.round(receivables * 0.6), days30: Math.round(receivables * 0.25), days60: Math.round(receivables * 0.15) }, 
       payables: { total: 85000, current: 60000, days30: 20000, days60: 5000 } 
     }};
   }

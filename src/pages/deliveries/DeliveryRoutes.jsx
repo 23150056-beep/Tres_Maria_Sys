@@ -335,10 +335,14 @@ export default function DeliveryRoutes() {
               {/* Footer */}
               <div className="p-4 border-t bg-gray-50 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <button className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                  <a 
+                    href="tel:+639171234567" 
+                    className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                    onClick={() => alert('Calling driver: +63 917 123 4567\n\nOn a real device, this would open the phone dialer.')}
+                  >
                     <PhoneIcon className="h-4 w-4 mr-2" />
                     Call Driver
-                  </button>
+                  </a>
                   <span className="text-sm text-gray-500">Driver's phone: +63 917 123 4567</span>
                 </div>
                 <div className="text-right">
