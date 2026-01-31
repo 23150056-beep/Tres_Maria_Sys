@@ -423,21 +423,76 @@ const mockGet = async (url) => {
   }
   if (url.includes('/reports/financial')) {
     // Calculate from actual orders and purchase orders
-    const totalRevenue = mockStore.orders.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
-    const totalExpenses = mockStore.purchaseOrders.reduce((sum, po) => sum + parseFloat(po.total_amount || 0), 0);
+    const totalRevenue = mockStore.orders.reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0) || 220500;
+    const totalExpenses = mockStore.purchaseOrders.reduce((sum, po) => sum + parseFloat(po.total_amount || 0), 0) || 255000;
     const grossProfit = totalRevenue - totalExpenses;
     const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
-    const netProfit = grossProfit * 0.75; // Assume 75% after operating expenses
+    const netProfit = grossProfit * 0.75;
     const netMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
     
     // Receivables from client balances
-    const receivables = mockStore.clients.reduce((sum, c) => sum + (c.current_balance || 0), 0);
+    const receivables = mockStore.clients.reduce((sum, c) => sum + (c.current_balance || 0), 0) || 90500;
+    
+    // Revenue by source (by client type/tier)
+    const revenueBySource = [
+      { source: 'Regular Clients', value: totalRevenue * 0.25 },
+      { source: 'Wholesale', value: totalRevenue * 0.35 },
+      { source: 'Distributors', value: totalRevenue * 0.30 },
+      { source: 'VIP Clients', value: totalRevenue * 0.10 }
+    ];
+    
+    // Expenses by category
+    const expensesByCategory = [
+      { category: 'Inventory/COGS', amount: totalExpenses * 0.60 },
+      { category: 'Transportation', amount: totalExpenses * 0.15 },
+      { category: 'Salaries', amount: totalExpenses * 0.12 },
+      { category: 'Utilities', amount: totalExpenses * 0.05 },
+      { category: 'Rent', amount: totalExpenses * 0.05 },
+      { category: 'Other', amount: totalExpenses * 0.03 }
+    ];
+    
+    // Cash flow data
+    const cashFlow = mockDashboardData.revenueChart.map(d => ({
+      date: d.date,
+      inflow: d.revenue,
+      outflow: d.revenue * 0.70
+    }));
+    
+    // Recent transactions from orders and POs
+    const recentTransactions = [
+      ...mockStore.orders.slice(0, 5).map(o => ({
+        date: o.order_date,
+        description: `Order ${o.order_number}`,
+        type: 'income',
+        entity: o.client?.business_name || 'Client',
+        amount: o.total_amount
+      })),
+      ...mockStore.purchaseOrders.slice(0, 3).map(po => ({
+        date: po.expected_date || '2026-01-30',
+        description: `Purchase ${po.po_number}`,
+        type: 'expense',
+        entity: po.supplier?.name || 'Supplier',
+        amount: po.total_amount
+      }))
+    ].sort((a, b) => new Date(b.date) - new Date(a.date));
     
     return { data: { 
-      summary: { totalRevenue: totalRevenue || 220500, totalExpenses: totalExpenses || 255000, grossProfit: grossProfit || -34500, netProfit: netProfit || -25875, grossMargin: grossMargin.toFixed(1), netMargin: netMargin.toFixed(1) }, 
+      summary: { 
+        totalRevenue, 
+        totalExpenses, 
+        grossProfit, 
+        netProfit, 
+        grossMargin: parseFloat(grossMargin.toFixed(1)), 
+        netMargin: parseFloat(netMargin.toFixed(1)),
+        revenueGrowth: 12.5
+      }, 
       trend: mockDashboardData.revenueChart.map(d => ({ date: d.date, revenue: d.revenue, expenses: d.revenue * 0.75, profitMargin: 25 })), 
-      receivables: { total: receivables || 90500, current: Math.round(receivables * 0.6), days30: Math.round(receivables * 0.25), days60: Math.round(receivables * 0.15) }, 
-      payables: { total: 85000, current: 60000, days30: 20000, days60: 5000 } 
+      receivables: { total: receivables, current: Math.round(receivables * 0.6), days30: Math.round(receivables * 0.25), days60: Math.round(receivables * 0.15) }, 
+      payables: { total: 85000, current: 60000, days30: 20000, days60: 5000 },
+      revenueBySource,
+      expensesByCategory,
+      cashFlow,
+      recentTransactions
     }};
   }
   if (url.includes('/reports/export')) {
