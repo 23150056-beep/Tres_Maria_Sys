@@ -1,9 +1,38 @@
 import express from 'express';
+import crypto from 'crypto';
 import { query, transaction } from '../database/db.js';
 import { createAuditLog } from '../utils/auditLog.js';
 import { paginate, paginationResponse } from '../utils/helpers.js';
 
 const router = express.Router();
+
+// Generate order hash for duplicate detection
+const generateOrderHash = (clientId, items, orderDate) => {
+  const sortedItems = items.map(i => `${i.productId}-${i.quantity}`).sort().join('|');
+  const dateStr = new Date(orderDate).toISOString().split('T')[0];
+  const data = `${clientId}-${dateStr}-${sortedItems}`;
+  return crypto.createHash('sha256').update(data).digest('hex');
+};
+
+// Check for duplicate orders
+const checkDuplicateOrder = async (clientId, items, orderDate) => {
+  const hash = generateOrderHash(clientId, items, orderDate);
+  
+  // Check within last 24 hours
+  const result = await query(
+    `SELECT doc.*, o.order_number, o.total_amount, o.status
+     FROM duplicate_order_checks doc
+     JOIN orders o ON doc.order_id = o.id
+     WHERE doc.check_hash = $1 
+       AND doc.created_at > NOW() - INTERVAL '24 hours'
+       AND o.status NOT IN ('cancelled')
+     ORDER BY doc.created_at DESC
+     LIMIT 1`,
+    [hash]
+  );
+  
+  return result.rows.length > 0 ? result.rows[0] : null;
+};
 
 // Generate order number
 const generateOrderNumber = async () => {
@@ -161,20 +190,71 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+// Check for potential duplicate order
+router.post('/check-duplicate', async (req, res, next) => {
+  try {
+    const { clientId, items, orderDate } = req.body;
+    
+    if (!clientId || !items || items.length === 0) {
+      return res.status(400).json({ error: 'Client and items are required' });
+    }
+    
+    const duplicate = await checkDuplicateOrder(clientId, items, orderDate || new Date());
+    
+    if (duplicate) {
+      res.json({
+        isDuplicate: true,
+        existingOrder: {
+          id: duplicate.order_id,
+          orderNumber: duplicate.order_number,
+          totalAmount: duplicate.total_amount,
+          status: duplicate.status,
+          createdAt: duplicate.created_at
+        },
+        message: `A similar order (${duplicate.order_number}) was created recently. Please confirm this is not a duplicate.`
+      });
+    } else {
+      res.json({ isDuplicate: false });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Create order
 router.post('/', async (req, res, next) => {
   try {
     const { 
       clientId, warehouseId, items, requiredDate, 
-      shippingAddress, notes, priority 
+      shippingAddress, notes, priority, confirmDuplicate 
     } = req.body;
 
     if (!clientId || !warehouseId || !items || items.length === 0) {
       return res.status(400).json({ error: 'Client, warehouse, and at least one item are required' });
     }
 
+    // Check for duplicate order unless explicitly confirmed
+    if (!confirmDuplicate) {
+      const duplicate = await checkDuplicateOrder(clientId, items, new Date());
+      if (duplicate) {
+        return res.status(409).json({
+          error: 'Potential duplicate order detected',
+          isDuplicate: true,
+          existingOrder: {
+            id: duplicate.order_id,
+            orderNumber: duplicate.order_number,
+            totalAmount: duplicate.total_amount,
+            status: duplicate.status,
+            createdAt: duplicate.created_at
+          },
+          message: `A similar order (${duplicate.order_number}) was created in the last 24 hours. Set confirmDuplicate: true to proceed.`
+        });
+      }
+    }
+
     const result = await transaction(async (client) => {
       const orderNumber = await generateOrderNumber();
+      const orderHash = generateOrderHash(clientId, items, new Date());
 
       // Get client pricing tier
       const clientResult = await client.query(
@@ -280,6 +360,13 @@ router.post('/', async (req, res, next) => {
         `INSERT INTO order_status_history (order_id, status, notes, changed_by)
          VALUES ($1, 'pending', 'Order created', $2)`,
         [order.id, req.user.id]
+      );
+
+      // Record duplicate check for future reference
+      await client.query(
+        `INSERT INTO duplicate_order_checks (client_id, check_hash, order_id, is_confirmed, confirmed_by)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [clientId, orderHash, order.id, confirmDuplicate || false, confirmDuplicate ? req.user.id : null]
       );
 
       return { ...order, items: orderItems };

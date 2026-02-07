@@ -41,15 +41,26 @@ const seed = async () => {
     // Seed additional users
     const managerPassword = await bcrypt.hash('manager123', 10);
     const staffPassword = await bcrypt.hash('staff123', 10);
+    const driverPassword = await bcrypt.hash('driver123', 10);
+
+    const driverUserId = uuidv4();
 
     await query(`
       INSERT INTO users (id, email, password, first_name, last_name, phone, role_id, is_active)
       VALUES 
-        ($1, 'manager@tresmarias.ph', $4, 'Juan', 'Dela Cruz', '+63 917 123 4567', 2, true),
-        ($2, 'sales@tresmarias.ph', $5, 'Maria', 'Santos', '+63 918 234 5678', 3, true),
-        ($3, 'warehouse@tresmarias.ph', $5, 'Pedro', 'Reyes', '+63 919 345 6789', 4, true)
+        ($1, 'manager@tresmarias.ph', $5, 'Juan', 'Dela Cruz', '+63 917 123 4567', 2, true),
+        ($2, 'sales@tresmarias.ph', $6, 'Maria', 'Santos', '+63 918 234 5678', 3, true),
+        ($3, 'warehouse@tresmarias.ph', $6, 'Pedro', 'Reyes', '+63 919 345 6789', 4, true),
+        ($4, 'driver@tresmarias.ph', $7, 'Carlos', 'Garcia', '+63 920 456 7890', 5, true)
       ON CONFLICT (email) DO NOTHING;
-    `, [uuidv4(), uuidv4(), uuidv4(), managerPassword, staffPassword]);
+    `, [uuidv4(), uuidv4(), uuidv4(), driverUserId, managerPassword, staffPassword, driverPassword]);
+
+    // Seed driver profile
+    await query(`
+      INSERT INTO drivers (id, user_id, employee_id, license_number, license_type, license_expiry, phone, emergency_contact, emergency_phone, status, is_active)
+      VALUES ($1, $2, 'DRV-001', 'N01-23-456789', 'Professional', '2027-12-31', '+63 920 456 7890', 'Elena Garcia', '+63 921 567 8901', 'available', true)
+      ON CONFLICT (employee_id) DO NOTHING;
+    `, [uuidv4(), driverUserId]);
 
     // ============================================
     // SEED PRICING TIERS

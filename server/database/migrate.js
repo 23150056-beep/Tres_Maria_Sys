@@ -496,7 +496,11 @@ const migrate = async () => {
         phone VARCHAR(20),
         emergency_contact VARCHAR(200),
         emergency_phone VARCHAR(20),
-        status VARCHAR(50) DEFAULT 'available', -- available, on_delivery, off_duty
+        status VARCHAR(50) DEFAULT 'available', -- available, on_delivery, off_duty, assigned
+        current_latitude DECIMAL(10, 8),
+        current_longitude DECIMAL(11, 8),
+        last_location_update TIMESTAMP,
+        device_token VARCHAR(255), -- For push notifications (mobile app)
         is_active BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -547,7 +551,7 @@ const migrate = async () => {
         order_id UUID REFERENCES orders(id),
         client_id UUID REFERENCES clients(id),
         sequence_number INTEGER NOT NULL,
-        status VARCHAR(50) DEFAULT 'pending', -- pending, delivered, failed, partial
+        status VARCHAR(50) DEFAULT 'pending', -- pending, in_transit, delivered, failed, partial
         delivery_address TEXT,
         latitude DECIMAL(10, 8),
         longitude DECIMAL(11, 8),
@@ -555,11 +559,48 @@ const migrate = async () => {
         actual_arrival TIMESTAMP,
         signature_url TEXT,
         photo_url TEXT,
+        photo_urls JSONB DEFAULT '[]', -- Multiple proof of delivery photos
         recipient_name VARCHAR(200),
+        recipient_relationship VARCHAR(100), -- owner, employee, relative, etc.
         notes TEXT,
         failure_reason TEXT,
+        delivery_attempts INTEGER DEFAULT 0,
+        last_attempt_at TIMESTAMP,
+        delivered_quantity JSONB, -- Track partial deliveries {product_id: quantity}
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    // ============================================
+    // DELIVERY TRACKING HISTORY
+    // ============================================
+    await query(`
+      CREATE TABLE IF NOT EXISTS delivery_status_history (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        delivery_id UUID REFERENCES deliveries(id) ON DELETE CASCADE,
+        delivery_item_id UUID REFERENCES delivery_items(id) ON DELETE CASCADE,
+        status VARCHAR(50) NOT NULL,
+        latitude DECIMAL(10, 8),
+        longitude DECIMAL(11, 8),
+        notes TEXT,
+        changed_by UUID REFERENCES users(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    // ============================================
+    // DUPLICATE ORDER DETECTION LOG
+    // ============================================
+    await query(`
+      CREATE TABLE IF NOT EXISTS duplicate_order_checks (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        client_id UUID REFERENCES clients(id),
+        check_hash VARCHAR(64) NOT NULL, -- Hash of client_id + date + items
+        order_id UUID REFERENCES orders(id),
+        is_confirmed BOOLEAN DEFAULT false, -- Staff confirmed it's not a duplicate
+        confirmed_by UUID REFERENCES users(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
 
@@ -705,6 +746,12 @@ const migrate = async () => {
     await query(`CREATE INDEX IF NOT EXISTS idx_orders_date ON orders(order_date);`);
     await query(`CREATE INDEX IF NOT EXISTS idx_deliveries_status ON deliveries(status);`);
     await query(`CREATE INDEX IF NOT EXISTS idx_deliveries_date ON deliveries(scheduled_date);`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_deliveries_driver ON deliveries(driver_id);`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_delivery_items_status ON delivery_items(status);`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_delivery_items_order ON delivery_items(order_id);`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_drivers_status ON drivers(status);`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_drivers_user ON drivers(user_id);`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_duplicate_checks_hash ON duplicate_order_checks(check_hash);`);
     await query(`CREATE INDEX IF NOT EXISTS idx_invoices_client ON invoices(client_id);`);
     await query(`CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);`);
     await query(`CREATE INDEX IF NOT EXISTS idx_audit_logs_user ON audit_logs(user_id);`);

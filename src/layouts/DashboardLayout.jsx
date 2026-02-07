@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
@@ -18,18 +18,50 @@ import {
   DocumentTextIcon,
   UserGroupIcon,
   BanknotesIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  MapPinIcon,
+  ClockIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline';
 import useAuthStore from '../stores/authStore';
 import NotificationDropdown from '../components/NotificationDropdown';
 import MobileBottomNav from '../components/MobileBottomNav';
 import { startNotificationPolling, stopNotificationPolling } from '../services/notificationService';
+import socketService from '../services/socketService';
 
-const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
+// Full navigation structure with role-based access
+const fullNavigation = [
+  { 
+    name: 'Dashboard', 
+    href: '/', 
+    icon: HomeIcon,
+    roles: ['Admin', 'Manager', 'Sales', 'Warehouse Staff', 'Driver']
+  },
+  {
+    name: 'Order Visibility',
+    icon: EyeIcon,
+    roles: ['Admin', 'Manager', 'Sales'],
+    children: [
+      { name: 'Order Dashboard', href: '/orders/dashboard' },
+      { name: 'All Orders', href: '/orders' },
+      { name: 'Pending Orders', href: '/orders?status=pending' },
+      { name: 'New Order', href: '/orders/create' },
+    ]
+  },
+  {
+    name: 'Delivery Tracking',
+    icon: MapPinIcon,
+    roles: ['Admin', 'Manager', 'Sales'],
+    children: [
+      { name: 'Live Tracking', href: '/deliveries/tracking' },
+      { name: 'All Deliveries', href: '/deliveries' },
+      { name: 'Routes', href: '/deliveries/routes' },
+    ]
+  },
   {
     name: 'Distribution',
     icon: TruckIcon,
+    roles: ['Admin', 'Manager', 'Warehouse Staff'],
     children: [
       { name: 'Distribution Plans', href: '/distribution' },
       { name: 'Create Plan', href: '/distribution/create' },
@@ -38,6 +70,7 @@ const navigation = [
   {
     name: 'Inventory',
     icon: CubeIcon,
+    roles: ['Admin', 'Manager', 'Warehouse Staff'],
     children: [
       { name: 'Stock Overview', href: '/inventory' },
       { name: 'Transactions', href: '/inventory/transactions' },
@@ -47,6 +80,7 @@ const navigation = [
   {
     name: 'Orders',
     icon: ShoppingCartIcon,
+    roles: ['Admin', 'Manager', 'Sales'],
     children: [
       { name: 'All Orders', href: '/orders' },
       { name: 'New Order', href: '/orders/create' },
@@ -55,6 +89,7 @@ const navigation = [
   {
     name: 'Products',
     icon: ClipboardDocumentListIcon,
+    roles: ['Admin', 'Manager', 'Sales', 'Warehouse Staff'],
     children: [
       { name: 'Product List', href: '/products' },
       { name: 'Categories', href: '/products/categories' },
@@ -63,6 +98,7 @@ const navigation = [
   {
     name: 'Clients',
     icon: UserGroupIcon,
+    roles: ['Admin', 'Manager', 'Sales'],
     children: [
       { name: 'Client List', href: '/clients' },
       { name: 'Add Client', href: '/clients/new' },
@@ -71,6 +107,7 @@ const navigation = [
   {
     name: 'Suppliers',
     icon: BuildingStorefrontIcon,
+    roles: ['Admin', 'Manager'],
     children: [
       { name: 'Supplier List', href: '/suppliers' },
       { name: 'Add Supplier', href: '/suppliers/new' },
@@ -79,6 +116,7 @@ const navigation = [
   {
     name: 'Purchasing',
     icon: DocumentTextIcon,
+    roles: ['Admin', 'Manager'],
     children: [
       { name: 'Purchase Orders', href: '/purchasing' },
       { name: 'Create PO', href: '/purchasing/create' },
@@ -88,6 +126,7 @@ const navigation = [
   {
     name: 'Deliveries',
     icon: TruckIcon,
+    roles: ['Admin', 'Manager', 'Warehouse Staff'],
     children: [
       { name: 'Delivery List', href: '/deliveries' },
       { name: 'Routes', href: '/deliveries/routes' },
@@ -96,11 +135,13 @@ const navigation = [
   {
     name: 'Warehouse',
     icon: BuildingOffice2Icon,
+    roles: ['Admin', 'Manager', 'Warehouse Staff'],
     href: '/warehouse'
   },
   {
     name: 'Reports',
     icon: ChartBarIcon,
+    roles: ['Admin', 'Manager'],
     children: [
       { name: 'Sales Report', href: '/reports/sales' },
       { name: 'Inventory Report', href: '/reports/inventory' },
@@ -111,9 +152,33 @@ const navigation = [
   {
     name: 'Users',
     icon: UsersIcon,
+    roles: ['Admin'],
     href: '/users'
   },
 ];
+
+// Normalize role name for comparison
+function normalizeRole(role) {
+  if (!role) return 'Staff';
+  // Map lowercase role values to display names
+  const roleMap = {
+    'admin': 'Admin',
+    'manager': 'Manager',
+    'sales': 'Sales',
+    'warehouse_staff': 'Warehouse Staff',
+    'driver': 'Driver'
+  };
+  return roleMap[role.toLowerCase()] || role;
+}
+
+// Filter navigation based on user role
+function getFilteredNavigation(userRole) {
+  const normalizedRole = normalizeRole(userRole);
+  return fullNavigation.filter(item => {
+    if (!item.roles) return true;
+    return item.roles.includes(normalizedRole);
+  });
+}
 
 function NavItem({ item }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -179,14 +244,27 @@ export default function DashboardLayout() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
-  // Start notification polling when layout mounts
+  // Filter navigation based on user role
+  const navigation = useMemo(() => {
+    const userRole = user?.role_name || user?.role || 'Staff';
+    return getFilteredNavigation(userRole);
+  }, [user?.role_name, user?.role]);
+
+  // Start notification polling and socket connection when layout mounts
   useEffect(() => {
     const cleanup = startNotificationPolling(60000); // Check every 60 seconds
+    
+    // Initialize socket connection for real-time updates
+    if (user?.id) {
+      socketService.connect(user.id);
+    }
+    
     return () => {
       cleanup();
       stopNotificationPolling();
+      socketService.disconnect();
     };
-  }, []);
+  }, [user?.id]);
 
   const handleLogout = () => {
     logout();

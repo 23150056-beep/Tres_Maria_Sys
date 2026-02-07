@@ -1,6 +1,68 @@
 # Tres Marias Warehouse Distribution System - Project Status
 
-## Last Updated: February 1, 2026
+## Last Updated: February 7, 2026
+
+---
+
+## 🏗️ Refined System Architecture
+
+### Core Goals (Problem-Solution Mapping)
+1. **Centralized Order Management** → Replace scattered emails, calls, and handwritten forms with a unified platform
+2. **Error Reduction & Verification** → Automated order entry, validation, and duplication checks
+3. **Real-Time Delivery Tracking** → Drivers update status via mobile, visible instantly to staff/admin
+4. **Order Visibility** → Dashboard for pending, dispatched, delivered orders
+5. **Clear Responsibilities** → Role-based access ensures accountability
+
+### System Architecture
+```
+                 ┌───────────────────────┐
+                 │   Web Client (React)  │
+                 │   - Admin & Staff     │
+                 └──────────▲────────────┘
+                            │
+                 ┌──────────┴────────────┐
+                 │ Centralized API Layer │ (Express.js + Socket.io)
+                 │ - Authentication      │
+                 │ - Transactions        │
+                 │ - Delivery Tracking   │
+                 │ - Reports             │
+                 │ - Real-time Events    │
+                 └──────────▲────────────┘
+                            │
+                 ┌──────────┴────────────┐
+                 │   Database (SQL)      │
+                 │ - Orders              │
+                 │ - Users & Roles       │
+                 │ - Deliveries          │
+                 │ - Reports             │
+                 └──────────▲────────────┘
+                            │
+                 ┌──────────┴────────────┐
+                 │ Mobile Client (RN)    │
+                 │ - Truck Drivers       │
+                 │ - Real-time updates   │
+                 └───────────────────────┘
+```
+
+### Features per User Level
+
+#### **Admin (Web)**
+- Centralized Control: Manage all users, products, and partner stores
+- Reports: Real-time dashboards for pending/dispatched/delivered orders
+- Error Prevention: Automated duplicate order detection
+- User Management: Create/edit users and assign roles
+
+#### **Staff (Web)**
+- Order Entry: Encode partner store orders directly into system
+- Delivery Scheduling: Assign drivers via system, visible instantly on mobile
+- Tracking: Monitor delivery progress in real-time
+- Duplicate Detection: System warns when similar orders exist
+
+#### **Truck Driver (Mobile App Endpoints)**
+- Assigned Deliveries: Receive delivery list from staff/admin
+- Status Updates: Mark orders as in transit, delivered, or failed
+- Proof of Delivery: Upload signature/photo confirmation
+- GPS Location: Real-time location tracking
 
 ---
 
@@ -125,7 +187,52 @@ Open: http://localhost:5173
 |------|-------|----------|
 | Admin | admin@tresmarias.ph | admin123 |
 | Manager | manager@tresmarias.ph | manager123 |
-| Sales | sales@tresmarias.ph | sales123 |
+| Sales | sales@tresmarias.ph | staff123 |
+| Warehouse | warehouse@tresmarias.ph | staff123 |
+| Driver | driver@tresmarias.ph | driver123 |
+
+---
+
+## 🔌 API Endpoints (Centralized Communication Flow)
+
+### Authentication
+- `POST /api/auth/login` → JWT login for all users
+- `POST /api/auth/register` → Create new user (Admin only)
+- `GET /api/auth/me` → Get current user profile
+
+### Orders (Staff)
+- `POST /api/orders` → Staff creates order (with duplicate detection)
+- `GET /api/orders` → Admin/Staff view all orders
+- `GET /api/orders/:id` → Get single order with items
+- `PATCH /api/orders/:id/status` → Update order status
+- `POST /api/orders/check-duplicate` → Check for duplicate orders
+- `POST /api/orders/:id/approve` → Approve pending order
+
+### Deliveries (Staff/Admin)
+- `POST /api/deliveries` → Create delivery from orders
+- `GET /api/deliveries` → View all deliveries
+- `PATCH /api/deliveries/:id/status` → Update delivery status
+- `PATCH /api/deliveries/:id/items/:itemId` → Update stop status
+
+### Driver Mobile Endpoints
+- `GET /api/driver/profile` → Get driver profile
+- `POST /api/driver/location` → Update GPS location
+- `GET /api/driver/deliveries` → Get assigned deliveries
+- `GET /api/driver/deliveries/:id` → Get delivery details with stops
+- `POST /api/driver/deliveries/:id/start` → Start delivery (depart)
+- `PATCH /api/driver/deliveries/:deliveryId/stops/:stopId` → Update stop status
+- `POST /api/driver/deliveries/:deliveryId/stops/:stopId/proof` → Upload proof of delivery
+- `POST /api/driver/deliveries/:id/complete` → Complete delivery
+- `GET /api/driver/history` → Delivery history
+- `GET /api/driver/stats` → Driver statistics
+
+### Dashboard & Reports
+- `GET /api/dashboard/kpis` → Main KPIs
+- `GET /api/dashboard/order-visibility` → Order status overview
+- `GET /api/dashboard/delivery-tracking` → Real-time delivery tracking
+- `GET /api/dashboard/order-pipeline` → Order flow analytics
+- `GET /api/dashboard/duplicate-alerts` → Recent duplicate checks
+- `GET /api/reports/*` → Various reports (sales, inventory, delivery, financial)
 
 ---
 

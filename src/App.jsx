@@ -27,6 +27,7 @@ import StockAlerts from './pages/inventory/StockAlerts';
 import Orders from './pages/orders/Orders';
 import CreateOrder from './pages/orders/CreateOrder';
 import OrderDetail from './pages/orders/OrderDetail';
+import OrderDashboard from './pages/orders/OrderDashboard';
 
 // Products Module
 import Products from './pages/products/Products';
@@ -51,6 +52,7 @@ import GoodsReceipts from './pages/purchasing/GoodsReceipts';
 import Deliveries from './pages/deliveries/Deliveries';
 import DeliveryRoutes from './pages/deliveries/DeliveryRoutes';
 import DeliveryDetail from './pages/deliveries/DeliveryDetail';
+import DeliveryTracking from './pages/deliveries/DeliveryTracking';
 
 // Warehouse Module
 import Warehouses from './pages/warehouse/Warehouses';
@@ -146,6 +148,7 @@ function App() {
           {/* Orders */}
           <Route path="orders">
             <Route index element={<Orders />} />
+            <Route path="dashboard" element={<OrderDashboard />} />
             <Route path="create" element={<CreateOrder />} />
             <Route path=":id" element={<OrderDetail />} />
           </Route>
@@ -183,6 +186,7 @@ function App() {
           {/* Deliveries */}
           <Route path="deliveries">
             <Route index element={<Deliveries />} />
+            <Route path="tracking" element={<DeliveryTracking />} />
             <Route path="routes" element={<DeliveryRoutes />} />
             <Route path=":id" element={<DeliveryDetail />} />
           </Route>

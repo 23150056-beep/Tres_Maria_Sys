@@ -425,4 +425,258 @@ router.get('/distribution-overview', async (req, res, next) => {
   }
 });
 
+// ====================================================
+// ORDER VISIBILITY DASHBOARD (Centralized Order Management)
+// ====================================================
+
+// Real-time Order Status Overview
+router.get('/order-visibility', async (req, res, next) => {
+  try {
+    // Order counts by status
+    const statusCounts = await query(
+      `SELECT 
+        status,
+        COUNT(*) as count,
+        COALESCE(SUM(total_amount), 0) as total_value
+       FROM orders
+       WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'
+       GROUP BY status
+       ORDER BY CASE status
+         WHEN 'pending' THEN 1
+         WHEN 'confirmed' THEN 2
+         WHEN 'processing' THEN 3
+         WHEN 'picking' THEN 4
+         WHEN 'packed' THEN 5
+         WHEN 'shipped' THEN 6
+         WHEN 'delivered' THEN 7
+         WHEN 'cancelled' THEN 8
+         ELSE 9
+       END`
+    );
+
+    // Today's order summary
+    const todaySummary = await query(
+      `SELECT 
+        COUNT(*) as total_orders,
+        COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending,
+        COUNT(CASE WHEN status IN ('confirmed', 'processing', 'picking', 'packed') THEN 1 END) as in_progress,
+        COUNT(CASE WHEN status = 'shipped' THEN 1 END) as dispatched,
+        COUNT(CASE WHEN status = 'delivered' THEN 1 END) as delivered,
+        COALESCE(SUM(total_amount), 0) as total_value,
+        COALESCE(SUM(CASE WHEN status = 'delivered' THEN total_amount ELSE 0 END), 0) as delivered_value
+       FROM orders
+       WHERE DATE(order_date) = CURRENT_DATE`
+    );
+
+    // Orders requiring attention (pending > 24hrs, failed deliveries)
+    const attentionRequired = await query(
+      `SELECT o.id, o.order_number, o.status, o.total_amount, o.order_date,
+              c.business_name as client_name, c.phone as client_phone,
+              CASE 
+                WHEN o.status = 'pending' AND o.created_at < NOW() - INTERVAL '24 hours' THEN 'pending_too_long'
+                WHEN o.status = 'failed' THEN 'delivery_failed'
+                WHEN o.required_date < CURRENT_DATE AND o.status NOT IN ('delivered', 'cancelled') THEN 'overdue'
+              END as attention_reason
+       FROM orders o
+       JOIN clients c ON o.client_id = c.id
+       WHERE (
+         (o.status = 'pending' AND o.created_at < NOW() - INTERVAL '24 hours')
+         OR o.status = 'failed'
+         OR (o.required_date < CURRENT_DATE AND o.status NOT IN ('delivered', 'cancelled'))
+       )
+       ORDER BY o.order_date DESC
+       LIMIT 20`
+    );
+
+    // Recent order activity (last 50 status changes)
+    const recentActivity = await query(
+      `SELECT osh.*, o.order_number, c.business_name as client_name,
+              u.first_name || ' ' || u.last_name as changed_by_name
+       FROM order_status_history osh
+       JOIN orders o ON osh.order_id = o.id
+       JOIN clients c ON o.client_id = c.id
+       LEFT JOIN users u ON osh.changed_by = u.id
+       ORDER BY osh.created_at DESC
+       LIMIT 50`
+    );
+
+    res.json({
+      statusCounts: statusCounts.rows,
+      todaySummary: todaySummary.rows[0],
+      attentionRequired: attentionRequired.rows,
+      recentActivity: recentActivity.rows
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Real-time Delivery Tracking Dashboard
+router.get('/delivery-tracking', async (req, res, next) => {
+  try {
+    // Active deliveries with real-time status
+    const activeDeliveries = await query(
+      `SELECT d.id, d.delivery_number, d.status, d.scheduled_date,
+              d.total_stops, d.completed_stops,
+              d.departure_time,
+              dr.name as route_name,
+              drv.current_latitude, drv.current_longitude, drv.last_location_update,
+              u.first_name || ' ' || u.last_name as driver_name,
+              u.phone as driver_phone,
+              v.plate_number
+       FROM deliveries d
+       LEFT JOIN delivery_routes dr ON d.route_id = dr.id
+       LEFT JOIN drivers drv ON d.driver_id = drv.id
+       LEFT JOIN users u ON drv.user_id = u.id
+       LEFT JOIN vehicles v ON d.vehicle_id = v.id
+       WHERE d.status IN ('scheduled', 'loading', 'in_transit')
+         AND d.scheduled_date = CURRENT_DATE
+       ORDER BY CASE d.status
+         WHEN 'in_transit' THEN 1
+         WHEN 'loading' THEN 2
+         WHEN 'scheduled' THEN 3
+       END, d.departure_time`
+    );
+
+    // Get delivery items for active deliveries
+    const deliveriesWithStops = await Promise.all(activeDeliveries.rows.map(async (delivery) => {
+      const stops = await query(
+        `SELECT di.id, di.sequence_number, di.status, di.delivery_address,
+                di.latitude, di.longitude,
+                c.business_name as client_name, c.phone as client_phone,
+                o.order_number, o.total_amount
+         FROM delivery_items di
+         LEFT JOIN clients c ON di.client_id = c.id
+         LEFT JOIN orders o ON di.order_id = o.id
+         WHERE di.delivery_id = $1
+         ORDER BY di.sequence_number`,
+        [delivery.id]
+      );
+      return { ...delivery, stops: stops.rows };
+    }));
+
+    // Driver locations for map
+    const driverLocations = await query(
+      `SELECT d.id as driver_id, d.current_latitude, d.current_longitude, 
+              d.last_location_update, d.status,
+              u.first_name || ' ' || u.last_name as driver_name,
+              del.delivery_number, del.id as delivery_id
+       FROM drivers d
+       JOIN users u ON d.user_id = u.id
+       LEFT JOIN deliveries del ON del.driver_id = d.id 
+         AND del.status = 'in_transit' 
+         AND del.scheduled_date = CURRENT_DATE
+       WHERE d.is_active = true 
+         AND d.status IN ('on_delivery', 'assigned')
+         AND d.current_latitude IS NOT NULL`
+    );
+
+    // Today's delivery stats
+    const todayStats = await query(
+      `SELECT 
+        COUNT(DISTINCT d.id) as total_deliveries,
+        COUNT(DISTINCT CASE WHEN d.status = 'scheduled' THEN d.id END) as scheduled,
+        COUNT(DISTINCT CASE WHEN d.status = 'in_transit' THEN d.id END) as in_transit,
+        COUNT(DISTINCT CASE WHEN d.status = 'delivered' THEN d.id END) as completed,
+        COUNT(DISTINCT CASE WHEN d.status = 'failed' THEN d.id END) as failed,
+        SUM(d.total_stops) as total_stops,
+        SUM(d.completed_stops) as completed_stops,
+        COUNT(CASE WHEN di.status = 'delivered' THEN 1 END) as stops_delivered,
+        COUNT(CASE WHEN di.status = 'failed' THEN 1 END) as stops_failed
+       FROM deliveries d
+       LEFT JOIN delivery_items di ON d.id = di.delivery_id
+       WHERE d.scheduled_date = CURRENT_DATE`
+    );
+
+    res.json({
+      activeDeliveries: deliveriesWithStops,
+      driverLocations: driverLocations.rows,
+      todayStats: todayStats.rows[0]
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Order Flow Pipeline (for Admin dashboard)
+router.get('/order-pipeline', async (req, res, next) => {
+  try {
+    const { period = '7days' } = req.query;
+    const interval = period === '7days' ? '7 days' : period === '30days' ? '30 days' : '90 days';
+
+    // Order flow by day
+    const dailyFlow = await query(
+      `SELECT DATE(order_date) as date,
+              COUNT(*) as created,
+              COUNT(CASE WHEN status = 'confirmed' THEN 1 END) as confirmed,
+              COUNT(CASE WHEN status = 'shipped' THEN 1 END) as shipped,
+              COUNT(CASE WHEN status = 'delivered' THEN 1 END) as delivered,
+              COUNT(CASE WHEN status = 'cancelled' THEN 1 END) as cancelled
+       FROM orders
+       WHERE order_date >= CURRENT_DATE - INTERVAL '${interval}'
+       GROUP BY DATE(order_date)
+       ORDER BY date`
+    );
+
+    // Average processing time by status
+    const processingTimes = await query(
+      `SELECT 
+        AVG(EXTRACT(EPOCH FROM (
+          CASE WHEN status != 'pending' THEN 
+            (SELECT MIN(created_at) FROM order_status_history WHERE order_id = o.id AND status = 'confirmed')
+          END - created_at
+        )) / 3600) as avg_confirmation_hours,
+        AVG(EXTRACT(EPOCH FROM (shipped_date - created_at)) / 3600) as avg_ship_hours,
+        AVG(EXTRACT(EPOCH FROM (delivered_date - created_at)) / 3600) as avg_delivery_hours
+       FROM orders o
+       WHERE order_date >= CURRENT_DATE - INTERVAL '${interval}'
+         AND status = 'delivered'`
+    );
+
+    // Top performing clients
+    const topClients = await query(
+      `SELECT c.id, c.business_name, c.code,
+              COUNT(o.id) as order_count,
+              COALESCE(SUM(o.total_amount), 0) as total_value
+       FROM clients c
+       JOIN orders o ON c.id = o.client_id
+       WHERE o.order_date >= CURRENT_DATE - INTERVAL '${interval}'
+         AND o.status NOT IN ('cancelled')
+       GROUP BY c.id, c.business_name, c.code
+       ORDER BY total_value DESC
+       LIMIT 10`
+    );
+
+    res.json({
+      dailyFlow: dailyFlow.rows,
+      processingTimes: processingTimes.rows[0],
+      topClients: topClients.rows
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Duplicate Order Alerts
+router.get('/duplicate-alerts', async (req, res, next) => {
+  try {
+    const result = await query(
+      `SELECT doc.*, o.order_number, o.total_amount, o.status,
+              c.business_name as client_name,
+              u.first_name || ' ' || u.last_name as confirmed_by_name
+       FROM duplicate_order_checks doc
+       JOIN orders o ON doc.order_id = o.id
+       JOIN clients c ON doc.client_id = c.id
+       LEFT JOIN users u ON doc.confirmed_by = u.id
+       WHERE doc.created_at >= CURRENT_DATE - INTERVAL '7 days'
+       ORDER BY doc.created_at DESC
+       LIMIT 50`
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

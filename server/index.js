@@ -24,10 +24,11 @@ import warehouseRoutes from './routes/warehouse.js';
 import distributionRoutes from './routes/distribution.js';
 import reportRoutes from './routes/reports.js';
 import dashboardRoutes from './routes/dashboard.js';
+import driverRoutes from './routes/driver.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
-import { authenticateToken } from './middleware/auth.js';
+import { authenticateToken, requireRole } from './middleware/auth.js';
 
 const app = express();
 const httpServer = createServer(app);
@@ -79,6 +80,9 @@ app.use('/api/warehouse', authenticateToken, warehouseRoutes);
 app.use('/api/distribution', authenticateToken, distributionRoutes);
 app.use('/api/reports', authenticateToken, reportRoutes);
 app.use('/api/dashboard', authenticateToken, dashboardRoutes);
+
+// Driver-specific routes (Mobile app)
+app.use('/api/driver', authenticateToken, requireRole('Driver', 'Admin'), driverRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

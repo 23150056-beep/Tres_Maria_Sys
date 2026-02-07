@@ -36,6 +36,36 @@ export const mockUsers = [
     warehouse_id: '1',
     is_active: true,
     permissions: { orders: true, clients: true }
+  },
+  {
+    id: '4',
+    email: 'warehouse@tresmarias.ph',
+    password: 'warehouse123',
+    name: 'Carlos Ramos',
+    first_name: 'Carlos',
+    last_name: 'Ramos',
+    role: 'warehouse_staff',
+    warehouse_id: '1',
+    is_active: true,
+    permissions: { inventory: true, deliveries: true }
+  },
+  {
+    id: '5',
+    email: 'driver@tresmarias.ph',
+    password: 'driver123',
+    name: 'Pedro Reyes',
+    first_name: 'Pedro',
+    last_name: 'Reyes',
+    role: 'driver',
+    warehouse_id: '1',
+    is_active: true,
+    permissions: { deliveries: true },
+    driver_profile: {
+      license_number: 'N01-12-345678',
+      vehicle_type: 'Delivery Truck',
+      vehicle_plate: 'ABC 1234',
+      phone: '+63 917 123 4567'
+    }
   }
 ];
 
@@ -105,9 +135,9 @@ export const mockInventory = [
 ];
 
 export const mockDeliveries = [
-  { id: 1, delivery_number: 'DEL-2026-0001', order_id: 1, order: mockOrders[0], status: 'delivered', scheduled_date: '2026-01-29T09:00:00', driver_name: 'Pedro Reyes', delivery_address: '123 Rizal St, San Fernando' },
-  { id: 2, delivery_number: 'DEL-2026-0002', order_id: 2, order: mockOrders[1], status: 'in-transit', scheduled_date: '2026-01-31T08:00:00', driver_name: 'Juan Santos', delivery_address: '456 Quezon Ave, Bauang' },
-  { id: 3, delivery_number: 'DEL-2026-0003', order_id: 4, order: mockOrders[3], status: 'assigned', scheduled_date: '2026-02-01T10:00:00', driver_name: 'Pedro Reyes', delivery_address: '654 Governor Luna St, San Fernando' }
+  { id: 1, delivery_number: 'DEL-2026-0001', order_id: 1, order: mockOrders[0], status: 'delivered', scheduled_date: '2026-01-29T09:00:00', driver_id: '5', driver_name: 'Pedro Reyes', delivery_address: '123 Rizal St, San Fernando' },
+  { id: 2, delivery_number: 'DEL-2026-0002', order_id: 2, order: mockOrders[1], status: 'in-transit', scheduled_date: '2026-01-31T08:00:00', driver_id: '5', driver_name: 'Pedro Reyes', delivery_address: '456 Quezon Ave, Bauang', current_location: { lat: 16.6159, lng: 120.3209 } },
+  { id: 3, delivery_number: 'DEL-2026-0003', order_id: 4, order: mockOrders[3], status: 'assigned', scheduled_date: '2026-02-01T10:00:00', driver_id: '5', driver_name: 'Pedro Reyes', delivery_address: '654 Governor Luna St, San Fernando' }
 ];
 
 export const mockPurchaseOrders = [
