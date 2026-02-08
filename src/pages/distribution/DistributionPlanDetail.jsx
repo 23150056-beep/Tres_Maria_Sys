@@ -13,20 +13,20 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const statusColors = {
-  draft: 'bg-gray-500/20 text-gray-400',
-  approved: 'bg-blue-500/20 text-blue-400',
-  executing: 'bg-yellow-500/20 text-yellow-400',
-  completed: 'bg-green-500/20 text-green-400',
-  cancelled: 'bg-red-500/20 text-red-400'
+  draft: 'bg-slate-100 text-slate-600',
+  approved: 'bg-blue-50 text-blue-700',
+  executing: 'bg-amber-50 text-amber-700',
+  completed: 'bg-emerald-50 text-emerald-700',
+  cancelled: 'bg-red-50 text-red-700'
 };
 
 const allocationStatusColors = {
-  pending: 'bg-gray-500/20 text-gray-400',
-  allocated: 'bg-blue-500/20 text-blue-400',
-  picked: 'bg-yellow-500/20 text-yellow-400',
-  shipped: 'bg-purple-500/20 text-purple-400',
-  delivered: 'bg-green-500/20 text-green-400',
-  cancelled: 'bg-red-500/20 text-red-400'
+  pending: 'bg-slate-100 text-slate-600',
+  allocated: 'bg-blue-50 text-blue-700',
+  picked: 'bg-amber-50 text-amber-700',
+  shipped: 'bg-primary-50 text-primary-700',
+  delivered: 'bg-emerald-50 text-emerald-700',
+  cancelled: 'bg-red-50 text-red-700'
 };
 
 export default function DistributionPlanDetail() {
@@ -122,18 +122,18 @@ export default function DistributionPlanDetail() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate('/distribution')}
-            className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg"
+            className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg"
           >
             <ArrowLeftIcon className="h-5 w-5" />
           </button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-white">{plan.plan_number}</h1>
+              <h1 className="text-2xl font-bold text-slate-900">{plan.plan_number}</h1>
               <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusColors[plan.status]}`}>
                 {plan.status.charAt(0).toUpperCase() + plan.status.slice(1)}
               </span>
             </div>
-            <p className="text-white/60 mt-1">
+            <p className="text-slate-500 mt-1">
               Created on {new Date(plan.created_at).toLocaleDateString('en-PH')}
             </p>
           </div>
@@ -175,48 +175,48 @@ export default function DistributionPlanDetail() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="glass-card p-6">
           <div className="flex items-center">
-            <div className="bg-blue-500/20 p-3 rounded-lg">
-              <CubeIcon className="h-6 w-6 text-blue-400" />
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <CubeIcon className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-white/60">Total Orders</p>
-              <p className="text-2xl font-bold text-white">{plan.total_orders || 0}</p>
+              <p className="text-sm text-slate-500">Total Orders</p>
+              <p className="text-2xl font-bold text-slate-900">{plan.total_orders || 0}</p>
             </div>
           </div>
         </div>
 
         <div className="glass-card p-6">
           <div className="flex items-center">
-            <div className="bg-green-500/20 p-3 rounded-lg">
-              <TruckIcon className="h-6 w-6 text-green-400" />
+            <div className="bg-emerald-50 p-3 rounded-lg">
+              <TruckIcon className="h-6 w-6 text-emerald-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-white/60">Total Value</p>
-              <p className="text-2xl font-bold text-white">{formatCurrency(plan.total_value)}</p>
+              <p className="text-sm text-slate-500">Total Value</p>
+              <p className="text-2xl font-bold text-slate-900">{formatCurrency(plan.total_value)}</p>
             </div>
           </div>
         </div>
 
         <div className="glass-card p-6">
           <div className="flex items-center">
-            <div className="bg-purple-500/20 p-3 rounded-lg">
-              <MapPinIcon className="h-6 w-6 text-purple-400" />
+            <div className="bg-primary-50 p-3 rounded-lg">
+              <MapPinIcon className="h-6 w-6 text-primary-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-white/60">Warehouse</p>
-              <p className="text-xl font-bold text-white">{plan.warehouse_name || 'All'}</p>
+              <p className="text-sm text-slate-500">Warehouse</p>
+              <p className="text-xl font-bold text-slate-900">{plan.warehouse_name || 'All'}</p>
             </div>
           </div>
         </div>
 
         <div className="glass-card p-6">
           <div className="flex items-center">
-            <div className="bg-yellow-500/20 p-3 rounded-lg">
-              <CheckCircleIcon className="h-6 w-6 text-yellow-400" />
+            <div className="bg-amber-50 p-3 rounded-lg">
+              <CheckCircleIcon className="h-6 w-6 text-amber-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-white/60">Plan Date</p>
-              <p className="text-xl font-bold text-white">
+              <p className="text-sm text-slate-500">Plan Date</p>
+              <p className="text-xl font-bold text-slate-900">
                 {new Date(plan.plan_date).toLocaleDateString('en-PH')}
               </p>
             </div>
@@ -227,21 +227,21 @@ export default function DistributionPlanDetail() {
       {/* Notes */}
       {plan.notes && (
         <div className="glass-card p-6">
-          <h3 className="text-lg font-semibold text-white mb-2">Notes</h3>
-          <p className="text-white/60">{plan.notes}</p>
+          <h3 className="text-lg font-semibold text-slate-900 mb-2">Notes</h3>
+          <p className="text-slate-500">{plan.notes}</p>
         </div>
       )}
 
       {/* Allocations */}
       <div className="glass-card overflow-hidden">
-        <div className="p-6 border-b border-white/10">
-          <h3 className="text-lg font-semibold text-white">Allocations</h3>
-          <p className="text-sm text-white/60 mt-1">Order allocations for this distribution plan</p>
+        <div className="p-6 border-b border-slate-200">
+          <h3 className="text-lg font-semibold text-slate-900">Allocations</h3>
+          <p className="text-sm text-slate-500 mt-1">Order allocations for this distribution plan</p>
         </div>
 
         {allocations.length === 0 ? (
-          <div className="p-12 text-center text-white/60">
-            <CubeIcon className="h-12 w-12 mx-auto mb-4 text-white/40" />
+          <div className="p-12 text-center text-slate-500">
+            <CubeIcon className="h-12 w-12 mx-auto mb-4 text-slate-400" />
             <p>No allocations yet. Execute the plan to create allocations.</p>
           </div>
         ) : (
@@ -249,47 +249,47 @@ export default function DistributionPlanDetail() {
             <table className="glass-table">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Order
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Client
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Warehouse
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Priority
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Allocated At
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10">
+              <tbody className="divide-y divide-slate-200">
                 {allocations.map((allocation) => (
-                  <tr key={allocation.id} className="hover:bg-white/5">
+                  <tr key={allocation.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-white">{allocation.order_number}</span>
+                      <span className="text-sm font-medium text-slate-900">{allocation.order_number}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-white/60">{allocation.client_name}</span>
+                      <span className="text-sm text-slate-500">{allocation.client_name}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-white/60">{allocation.warehouse_name}</span>
+                      <span className="text-sm text-slate-500">{allocation.warehouse_name}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-white/60">{allocation.priority_score?.toFixed(2)}</span>
+                      <span className="text-sm text-slate-500">{allocation.priority_score?.toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${allocationStatusColors[allocation.status]}`}>
                         {allocation.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                       {allocation.allocated_at 
                         ? new Date(allocation.allocated_at).toLocaleString('en-PH')
                         : '-'}

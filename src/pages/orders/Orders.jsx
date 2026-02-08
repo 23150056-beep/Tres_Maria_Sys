@@ -5,14 +5,14 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const statusColors = {
-  pending: 'bg-yellow-500/20 text-yellow-400',
-  confirmed: 'bg-blue-500/20 text-blue-400',
-  processing: 'bg-orange-500/20 text-orange-400',
-  picking: 'bg-purple-500/20 text-purple-400',
-  packed: 'bg-indigo-500/20 text-indigo-400',
-  shipped: 'bg-cyan-500/20 text-cyan-400',
-  delivered: 'bg-green-500/20 text-green-400',
-  cancelled: 'bg-red-500/20 text-red-400'
+  pending: 'bg-amber-50 text-amber-700',
+  confirmed: 'bg-blue-50 text-blue-700',
+  processing: 'bg-orange-50 text-orange-700',
+  picking: 'bg-primary-50 text-primary-700',
+  packed: 'bg-indigo-50 text-indigo-700',
+  shipped: 'bg-cyan-50 text-cyan-700',
+  delivered: 'bg-emerald-50 text-emerald-700',
+  cancelled: 'bg-red-50 text-red-700'
 };
 
 export default function Orders() {
@@ -58,8 +58,8 @@ export default function Orders() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Orders</h1>
-          <p className="text-white/60 mt-1">Manage sales orders</p>
+          <h1 className="text-2xl font-bold text-slate-900">Orders</h1>
+          <p className="text-slate-500 mt-1">Manage sales orders</p>
         </div>
         <Link
           to="/orders/create"
@@ -74,7 +74,7 @@ export default function Orders() {
       <div className="glass-card p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
             <input
               type="text"
               placeholder="Search orders..."
@@ -125,7 +125,7 @@ export default function Orders() {
                 <tbody>
                   {filteredOrders.map((order) => (
                     <tr key={order.id}>
-                      <td className="font-medium text-white">
+                      <td className="font-medium text-slate-900">
                         {order.order_number}
                       </td>
                       <td>
@@ -137,7 +137,7 @@ export default function Orders() {
                       <td>
                         {order.total_items}
                       </td>
-                      <td className="font-medium text-green-400">
+                      <td className="font-medium text-emerald-600">
                         {formatCurrency(order.total_amount)}
                       </td>
                       <td>
@@ -146,7 +146,7 @@ export default function Orders() {
                         </span>
                       </td>
                       <td className="text-right">
-                        <Link to={`/orders/${order.id}`} className="text-purple-400 hover:text-purple-300">
+                        <Link to={`/orders/${order.id}`} className="text-primary-600 hover:text-primary-700">
                           <EyeIcon className="h-5 w-5 inline" />
                         </Link>
                       </td>
@@ -156,8 +156,8 @@ export default function Orders() {
               </table>
             </div>
 
-            <div className="px-6 py-4 border-t border-white/10 flex items-center justify-between">
-              <p className="text-sm text-white/50">Page {page} of {totalPages}</p>
+            <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+              <p className="text-sm text-slate-400">Page {page} of {totalPages}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}

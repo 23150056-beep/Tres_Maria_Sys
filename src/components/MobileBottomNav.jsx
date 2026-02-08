@@ -29,7 +29,7 @@ export default function MobileBottomNav({ onMenuClick }) {
   };
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-white/10 safe-area-bottom">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 safe-area-bottom">
       <div className="flex items-center justify-around h-16 px-2">
         {navItems.map((item) => {
           const active = isActive(item.href);
@@ -39,28 +39,27 @@ export default function MobileBottomNav({ onMenuClick }) {
             <NavLink
               key={item.name}
               to={item.href}
-              className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors duration-150 ${
                 active 
-                  ? 'text-purple-400' 
-                  : 'text-white/50 active:text-white/80'
+                  ? 'text-primary-600' 
+                  : 'text-slate-400 active:text-slate-600'
               }`}
             >
-              <Icon className={`h-6 w-6 ${active ? 'scale-110' : ''} transition-transform`} />
-              <span className={`text-xs mt-1 ${active ? 'font-medium' : ''}`}>{item.name}</span>
+              <Icon className={`h-5 w-5 ${active ? 'scale-110' : ''} transition-transform`} />
+              <span className={`text-[11px] mt-0.5 ${active ? 'font-semibold' : 'font-medium'}`}>{item.name}</span>
               {active && (
-                <div className="absolute bottom-0 w-12 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full" />
+                <div className="absolute bottom-0 w-10 h-0.5 bg-primary-600 rounded-full" />
               )}
             </NavLink>
           );
         })}
         
-        {/* Menu Button */}
         <button
           onClick={onMenuClick}
-          className="flex flex-col items-center justify-center flex-1 h-full py-1 text-white/50 active:text-white/80 transition-colors"
+          className="flex flex-col items-center justify-center flex-1 h-full py-1 text-slate-400 active:text-slate-600 transition-colors"
         >
-          <Bars3Icon className="h-6 w-6" />
-          <span className="text-xs mt-1">Menu</span>
+          <Bars3Icon className="h-5 w-5" />
+          <span className="text-[11px] mt-0.5 font-medium">Menu</span>
         </button>
       </div>
     </nav>

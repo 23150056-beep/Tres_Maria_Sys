@@ -34,25 +34,8 @@ import {
 } from 'recharts';
 import api from '../services/api';
 
-// Colors for pie chart - matching the ethereal design
-const COLORS = ['#A855F7', '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#EC4899'];
-
-// Glassmorphism card component
-function GlassCard({ children, className = '', gradient = false, gradientColors = '' }) {
-  return (
-    <div className={`
-      relative overflow-hidden rounded-2xl 
-      ${gradient 
-        ? `bg-gradient-to-br ${gradientColors}` 
-        : 'bg-white/10 backdrop-blur-xl border border-white/20'
-      }
-      shadow-xl
-      ${className}
-    `}>
-      {children}
-    </div>
-  );
-}
+// Professional color palette
+const COLORS = ['#0070c9', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 export default function Dashboard() {
   const [kpis, setKpis] = useState(null);
@@ -92,8 +75,8 @@ export default function Dashboard() {
     return new Intl.NumberFormat('en-PH', {
       style: 'currency',
       currency: 'PHP',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(value);
   };
 
@@ -103,10 +86,10 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center -m-6">
+      <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-500 border-t-transparent mx-auto"></div>
-          <p className="text-white/70 mt-4">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-[3px] border-primary-600 border-t-transparent mx-auto"></div>
+          <p className="text-slate-500 mt-3 text-sm">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -116,10 +99,9 @@ export default function Dashboard() {
   const todayRevenue = kpis?.today?.revenue_today || 0;
   const pendingOrders = kpis?.pendingOrders?.pending || 0;
   const monthOrders = kpis?.thisMonth?.orders_this_month || 0;
-  const totalExpenses = totalRevenue * 0.65; // Simulated expenses (65% of revenue)
+  const totalExpenses = totalRevenue * 0.65;
   const profit = totalRevenue - totalExpenses;
 
-  // Calculate expense split for pie chart
   const expenseSplit = [
     { name: 'Operations', value: totalExpenses * 0.35, percent: 35 },
     { name: 'Inventory', value: totalExpenses * 0.30, percent: 30 },
@@ -128,247 +110,236 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 -m-6 p-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">My Dashboard</h1>
-          <p className="text-white/50 mt-1">Tres Marias Distribution System</p>
+          <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
+          <p className="text-slate-500 text-sm mt-0.5">Consumer Goods Distribution & Delivery Operations</p>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-white/60 text-sm bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
-            <ClockIcon className="h-4 w-4" />
-            <span>{new Date().toLocaleDateString('en-PH', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <div className="flex items-center gap-2 text-slate-500 text-sm bg-white px-4 py-2 rounded-lg border border-slate-200">
+          <ClockIcon className="h-4 w-4" />
+          <span>{new Date().toLocaleDateString('en-PH', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        </div>
+      </div>
+
+      {/* KPI Cards Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Revenue Card */}
+        <div className="bg-white rounded-xl border border-slate-200 p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-slate-500">Monthly Revenue</p>
+              <p className="text-2xl font-semibold text-slate-900 mt-1">{formatCurrency(totalRevenue)}</p>
+              <div className="flex items-center gap-1 mt-1.5">
+                <span className="text-xs text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-medium flex items-center">
+                  <ArrowUpIcon className="h-3 w-3 mr-0.5" />16%
+                </span>
+                <span className="text-slate-400 text-xs">vs last month</span>
+              </div>
+            </div>
+            <div className="h-11 w-11 rounded-lg bg-primary-50 flex items-center justify-center">
+              <BanknotesIcon className="h-6 w-6 text-primary-600" />
+            </div>
+          </div>
+        </div>
+
+        {/* Orders Card */}
+        <div className="bg-white rounded-xl border border-slate-200 p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-slate-500">Monthly Orders</p>
+              <p className="text-2xl font-semibold text-slate-900 mt-1">{monthOrders}</p>
+              <div className="flex items-center gap-1 mt-1.5">
+                <span className="text-xs text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-medium flex items-center">
+                  <ArrowUpIcon className="h-3 w-3 mr-0.5" />12%
+                </span>
+                <span className="text-slate-400 text-xs">vs last month</span>
+              </div>
+            </div>
+            <div className="h-11 w-11 rounded-lg bg-blue-50 flex items-center justify-center">
+              <ShoppingCartIcon className="h-6 w-6 text-blue-600" />
+            </div>
+          </div>
+        </div>
+
+        {/* Deliveries Card */}
+        <div className="bg-white rounded-xl border border-slate-200 p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-slate-500">Today's Deliveries</p>
+              <p className="text-2xl font-semibold text-slate-900 mt-1">
+                {kpis?.today?.completed_deliveries_today || 0}
+                <span className="text-base text-slate-400 font-normal">/{kpis?.today?.deliveries_today || 0}</span>
+              </p>
+              <p className="text-xs text-slate-400 mt-1.5">completed today</p>
+            </div>
+            <div className="h-11 w-11 rounded-lg bg-violet-50 flex items-center justify-center">
+              <TruckIcon className="h-6 w-6 text-violet-600" />
+            </div>
+          </div>
+        </div>
+
+        {/* Pending Orders Card */}
+        <div className="bg-white rounded-xl border border-slate-200 p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-slate-500">Pending Orders</p>
+              <p className="text-2xl font-semibold text-slate-900 mt-1">{pendingOrders}</p>
+              <p className="text-xs text-slate-400 mt-1.5">{kpis?.activeClients || 0} active clients</p>
+            </div>
+            <div className="h-11 w-11 rounded-lg bg-amber-50 flex items-center justify-center">
+              <ClockIcon className="h-6 w-6 text-amber-600" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Main Grid Layout */}
+      {/* Charts Row */}
       <div className="grid grid-cols-12 gap-6">
-        
-        {/* Left Column - Main Balance Card */}
-        <div className="col-span-12 lg:col-span-4">
-          <GlassCard gradient gradientColors="from-lime-400 via-green-400 to-emerald-500" className="p-6 h-full">
-            <div className="flex flex-col h-full">
-              <p className="text-green-900/70 text-sm font-medium">Total Revenue</p>
-              <h2 className="text-4xl font-bold text-green-900 mt-2">
-                {formatCurrency(totalRevenue).replace('₱', '')}
-                <span className="text-lg align-top">₱</span>
-              </h2>
-              <p className="text-green-800/60 text-sm mt-1">+{formatCurrency(todayRevenue)} revenue today</p>
-              
-              <div className="flex gap-3 mt-6">
-                <Link to="/orders/create" className="flex-1 bg-green-900/80 hover:bg-green-900 text-white px-4 py-2.5 rounded-xl text-sm font-medium text-center transition-colors">
-                  New Order
-                </Link>
-                <Link to="/reports/sales" className="flex-1 bg-white/30 hover:bg-white/40 text-green-900 px-4 py-2.5 rounded-xl text-sm font-medium text-center transition-colors">
+        {/* Revenue Chart */}
+        <div className="col-span-12 lg:col-span-8">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">Revenue Overview</h3>
+                <p className="text-sm text-slate-500 mt-0.5">Last 7 days performance</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1.5">
+                  <div className="h-2.5 w-2.5 rounded-full bg-primary-500"></div>
+                  <span className="text-xs text-slate-500">Revenue</span>
+                </div>
+                <Link to="/reports/sales" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
                   View Report
                 </Link>
               </div>
-
-              {/* Mini Stats */}
-              <div className="grid grid-cols-2 gap-3 mt-auto pt-6">
-                <div className="bg-green-900/20 rounded-xl p-3">
-                  <p className="text-green-900/70 text-xs">Orders</p>
-                  <p className="text-green-900 font-bold text-lg">{monthOrders}</p>
-                </div>
-                <div className="bg-green-900/20 rounded-xl p-3">
-                  <p className="text-green-900/70 text-xs">Clients</p>
-                  <p className="text-green-900 font-bold text-lg">{kpis?.activeClients || 0}</p>
-                </div>
-              </div>
             </div>
-          </GlassCard>
-        </div>
-
-        {/* Middle Column */}
-        <div className="col-span-12 lg:col-span-5 space-y-6">
-          {/* Income & Expense Row */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* Income Card */}
-            <GlassCard className="p-5">
-              <p className="text-white/60 text-sm">Income</p>
-              <div className="flex items-baseline gap-2 mt-2">
-                <span className="text-2xl font-bold text-white">+{formatNumber(todayRevenue)}</span>
-                <span className="text-white/50 text-sm">₱</span>
-              </div>
-              <div className="flex items-center gap-1 mt-2">
-                <span className="text-xs text-green-400 bg-green-400/20 px-2 py-0.5 rounded-full flex items-center">
-                  <ArrowUpIcon className="h-3 w-3 mr-1" />
-                  +15.7%
-                </span>
-                <span className="text-white/40 text-xs">vs last week</span>
-              </div>
-            </GlassCard>
-
-            {/* Expense Card */}
-            <GlassCard className="p-5">
-              <p className="text-white/60 text-sm">Expenses</p>
-              <div className="flex items-baseline gap-2 mt-2">
-                <span className="text-2xl font-bold text-white">-{formatNumber(totalExpenses * 0.1)}</span>
-                <span className="text-white/50 text-sm">₱</span>
-              </div>
-              <div className="flex items-center gap-1 mt-2">
-                <span className="text-xs text-red-400 bg-red-400/20 px-2 py-0.5 rounded-full flex items-center">
-                  <ArrowDownIcon className="h-3 w-3 mr-1" />
-                  -10.7%
-                </span>
-                <span className="text-white/40 text-xs">vs last week</span>
-              </div>
-            </GlassCard>
-          </div>
-
-          {/* Revenue Flow Chart */}
-          <GlassCard className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-semibold">Revenue Flow</h3>
-              <span className="text-white/50 text-sm bg-white/10 px-3 py-1 rounded-full">Monthly</span>
-            </div>
-            <div className="h-48">
+            <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={revenueData.slice(-7)}>
-                  <defs>
-                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#A855F7" />
-                      <stop offset="100%" stopColor="#6366F1" />
-                    </linearGradient>
-                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                   <XAxis 
                     dataKey="label" 
-                    tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }}
+                    tick={{ fill: '#94a3b8', fontSize: 12 }}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis 
-                    tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }}
+                    tick={{ fill: '#94a3b8', fontSize: 12 }}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(value) => `₱${(value / 1000).toFixed(0)}K`}
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: 'rgba(15, 15, 35, 0.9)', 
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: '12px',
-                      color: '#fff'
+                      backgroundColor: '#fff', 
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.04)',
+                      color: '#1e293b',
+                      fontSize: '13px'
                     }}
                     formatter={(value) => [formatCurrency(value), 'Revenue']}
                   />
-                  <Bar dataKey="revenue" fill="url(#barGradient)" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="revenue" fill="#0070c9" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            {/* Revenue indicators */}
-            <div className="flex items-center gap-2 mt-2">
-              <div className="h-3 w-3 rounded-full bg-green-400"></div>
-              <span className="text-white/70 text-sm">{formatCurrency(totalRevenue)}</span>
-              <span className="text-green-400 text-xs ml-2">↑ 16%</span>
-            </div>
-          </GlassCard>
+          </div>
         </div>
 
-        {/* Right Column - Stats & Quick Actions */}
-        <div className="col-span-12 lg:col-span-3 space-y-6">
-          {/* Quick Stats Cards */}
-          <GlassCard className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-semibold">Quick Stats</h3>
-              <span className="text-white/30 text-xs">{kpis?.activeProducts || 0} products</span>
-            </div>
-            <div className="space-y-3">
-              {/* Today Orders */}
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                    <ShoppingCartIcon className="h-5 w-5 text-blue-400" />
-                  </div>
-                  <div>
-                    <p className="text-white/50 text-xs">Today's Orders</p>
-                    <p className="text-white font-semibold">{kpis?.today?.orders_today || 0}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Deliveries */}
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                    <TruckIcon className="h-5 w-5 text-purple-400" />
-                  </div>
-                  <div>
-                    <p className="text-white/50 text-xs">Deliveries Today</p>
-                    <p className="text-white font-semibold">{kpis?.today?.completed_deliveries_today || 0}/{kpis?.today?.deliveries_today || 0}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Pending */}
-              <div className="flex items-center justify-between bg-white/5 p-3 rounded-xl">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-yellow-500/20 flex items-center justify-center">
-                    <ClockIcon className="h-5 w-5 text-yellow-400" />
-                  </div>
-                  <div>
-                    <p className="text-white/50 text-xs">Pending Orders</p>
-                    <p className="text-white font-semibold">{pendingOrders}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </GlassCard>
-
+        {/* Right Column - Alerts & Quick Actions */}
+        <div className="col-span-12 lg:col-span-4 space-y-6">
           {/* Stock Alerts */}
-          <GlassCard className="p-5">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-semibold">Stock Alerts</h3>
-              <Link to="/inventory/alerts" className="text-purple-400 text-xs hover:text-purple-300">Manage</Link>
+              <h3 className="text-base font-semibold text-slate-900">Stock Alerts</h3>
+              <Link to="/inventory/alerts" className="text-sm text-primary-600 hover:text-primary-700 font-medium">Manage</Link>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {kpis?.alerts?.low_stock_alerts > 0 && (
-                <div className="flex items-center justify-between bg-yellow-500/10 p-3 rounded-xl">
-                  <div className="flex items-center gap-2">
-                    <ExclamationTriangleIcon className="h-4 w-4 text-yellow-400" />
-                    <span className="text-yellow-400 text-sm">Low Stock</span>
+                <div className="flex items-center justify-between bg-amber-50 p-3 rounded-lg border border-amber-100">
+                  <div className="flex items-center gap-2.5">
+                    <ExclamationTriangleIcon className="h-5 w-5 text-amber-600" />
+                    <span className="text-sm text-amber-800 font-medium">Low Stock Items</span>
                   </div>
-                  <span className="text-yellow-400 font-bold">{kpis.alerts.low_stock_alerts}</span>
+                  <span className="text-sm text-amber-700 font-bold">{kpis.alerts.low_stock_alerts}</span>
                 </div>
               )}
               {kpis?.alerts?.out_of_stock_alerts > 0 && (
-                <div className="flex items-center justify-between bg-red-500/10 p-3 rounded-xl">
-                  <div className="flex items-center gap-2">
-                    <ExclamationTriangleIcon className="h-4 w-4 text-red-400" />
-                    <span className="text-red-400 text-sm">Out of Stock</span>
+                <div className="flex items-center justify-between bg-red-50 p-3 rounded-lg border border-red-100">
+                  <div className="flex items-center gap-2.5">
+                    <ExclamationTriangleIcon className="h-5 w-5 text-red-600" />
+                    <span className="text-sm text-red-800 font-medium">Out of Stock</span>
                   </div>
-                  <span className="text-red-400 font-bold">{kpis.alerts.out_of_stock_alerts}</span>
+                  <span className="text-sm text-red-700 font-bold">{kpis.alerts.out_of_stock_alerts}</span>
                 </div>
               )}
               {!kpis?.alerts?.low_stock_alerts && !kpis?.alerts?.out_of_stock_alerts && (
-                <div className="flex items-center gap-2 text-green-400 bg-green-500/10 p-3 rounded-xl">
-                  <CheckCircleIcon className="h-4 w-4" />
-                  <span className="text-sm">All stock healthy</span>
+                <div className="flex items-center gap-2.5 text-emerald-700 bg-emerald-50 p-3 rounded-lg border border-emerald-100">
+                  <CheckCircleIcon className="h-5 w-5" />
+                  <span className="text-sm font-medium">All stock levels healthy</span>
                 </div>
               )}
             </div>
-          </GlassCard>
-        </div>
+          </div>
 
-        {/* Bottom Row - Expense Split & Top Products */}
+          {/* Quick Actions */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <h3 className="text-base font-semibold text-slate-900 mb-4">Quick Actions</h3>
+            <div className="space-y-2">
+              <Link to="/orders/create" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                <div className="h-9 w-9 rounded-lg bg-primary-50 flex items-center justify-center group-hover:bg-primary-100 transition-colors">
+                  <ShoppingCartIcon className="h-4.5 w-4.5 text-primary-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-700">New Order</p>
+                  <p className="text-xs text-slate-400">Create a new sales order</p>
+                </div>
+              </Link>
+              <Link to="/distribution/create" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                <div className="h-9 w-9 rounded-lg bg-violet-50 flex items-center justify-center group-hover:bg-violet-100 transition-colors">
+                  <TruckIcon className="h-4.5 w-4.5 text-violet-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-700">Distribution Plan</p>
+                  <p className="text-xs text-slate-400">Plan a new distribution</p>
+                </div>
+              </Link>
+              <Link to="/deliveries/tracking" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                <div className="h-9 w-9 rounded-lg bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
+                  <EyeIcon className="h-4.5 w-4.5 text-emerald-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-700">Track Deliveries</p>
+                  <p className="text-xs text-slate-400">Live delivery tracking</p>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Row */}
+      <div className="grid grid-cols-12 gap-6">
+        {/* Expense Split */}
         <div className="col-span-12 lg:col-span-4">
-          <GlassCard className="p-5 h-full">
+          <div className="bg-white rounded-xl border border-slate-200 p-5 h-full">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-semibold">Expense Split</h3>
-              <span className="text-white/50 text-sm">Monthly</span>
+              <h3 className="text-base font-semibold text-slate-900">Expense Breakdown</h3>
+              <span className="text-xs text-slate-400 font-medium">Monthly</span>
             </div>
             <div className="flex items-center gap-6">
-              <div className="relative w-36 h-36">
+              <div className="relative w-32 h-32 flex-shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={expenseSplit}
                       cx="50%"
                       cy="50%"
-                      innerRadius={40}
-                      outerRadius={55}
+                      innerRadius={35}
+                      outerRadius={50}
                       paddingAngle={3}
                       dataKey="value"
                     >
@@ -376,72 +347,72 @@ export default function Dashboard() {
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
+                    <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px' }} />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-white/50 text-xs">Total</span>
-                  <span className="text-white font-bold text-sm">{formatCurrency(totalExpenses).replace('₱', '').slice(0, 7)}₱</span>
+                  <span className="text-slate-400 text-[10px]">Total</span>
+                  <span className="text-slate-900 font-semibold text-xs">{formatCurrency(totalExpenses)}</span>
                 </div>
               </div>
-              <div className="space-y-2 flex-1">
+              <div className="space-y-2.5 flex-1">
                 {expenseSplit.map((item, index) => (
                   <div key={item.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[index] }}></div>
-                      <span className="text-white/70 text-xs">{item.name}</span>
+                      <span className="text-slate-600 text-sm">{item.name}</span>
                     </div>
-                    <span className="text-white text-xs">{item.percent}%</span>
+                    <span className="text-slate-900 text-sm font-medium">{item.percent}%</span>
                   </div>
                 ))}
               </div>
             </div>
-          </GlassCard>
+          </div>
         </div>
 
         {/* Top Products */}
         <div className="col-span-12 lg:col-span-4">
-          <GlassCard className="p-5 h-full">
+          <div className="bg-white rounded-xl border border-slate-200 p-5 h-full">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-semibold">Top Products</h3>
-              <Link to="/products" className="text-purple-400 text-xs hover:text-purple-300">See All</Link>
+              <h3 className="text-base font-semibold text-slate-900">Top Products</h3>
+              <Link to="/products" className="text-sm text-primary-600 hover:text-primary-700 font-medium">See All</Link>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {topProducts.slice(0, 4).map((product, index) => (
-                <div key={index} className="flex items-center justify-between bg-white/5 p-3 rounded-xl">
+                <div key={index} className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-50 transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500/30 to-blue-500/30 flex items-center justify-center">
-                      <CubeIcon className="h-5 w-5 text-purple-300" />
+                    <div className="h-9 w-9 rounded-lg bg-slate-100 flex items-center justify-center text-sm font-semibold text-slate-500">
+                      {index + 1}
                     </div>
                     <div>
-                      <p className="text-white text-sm font-medium truncate max-w-[120px]">{product.name}</p>
-                      <p className="text-white/40 text-xs">{product.quantity || 0} sold</p>
+                      <p className="text-sm font-medium text-slate-700 truncate max-w-[130px]">{product.name}</p>
+                      <p className="text-xs text-slate-400">{product.quantity || 0} sold</p>
                     </div>
                   </div>
-                  <span className="text-green-400 font-semibold text-sm">{formatCurrency(product.revenue)}</span>
+                  <span className="text-sm font-semibold text-emerald-600">{formatCurrency(product.revenue)}</span>
                 </div>
               ))}
             </div>
-          </GlassCard>
+          </div>
         </div>
 
         {/* Sales by Category */}
         <div className="col-span-12 lg:col-span-4">
-          <GlassCard className="p-5 h-full">
+          <div className="bg-white rounded-xl border border-slate-200 p-5 h-full">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-semibold">Sales by Category</h3>
-              <Link to="/reports/sales" className="text-purple-400 text-xs hover:text-purple-300">Report</Link>
+              <h3 className="text-base font-semibold text-slate-900">Sales by Category</h3>
+              <Link to="/reports/sales" className="text-sm text-primary-600 hover:text-primary-700 font-medium">Report</Link>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-28 h-28">
+              <div className="w-28 h-28 flex-shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={categoryData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={30}
-                      outerRadius={45}
+                      innerRadius={28}
+                      outerRadius={42}
                       paddingAngle={2}
                       dataKey="revenue"
                     >
@@ -449,97 +420,95 @@ export default function Dashboard() {
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
+                    <Tooltip formatter={(v) => formatCurrency(v)} contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="space-y-1.5 flex-1 max-h-28 overflow-y-auto">
+              <div className="space-y-2 flex-1 max-h-28 overflow-y-auto">
                 {categoryData.slice(0, 5).map((cat, index) => (
                   <div key={cat.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                      <span className="text-white/70 text-xs truncate max-w-[80px]">{cat.name}</span>
+                      <span className="text-slate-600 text-xs truncate max-w-[90px]">{cat.name}</span>
                     </div>
-                    <span className="text-white text-xs">{((cat.revenue / categoryData.reduce((a, b) => a + b.revenue, 0)) * 100).toFixed(0)}%</span>
+                    <span className="text-slate-900 text-xs font-medium">{((cat.revenue / categoryData.reduce((a, b) => a + b.revenue, 0)) * 100).toFixed(0)}%</span>
                   </div>
                 ))}
               </div>
             </div>
-          </GlassCard>
+          </div>
         </div>
+      </div>
 
-        {/* Recent Transactions */}
-        <div className="col-span-12">
-          <GlassCard className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <h3 className="text-white font-semibold">Recent Transactions</h3>
-                <span className="text-white/30 text-xs bg-white/10 px-2 py-0.5 rounded-full">{recentActivity.length}</span>
-              </div>
-              <Link to="/orders" className="text-purple-400 text-sm hover:text-purple-300 flex items-center gap-1">
-                See All <EyeIcon className="h-4 w-4" />
-              </Link>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="text-white/40 text-xs border-b border-white/10">
-                    <th className="text-left pb-3 font-medium">Transaction</th>
-                    <th className="text-left pb-3 font-medium">Details</th>
-                    <th className="text-left pb-3 font-medium">Date & Time</th>
-                    <th className="text-left pb-3 font-medium">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentActivity.map((activity, index) => (
-                    <tr key={index} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                      <td className="py-3">
-                        <div className="flex items-center gap-3">
-                          <div className={`h-9 w-9 rounded-xl flex items-center justify-center ${
-                            activity.type === 'order' ? 'bg-blue-500/20' :
-                            activity.type === 'delivery' ? 'bg-purple-500/20' :
-                            activity.type === 'purchase_order' ? 'bg-orange-500/20' :
-                            'bg-green-500/20'
-                          }`}>
-                            {activity.type === 'order' && <ShoppingCartIcon className="h-4 w-4 text-blue-400" />}
-                            {activity.type === 'delivery' && <TruckIcon className="h-4 w-4 text-purple-400" />}
-                            {activity.type === 'purchase_order' && <ClipboardDocumentListIcon className="h-4 w-4 text-orange-400" />}
-                            {activity.type === 'inventory' && <CubeIcon className="h-4 w-4 text-green-400" />}
-                          </div>
-                          <span className="text-white text-sm font-medium">{activity.reference}</span>
-                        </div>
-                      </td>
-                      <td className="py-3">
-                        <span className="text-white/60 text-sm">
-                          {activity.client_name || activity.driver_name || activity.supplier_name || '-'}
-                        </span>
-                      </td>
-                      <td className="py-3">
-                        <span className="text-white/50 text-sm">
-                          {new Date(activity.timestamp).toLocaleString('en-PH', { 
-                            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
-                          })}
-                        </span>
-                      </td>
-                      <td className="py-3">
-                        <span className={`inline-flex px-2.5 py-1 text-xs font-medium rounded-full ${
-                          activity.status === 'delivered' || activity.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                          activity.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
-                          activity.status === 'failed' || activity.status === 'cancelled' ? 'bg-red-500/20 text-red-400' :
-                          'bg-blue-500/20 text-blue-400'
-                        }`}>
-                          {activity.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {recentActivity.length === 0 && (
-                <div className="py-8 text-center text-white/50">No recent transactions</div>
-              )}
-            </div>
-          </GlassCard>
+      {/* Recent Transactions */}
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2.5">
+            <h3 className="text-base font-semibold text-slate-900">Recent Transactions</h3>
+            <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full font-medium">{recentActivity.length}</span>
+          </div>
+          <Link to="/orders" className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1">
+            View All
+          </Link>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="text-xs text-slate-500 border-b border-slate-200">
+                <th className="text-left pb-3 font-semibold uppercase tracking-wider">Transaction</th>
+                <th className="text-left pb-3 font-semibold uppercase tracking-wider">Details</th>
+                <th className="text-left pb-3 font-semibold uppercase tracking-wider">Date & Time</th>
+                <th className="text-left pb-3 font-semibold uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentActivity.map((activity, index) => (
+                <tr key={index} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                  <td className="py-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${
+                        activity.type === 'order' ? 'bg-blue-50' :
+                        activity.type === 'delivery' ? 'bg-violet-50' :
+                        activity.type === 'purchase_order' ? 'bg-amber-50' :
+                        'bg-emerald-50'
+                      }`}>
+                        {activity.type === 'order' && <ShoppingCartIcon className="h-4 w-4 text-blue-600" />}
+                        {activity.type === 'delivery' && <TruckIcon className="h-4 w-4 text-violet-600" />}
+                        {activity.type === 'purchase_order' && <ClipboardDocumentListIcon className="h-4 w-4 text-amber-600" />}
+                        {activity.type === 'inventory' && <CubeIcon className="h-4 w-4 text-emerald-600" />}
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">{activity.reference}</span>
+                    </div>
+                  </td>
+                  <td className="py-3">
+                    <span className="text-sm text-slate-500">
+                      {activity.client_name || activity.driver_name || activity.supplier_name || '-'}
+                    </span>
+                  </td>
+                  <td className="py-3">
+                    <span className="text-sm text-slate-400">
+                      {new Date(activity.timestamp).toLocaleString('en-PH', { 
+                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                      })}
+                    </span>
+                  </td>
+                  <td className="py-3">
+                    <span className={`inline-flex px-2.5 py-1 text-xs font-medium rounded-full ${
+                      activity.status === 'delivered' || activity.status === 'completed' ? 'bg-emerald-50 text-emerald-700' :
+                      activity.status === 'pending' ? 'bg-amber-50 text-amber-700' :
+                      activity.status === 'failed' || activity.status === 'cancelled' ? 'bg-red-50 text-red-700' :
+                      'bg-blue-50 text-blue-700'
+                    }`}>
+                      {activity.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {recentActivity.length === 0 && (
+            <div className="py-12 text-center text-slate-400">No recent transactions</div>
+          )}
         </div>
       </div>
     </div>

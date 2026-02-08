@@ -66,63 +66,63 @@ export default function ProductForm() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <button onClick={() => navigate('/products')} className="p-2 text-white/60 hover:text-white hover:bg-white/5 rounded-lg">
+        <button onClick={() => navigate('/products')} className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg">
           <ArrowLeftIcon className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-bold text-white">{isEdit ? 'Edit Product' : 'New Product'}</h1>
+        <h1 className="text-2xl font-bold text-slate-900">{isEdit ? 'Edit Product' : 'New Product'}</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="glass-card p-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-1">SKU *</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">SKU *</label>
             <input {...register('sku', { required: 'SKU is required' })} className="form-input" />
-            {errors.sku && <p className="mt-1 text-sm text-red-400">{errors.sku.message}</p>}
+            {errors.sku && <p className="mt-1 text-sm text-red-600">{errors.sku.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-1">Name *</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Name *</label>
             <input {...register('name', { required: 'Name is required' })} className="form-input" />
-            {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name.message}</p>}
+            {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-1">Category</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Category</label>
             <select {...register('category_id')} className="form-select">
               <option value="">Select category</option>
               {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-1">Brand</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Brand</label>
             <input {...register('brand')} className="form-input" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-1">Cost Price</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Cost Price</label>
             <input type="number" step="0.01" {...register('cost_price')} className="form-input" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-1">Unit Price *</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Unit Price *</label>
             <input type="number" step="0.01" {...register('unit_price', { required: 'Price is required' })} className="form-input" />
-            {errors.unit_price && <p className="mt-1 text-sm text-red-400">{errors.unit_price.message}</p>}
+            {errors.unit_price && <p className="mt-1 text-sm text-red-600">{errors.unit_price.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-1">Unit</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Unit</label>
             <input {...register('unit')} placeholder="e.g., pcs, kg, box" className="form-input" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-1">Reorder Point</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Reorder Point</label>
             <input type="number" {...register('reorder_point')} className="form-input" />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-white/80 mb-1">Description</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Description</label>
             <textarea {...register('description')} rows={3} className="form-input" />
           </div>
           <div className="flex items-center">
-            <input type="checkbox" {...register('is_active')} defaultChecked className="h-4 w-4 text-purple-600 rounded bg-white/10 border-white/20" />
-            <label className="ml-2 text-sm text-white/80">Active</label>
+            <input type="checkbox" {...register('is_active')} defaultChecked className="h-4 w-4 text-primary-600 rounded bg-slate-100 border-slate-200" />
+            <label className="ml-2 text-sm text-slate-600">Active</label>
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 pt-6 border-t border-white/10">
+        <div className="flex justify-end gap-4 pt-6 border-t border-slate-200">
           <button type="button" onClick={() => navigate('/products')} className="btn-secondary">Cancel</button>
           <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-50">
             {submitting ? 'Saving...' : (isEdit ? 'Update Product' : 'Create Product')}

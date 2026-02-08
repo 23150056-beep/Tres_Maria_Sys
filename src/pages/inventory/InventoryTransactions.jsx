@@ -4,11 +4,11 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const transactionTypeColors = {
-  receive: { bg: 'bg-green-500/20', text: 'text-green-400', icon: ArrowDownIcon },
-  issue: { bg: 'bg-red-500/20', text: 'text-red-400', icon: ArrowUpIcon },
-  adjust: { bg: 'bg-yellow-500/20', text: 'text-yellow-400', icon: ArrowsRightLeftIcon },
-  transfer: { bg: 'bg-blue-500/20', text: 'text-blue-400', icon: ArrowsRightLeftIcon },
-  return: { bg: 'bg-purple-500/20', text: 'text-purple-400', icon: ArrowDownIcon }
+  receive: { bg: 'bg-emerald-50', text: 'text-emerald-600', icon: ArrowDownIcon },
+  issue: { bg: 'bg-red-50', text: 'text-red-600', icon: ArrowUpIcon },
+  adjust: { bg: 'bg-amber-50', text: 'text-amber-600', icon: ArrowsRightLeftIcon },
+  transfer: { bg: 'bg-blue-50', text: 'text-blue-600', icon: ArrowsRightLeftIcon },
+  return: { bg: 'bg-primary-50', text: 'text-primary-600', icon: ArrowDownIcon }
 };
 
 export default function InventoryTransactions() {
@@ -44,8 +44,8 @@ export default function InventoryTransactions() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Inventory Transactions</h1>
-          <p className="text-white/60 mt-1">Track all stock movements</p>
+          <h1 className="text-2xl font-bold text-slate-900">Inventory Transactions</h1>
+          <p className="text-slate-500 mt-1">Track all stock movements</p>
         </div>
       </div>
 
@@ -64,7 +64,7 @@ export default function InventoryTransactions() {
             <option value="transfer">Transfer</option>
             <option value="return">Return</option>
           </select>
-          <button onClick={fetchTransactions} className="p-2 text-white/60 hover:text-white">
+          <button onClick={fetchTransactions} className="p-2 text-slate-500 hover:text-slate-700">
             <ArrowPathIcon className="h-5 w-5" />
           </button>
         </div>
@@ -82,15 +82,15 @@ export default function InventoryTransactions() {
               <table className="glass-table">
                 <thead>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Reference</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Type</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Product</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Warehouse</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Quantity</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Before</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">After</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">By</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Reference</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Product</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Warehouse</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Quantity</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Before</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">After</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Date</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">By</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,7 +99,7 @@ export default function InventoryTransactions() {
                     const Icon = typeStyle.icon;
                     return (
                       <tr key={txn.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
                           {txn.reference_number}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -110,26 +110,26 @@ export default function InventoryTransactions() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
-                            <p className="text-sm font-medium text-white">{txn.product_name}</p>
-                            <p className="text-xs text-white/60">{txn.sku}</p>
+                            <p className="text-sm font-medium text-slate-900">{txn.product_name}</p>
+                            <p className="text-xs text-slate-500">{txn.sku}</p>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {txn.warehouse_name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
                           {txn.quantity > 0 ? `+${txn.quantity}` : txn.quantity}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {txn.quantity_before}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {txn.quantity_after}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {new Date(txn.created_at).toLocaleString('en-PH')}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {txn.created_by_name || '-'}
                         </td>
                       </tr>
@@ -139,20 +139,20 @@ export default function InventoryTransactions() {
               </table>
             </div>
 
-            <div className="px-6 py-4 border-t border-white/10 flex items-center justify-between">
-              <p className="text-sm text-white/60">Page {page} of {totalPages}</p>
+            <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+              <p className="text-sm text-slate-500">Page {page} of {totalPages}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-3 py-1 border border-white/10 rounded text-sm text-white/60 hover:text-white disabled:opacity-50"
+                  className="px-3 py-1 border border-slate-200 rounded text-sm text-slate-500 hover:text-slate-700 disabled:opacity-50"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-3 py-1 border border-white/10 rounded text-sm text-white/60 hover:text-white disabled:opacity-50"
+                  className="px-3 py-1 border border-slate-200 rounded text-sm text-slate-500 hover:text-slate-700 disabled:opacity-50"
                 >
                   Next
                 </button>

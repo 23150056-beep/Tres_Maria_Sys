@@ -63,7 +63,7 @@ export default function Warehouses() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-white">Warehouses</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Warehouses</h1>
         <button onClick={() => { resetForm(); setCreateModal(true); }} className="btn-primary inline-flex items-center">
           <PlusIcon className="h-5 w-5 mr-2" />Add Warehouse
         </button>
@@ -72,69 +72,69 @@ export default function Warehouses() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="glass-card p-4">
-          <BuildingStorefrontIcon className="h-8 w-8 text-blue-400 mb-2" />
-          <p className="text-2xl font-bold text-white">{warehouses.length}</p>
-          <p className="text-sm text-white/60">Total Warehouses</p>
+          <BuildingStorefrontIcon className="h-8 w-8 text-blue-600 mb-2" />
+          <p className="text-2xl font-bold text-slate-900">{warehouses.length}</p>
+          <p className="text-sm text-slate-500">Total Warehouses</p>
         </div>
         <div className="glass-card p-4">
-          <CubeIcon className="h-8 w-8 text-green-400 mb-2" />
-          <p className="text-2xl font-bold text-white">{warehouses.filter(w => w.is_active).length}</p>
-          <p className="text-sm text-white/60">Active</p>
+          <CubeIcon className="h-8 w-8 text-emerald-600 mb-2" />
+          <p className="text-2xl font-bold text-slate-900">{warehouses.filter(w => w.is_active).length}</p>
+          <p className="text-sm text-slate-500">Active</p>
         </div>
         <div className="glass-card p-4">
-          <MapPinIcon className="h-8 w-8 text-purple-400 mb-2" />
-          <p className="text-2xl font-bold text-white">{[...new Set(warehouses.map(w => w.province))].length}</p>
-          <p className="text-sm text-white/60">Provinces Covered</p>
+          <MapPinIcon className="h-8 w-8 text-primary-600 mb-2" />
+          <p className="text-2xl font-bold text-slate-900">{[...new Set(warehouses.map(w => w.province))].length}</p>
+          <p className="text-sm text-slate-500">Provinces Covered</p>
         </div>
         <div className="glass-card p-4">
-          <UsersIcon className="h-8 w-8 text-orange-400 mb-2" />
-          <p className="text-2xl font-bold text-white">{warehouses.reduce((sum, w) => sum + (w.staff_count || 0), 0)}</p>
-          <p className="text-sm text-white/60">Total Staff</p>
+          <UsersIcon className="h-8 w-8 text-orange-600 mb-2" />
+          <p className="text-2xl font-bold text-slate-900">{warehouses.reduce((sum, w) => sum + (w.staff_count || 0), 0)}</p>
+          <p className="text-sm text-slate-500">Total Staff</p>
         </div>
       </div>
 
       {/* Search */}
       <div className="relative max-w-md">
-        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/40" />
+        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
         <input type="text" placeholder="Search warehouses..." value={search} onChange={(e) => setSearch(e.target.value)} className="form-input pl-10" />
       </div>
 
       {/* Warehouses Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.length === 0 ? (
-          <div className="col-span-full text-center py-12 text-white/60 glass-card">No warehouses found</div>
+          <div className="col-span-full text-center py-12 text-slate-500 glass-card">No warehouses found</div>
         ) : filtered.map(warehouse => (
           <div key={warehouse.id} className="glass-card overflow-hidden">
             <div className="p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="font-semibold text-white">{warehouse.name}</h3>
-                  <p className="text-sm text-white/60">{warehouse.code}</p>
+                  <h3 className="font-semibold text-slate-900">{warehouse.name}</h3>
+                  <p className="text-sm text-slate-500">{warehouse.code}</p>
                 </div>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${warehouse.is_active ? 'bg-green-500/20 text-green-400' : 'bg-white/10 text-white/60'}`}>
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${warehouse.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
                   {warehouse.is_active ? 'Active' : 'Inactive'}
                 </span>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex items-start">
-                  <MapPinIcon className="h-4 w-4 text-white/40 mr-2 mt-0.5" />
-                  <span className="text-white/60">{warehouse.address || '-'}, {warehouse.city}, {warehouse.province}</span>
+                  <MapPinIcon className="h-4 w-4 text-slate-400 mr-2 mt-0.5" />
+                  <span className="text-slate-500">{warehouse.address || '-'}, {warehouse.city}, {warehouse.province}</span>
                 </div>
                 <div className="flex items-center">
-                  <UsersIcon className="h-4 w-4 text-white/40 mr-2" />
-                  <span className="text-white/60">Manager: {warehouse.manager_name || '-'}</span>
+                  <UsersIcon className="h-4 w-4 text-slate-400 mr-2" />
+                  <span className="text-slate-500">Manager: {warehouse.manager_name || '-'}</span>
                 </div>
                 {warehouse.capacity && (
                   <div className="flex items-center">
-                    <CubeIcon className="h-4 w-4 text-white/40 mr-2" />
-                    <span className="text-white/60">Capacity: {warehouse.capacity} units</span>
+                    <CubeIcon className="h-4 w-4 text-slate-400 mr-2" />
+                    <span className="text-slate-500">Capacity: {warehouse.capacity} units</span>
                   </div>
                 )}
               </div>
             </div>
-            <div className="px-6 py-4 border-t border-white/10 flex justify-between">
-              <button onClick={() => openEdit(warehouse)} className="text-sm text-purple-400 hover:text-purple-300">Edit</button>
-              <Link to={`/warehouse/${warehouse.id}`} className="text-sm text-purple-400 hover:text-purple-300">View Details →</Link>
+            <div className="px-6 py-4 border-t border-slate-200 flex justify-between">
+              <button onClick={() => openEdit(warehouse)} className="text-sm text-primary-600 hover:text-primary-700">Edit</button>
+              <Link to={`/warehouse/${warehouse.id}`} className="text-sm text-primary-600 hover:text-primary-700">View Details →</Link>
             </div>
           </div>
         ))}
@@ -146,50 +146,50 @@ export default function Warehouses() {
           <div className="flex items-center justify-center min-h-screen px-4">
             <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setCreateModal(false)}></div>
             <div className="relative glass-card max-w-lg w-full p-6">
-              <h2 className="text-xl font-bold text-white mb-6">{editingId ? 'Edit Warehouse' : 'Add New Warehouse'}</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-6">{editingId ? 'Edit Warehouse' : 'Add New Warehouse'}</h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-white/60 mb-1">Warehouse Name *</label>
+                    <label className="block text-sm font-medium text-slate-500 mb-1">Warehouse Name *</label>
                     <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="form-input" placeholder="Main Warehouse" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-white/60 mb-1">Code *</label>
+                    <label className="block text-sm font-medium text-slate-500 mb-1">Code *</label>
                     <input type="text" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} className="form-input" placeholder="WH-001" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-white/60 mb-1">Address</label>
+                  <label className="block text-sm font-medium text-slate-500 mb-1">Address</label>
                   <input type="text" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="form-input" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-white/60 mb-1">City</label>
+                    <label className="block text-sm font-medium text-slate-500 mb-1">City</label>
                     <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="form-input" placeholder="San Fernando City" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-white/60 mb-1">Province</label>
+                    <label className="block text-sm font-medium text-slate-500 mb-1">Province</label>
                     <input type="text" value={form.province} onChange={(e) => setForm({ ...form, province: e.target.value })} className="form-input" placeholder="La Union" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-white/60 mb-1">Manager Name</label>
+                    <label className="block text-sm font-medium text-slate-500 mb-1">Manager Name</label>
                     <input type="text" value={form.manager_name} onChange={(e) => setForm({ ...form, manager_name: e.target.value })} className="form-input" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-white/60 mb-1">Phone</label>
+                    <label className="block text-sm font-medium text-slate-500 mb-1">Phone</label>
                     <input type="text" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="form-input" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-white/60 mb-1">Capacity (units)</label>
+                    <label className="block text-sm font-medium text-slate-500 mb-1">Capacity (units)</label>
                     <input type="number" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} className="form-input" />
                   </div>
                   <div className="flex items-center pt-6">
-                    <input type="checkbox" id="is_active" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} className="h-4 w-4 text-purple-600 rounded mr-2" />
-                    <label htmlFor="is_active" className="text-sm font-medium text-white">Active</label>
+                    <input type="checkbox" id="is_active" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} className="h-4 w-4 text-primary-600 rounded mr-2" />
+                    <label htmlFor="is_active" className="text-sm font-medium text-slate-900">Active</label>
                   </div>
                 </div>
               </div>

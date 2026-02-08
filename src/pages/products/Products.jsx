@@ -41,8 +41,8 @@ export default function Products() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Products</h1>
-          <p className="text-white/60 mt-1">Manage your product catalog</p>
+          <h1 className="text-2xl font-bold text-slate-900">Products</h1>
+          <p className="text-slate-500 mt-1">Manage your product catalog</p>
         </div>
         <Link to="/products/new" className="btn-primary inline-flex items-center">
           <PlusIcon className="h-5 w-5 mr-2" />
@@ -52,7 +52,7 @@ export default function Products() {
 
       <div className="glass-card p-4">
         <div className="relative">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
           <input
             type="text"
             placeholder="Search products..."
@@ -86,20 +86,20 @@ export default function Products() {
                 {filteredProducts.map((product) => (
                   <tr key={product.id}>
                     <td>
-                      <p className="font-medium text-white">{product.name}</p>
-                      <p className="text-xs text-white/50">{product.brand}</p>
+                      <p className="font-medium text-slate-900">{product.name}</p>
+                      <p className="text-xs text-slate-400">{product.brand}</p>
                     </td>
                     <td>{product.sku}</td>
                     <td>{product.category_name}</td>
                     <td className="text-right">{formatCurrency(product.cost_price)}</td>
-                    <td className="text-right font-medium text-green-400">{formatCurrency(product.unit_price)}</td>
+                    <td className="text-right font-medium text-emerald-600">{formatCurrency(product.unit_price)}</td>
                     <td className="text-center">
-                      <span className={`badge ${product.is_active ? 'badge-success' : 'bg-white/10 text-white/50'}`}>
+                      <span className={`badge ${product.is_active ? 'badge-success' : 'bg-slate-100 text-slate-400'}`}>
                         {product.is_active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="text-right">
-                      <Link to={`/products/${product.id}/edit`} className="text-purple-400 hover:text-purple-300">
+                      <Link to={`/products/${product.id}/edit`} className="text-primary-600 hover:text-primary-700">
                         <PencilIcon className="h-5 w-5 inline" />
                       </Link>
                     </td>
@@ -107,8 +107,8 @@ export default function Products() {
                 ))}
               </tbody>
             </table>
-            <div className="px-6 py-4 border-t border-white/10 flex justify-between">
-              <span className="text-sm text-white/50">Page {page} of {totalPages}</span>
+            <div className="px-6 py-4 border-t border-slate-200 flex justify-between">
+              <span className="text-sm text-slate-400">Page {page} of {totalPages}</span>
               <div className="flex gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="btn-secondary text-sm disabled:opacity-50">Previous</button>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="btn-secondary text-sm disabled:opacity-50">Next</button>

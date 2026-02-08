@@ -5,14 +5,14 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const statusColors = {
-  pending: 'bg-gray-500/20 text-gray-400',
-  confirmed: 'bg-blue-500/20 text-blue-400',
-  processing: 'bg-yellow-500/20 text-yellow-400',
-  picking: 'bg-orange-500/20 text-orange-400',
-  packed: 'bg-purple-500/20 text-purple-400',
-  shipped: 'bg-indigo-500/20 text-indigo-400',
-  delivered: 'bg-green-500/20 text-green-400',
-  cancelled: 'bg-red-500/20 text-red-400'
+  pending: 'bg-slate-100 text-slate-600',
+  confirmed: 'bg-blue-50 text-blue-700',
+  processing: 'bg-amber-50 text-amber-700',
+  picking: 'bg-orange-50 text-orange-700',
+  packed: 'bg-primary-50 text-primary-700',
+  shipped: 'bg-indigo-50 text-indigo-700',
+  delivered: 'bg-emerald-50 text-emerald-700',
+  cancelled: 'bg-red-50 text-red-700'
 };
 
 const statusFlow = ['pending', 'confirmed', 'processing', 'picking', 'packed', 'shipped', 'delivered'];
@@ -77,17 +77,17 @@ export default function OrderDetail() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/orders')} className="p-2 text-white/60 hover:text-white hover:bg-white/5 rounded-lg">
+          <button onClick={() => navigate('/orders')} className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg">
             <ArrowLeftIcon className="h-5 w-5" />
           </button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-white">{order.order_number}</h1>
+              <h1 className="text-2xl font-bold text-slate-900">{order.order_number}</h1>
               <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusColors[order.status]}`}>
                 {order.status}
               </span>
             </div>
-            <p className="text-white/60 mt-1">
+            <p className="text-slate-500 mt-1">
               Created on {new Date(order.created_at).toLocaleDateString('en-PH')}
             </p>
           </div>
@@ -119,46 +119,46 @@ export default function OrderDetail() {
       {/* Order Info */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="glass-card p-6">
-          <h3 className="text-sm font-medium text-white/60 mb-3">Customer</h3>
-          <p className="font-semibold text-white">{order.client_name}</p>
-          <p className="text-sm text-white/60">{order.client_code}</p>
-          <p className="text-sm text-white/60 mt-2">{order.delivery_address}</p>
+          <h3 className="text-sm font-medium text-slate-500 mb-3">Customer</h3>
+          <p className="font-semibold text-slate-900">{order.client_name}</p>
+          <p className="text-sm text-slate-500">{order.client_code}</p>
+          <p className="text-sm text-slate-500 mt-2">{order.delivery_address}</p>
         </div>
 
         <div className="glass-card p-6">
-          <h3 className="text-sm font-medium text-white/60 mb-3">Order Details</h3>
+          <h3 className="text-sm font-medium text-slate-500 mb-3">Order Details</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-white/60">Order Date</span>
-              <span className="text-white">{new Date(order.order_date).toLocaleDateString('en-PH')}</span>
+              <span className="text-slate-500">Order Date</span>
+              <span className="text-slate-900">{new Date(order.order_date).toLocaleDateString('en-PH')}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-white/60">Payment Terms</span>
-              <span className="text-white">{order.payment_terms}</span>
+              <span className="text-slate-500">Payment Terms</span>
+              <span className="text-slate-900">{order.payment_terms}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-white/60">Items</span>
-              <span className="text-white">{order.total_items}</span>
+              <span className="text-slate-500">Items</span>
+              <span className="text-slate-900">{order.total_items}</span>
             </div>
           </div>
         </div>
 
         <div className="glass-card p-6">
-          <h3 className="text-sm font-medium text-white/60 mb-3">Payment Summary</h3>
+          <h3 className="text-sm font-medium text-slate-500 mb-3">Payment Summary</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-white/60">Subtotal</span>
-              <span className="text-white">{formatCurrency(order.subtotal)}</span>
+              <span className="text-slate-500">Subtotal</span>
+              <span className="text-slate-900">{formatCurrency(order.subtotal)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-white/60">Discount</span>
-              <span className="text-white">-{formatCurrency(order.discount_amount)}</span>
+              <span className="text-slate-500">Discount</span>
+              <span className="text-slate-900">-{formatCurrency(order.discount_amount)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-white/60">Tax</span>
-              <span className="text-white">{formatCurrency(order.tax_amount)}</span>
+              <span className="text-slate-500">Tax</span>
+              <span className="text-slate-900">{formatCurrency(order.tax_amount)}</span>
             </div>
-            <div className="flex justify-between font-bold text-lg border-t border-white/10 pt-2 text-white">
+            <div className="flex justify-between font-bold text-lg border-t border-slate-200 pt-2 text-slate-900">
               <span>Total</span>
               <span>{formatCurrency(order.total_amount)}</span>
             </div>
@@ -168,27 +168,27 @@ export default function OrderDetail() {
 
       {/* Order Items */}
       <div className="glass-card overflow-hidden">
-        <div className="p-6 border-b border-white/10">
-          <h3 className="text-lg font-semibold text-white">Order Items</h3>
+        <div className="p-6 border-b border-slate-200">
+          <h3 className="text-lg font-semibold text-slate-900">Order Items</h3>
         </div>
         <table className="glass-table">
           <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Product</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">SKU</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Qty</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Unit Price</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Total</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Product</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">SKU</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Qty</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Unit Price</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Total</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => (
               <tr key={item.id}>
-                <td className="px-6 py-4 text-sm font-medium text-white">{item.product_name}</td>
-                <td className="px-6 py-4 text-sm text-white/60">{item.sku}</td>
-                <td className="px-6 py-4 text-sm text-white text-right">{item.quantity}</td>
-                <td className="px-6 py-4 text-sm text-white text-right">{formatCurrency(item.unit_price)}</td>
-                <td className="px-6 py-4 text-sm font-medium text-white text-right">{formatCurrency(item.total_price)}</td>
+                <td className="px-6 py-4 text-sm font-medium text-slate-900">{item.product_name}</td>
+                <td className="px-6 py-4 text-sm text-slate-500">{item.sku}</td>
+                <td className="px-6 py-4 text-sm text-slate-900 text-right">{item.quantity}</td>
+                <td className="px-6 py-4 text-sm text-slate-900 text-right">{formatCurrency(item.unit_price)}</td>
+                <td className="px-6 py-4 text-sm font-medium text-slate-900 text-right">{formatCurrency(item.total_price)}</td>
               </tr>
             ))}
           </tbody>
@@ -198,17 +198,17 @@ export default function OrderDetail() {
       {/* Status History */}
       {history.length > 0 && (
         <div className="glass-card p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Status History</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">Status History</h3>
           <div className="space-y-4">
             {history.map((h, index) => (
               <div key={index} className="flex items-start">
                 <div className={`h-3 w-3 rounded-full mt-1.5 ${statusColors[h.status].split(' ')[0]}`}></div>
                 <div className="ml-4">
-                  <p className="font-medium text-white">{h.status.charAt(0).toUpperCase() + h.status.slice(1)}</p>
-                  <p className="text-sm text-white/60">
+                  <p className="font-medium text-slate-900">{h.status.charAt(0).toUpperCase() + h.status.slice(1)}</p>
+                  <p className="text-sm text-slate-500">
                     {new Date(h.created_at).toLocaleString('en-PH')} by {h.changed_by_name}
                   </p>
-                  {h.notes && <p className="text-sm text-white/60 mt-1">{h.notes}</p>}
+                  {h.notes && <p className="text-sm text-slate-500 mt-1">{h.notes}</p>}
                 </div>
               </div>
             ))}
@@ -219,8 +219,8 @@ export default function OrderDetail() {
       {/* Notes */}
       {order.notes && (
         <div className="glass-card p-6">
-          <h3 className="text-lg font-semibold text-white mb-2">Notes</h3>
-          <p className="text-white/60">{order.notes}</p>
+          <h3 className="text-lg font-semibold text-slate-900 mb-2">Notes</h3>
+          <p className="text-slate-500">{order.notes}</p>
         </div>
       )}
     </div>

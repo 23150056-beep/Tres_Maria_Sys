@@ -45,10 +45,10 @@ export default function GoodsReceipts() {
   const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-PH') : '-';
 
   const statusConfig = {
-    pending: { color: 'bg-yellow-500/20 text-yellow-400', icon: ClockIcon },
-    partial: { color: 'bg-blue-500/20 text-blue-400', icon: TruckIcon },
-    complete: { color: 'bg-green-500/20 text-green-400', icon: CheckCircleIcon },
-    discrepancy: { color: 'bg-red-500/20 text-red-400', icon: ExclamationTriangleIcon },
+    pending: { color: 'bg-amber-50 text-amber-700', icon: ClockIcon },
+    partial: { color: 'bg-blue-50 text-blue-700', icon: TruckIcon },
+    complete: { color: 'bg-emerald-50 text-emerald-700', icon: CheckCircleIcon },
+    discrepancy: { color: 'bg-red-50 text-red-700', icon: ExclamationTriangleIcon },
   };
 
   const filteredPOs = pendingPOs.filter(po =>
@@ -61,15 +61,15 @@ export default function GoodsReceipts() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-white">Goods Receiving</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Goods Receiving</h1>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-white/10">
+      <div className="border-b border-slate-200">
         <nav className="-mb-px flex space-x-8">
           {[{ key: 'pending', label: 'Pending Receipt', count: pendingPOs.length }, { key: 'history', label: 'Receipt History', count: receipts.length }].map(tab => (
-            <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.key ? 'border-purple-500 text-purple-400' : 'border-transparent text-white/60 hover:text-white'}`}>
-              {tab.label} <span className={`ml-2 px-2 py-1 rounded-full text-xs ${activeTab === tab.key ? 'bg-purple-500/20 text-purple-400' : 'bg-white/10 text-white/60'}`}>{tab.count}</span>
+            <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.key ? 'border-primary-500 text-primary-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>
+              {tab.label} <span className={`ml-2 px-2 py-1 rounded-full text-xs ${activeTab === tab.key ? 'bg-primary-50 text-primary-700' : 'bg-slate-100 text-slate-500'}`}>{tab.count}</span>
             </button>
           ))}
         </nav>
@@ -77,7 +77,7 @@ export default function GoodsReceipts() {
 
       {/* Search */}
       <div className="relative max-w-md">
-        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/40" />
+        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
         <input type="text" placeholder="Search PO# or supplier..." value={search} onChange={(e) => setSearch(e.target.value)} className="form-input pl-10" />
       </div>
 
@@ -86,27 +86,27 @@ export default function GoodsReceipts() {
           <table className="glass-table">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">PO Number</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Supplier</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Expected Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Items</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Total</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Status</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">PO Number</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Supplier</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Expected Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Items</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Total</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Status</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="divide-y divide-slate-200">
               {filteredPOs.length === 0 ? (
-                <tr><td colSpan="7" className="px-6 py-12 text-center text-white/60">No pending receipts</td></tr>
+                <tr><td colSpan="7" className="px-6 py-12 text-center text-slate-500">No pending receipts</td></tr>
               ) : filteredPOs.map(po => {
                 const config = statusConfig[po.status] || statusConfig.pending;
                 return (
-                  <tr key={po.id} className="hover:bg-white/5">
-                    <td className="px-6 py-4"><Link to={`/purchasing/${po.id}`} className="text-purple-400 hover:text-purple-300 font-medium">{po.po_number}</Link></td>
-                    <td className="px-6 py-4 text-white/60">{po.supplier?.name || '-'}</td>
-                    <td className="px-6 py-4 text-white/60">{formatDate(po.expected_date)}</td>
-                    <td className="px-6 py-4 text-white/60">{po.items?.length || 0} items</td>
-                    <td className="px-6 py-4 font-medium text-white">{formatCurrency(po.total_amount)}</td>
+                  <tr key={po.id} className="hover:bg-slate-50">
+                    <td className="px-6 py-4"><Link to={`/purchasing/${po.id}`} className="text-primary-600 hover:text-primary-700 font-medium">{po.po_number}</Link></td>
+                    <td className="px-6 py-4 text-slate-500">{po.supplier?.name || '-'}</td>
+                    <td className="px-6 py-4 text-slate-500">{formatDate(po.expected_date)}</td>
+                    <td className="px-6 py-4 text-slate-500">{po.items?.length || 0} items</td>
+                    <td className="px-6 py-4 font-medium text-slate-900">{formatCurrency(po.total_amount)}</td>
                     <td className="px-6 py-4"><span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>{po.status}</span></td>
                     <td className="px-6 py-4 text-right">
                       <button onClick={() => openReceiveModal(po)} className="btn-success text-sm">Receive</button>
@@ -120,7 +120,7 @@ export default function GoodsReceipts() {
       )}
 
       {activeTab === 'history' && (
-        <div className="glass-card p-12 text-center text-white/60">
+        <div className="glass-card p-12 text-center text-slate-500">
           Receipt history will show here once goods are received.
         </div>
       )}
@@ -131,24 +131,24 @@ export default function GoodsReceipts() {
           <div className="flex items-center justify-center min-h-screen px-4">
             <div className="fixed inset-0 bg-black bg-opacity-70" onClick={() => setReceiveModal({ open: false, po: null })}></div>
             <div className="relative glass-card max-w-4xl w-full p-6">
-              <h2 className="text-xl font-bold mb-4 text-white">Receive Goods - {receiveModal.po.po_number}</h2>
-              <p className="text-white/60 mb-4">Supplier: {receiveModal.po.supplier?.name}</p>
+              <h2 className="text-xl font-bold mb-4 text-slate-900">Receive Goods - {receiveModal.po.po_number}</h2>
+              <p className="text-slate-500 mb-4">Supplier: {receiveModal.po.supplier?.name}</p>
               <table className="min-w-full mb-6">
                 <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="py-2 text-left text-sm font-medium text-white/60">Product</th>
-                    <th className="py-2 text-left text-sm font-medium text-white/60 w-24">Ordered</th>
-                    <th className="py-2 text-left text-sm font-medium text-white/60 w-24">Prev Rcvd</th>
-                    <th className="py-2 text-left text-sm font-medium text-white/60 w-32">Receiving</th>
-                    <th className="py-2 text-left text-sm font-medium text-white/60">Notes</th>
+                  <tr className="border-b border-slate-200">
+                    <th className="py-2 text-left text-sm font-medium text-slate-500">Product</th>
+                    <th className="py-2 text-left text-sm font-medium text-slate-500 w-24">Ordered</th>
+                    <th className="py-2 text-left text-sm font-medium text-slate-500 w-24">Prev Rcvd</th>
+                    <th className="py-2 text-left text-sm font-medium text-slate-500 w-32">Receiving</th>
+                    <th className="py-2 text-left text-sm font-medium text-slate-500">Notes</th>
                   </tr>
                 </thead>
                 <tbody>
                   {receiveItems.map((item, idx) => (
-                    <tr key={item.id} className="border-b border-white/10">
-                      <td className="py-3 text-white">{item.product?.name || `Product #${item.product_id}`}</td>
-                      <td className="py-3 text-white/60">{item.quantity}</td>
-                      <td className="py-3 text-white/60">{item.received_quantity_prev || 0}</td>
+                    <tr key={item.id} className="border-b border-slate-200">
+                      <td className="py-3 text-slate-900">{item.product?.name || `Product #${item.product_id}`}</td>
+                      <td className="py-3 text-slate-500">{item.quantity}</td>
+                      <td className="py-3 text-slate-500">{item.received_quantity_prev || 0}</td>
                       <td className="py-3">
                         <input type="number" min="0" max={item.quantity - (item.received_quantity_prev || 0)} value={item.received_quantity}
                           onChange={(e) => { const newItems = [...receiveItems]; newItems[idx].received_quantity = e.target.value; setReceiveItems(newItems); }}
