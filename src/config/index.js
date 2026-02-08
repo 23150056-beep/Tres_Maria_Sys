@@ -16,8 +16,8 @@ export const config = {
   // APP SETTINGS
   // ===================
   app: {
-    name: 'Tres Marias Distribution System',
-    shortName: 'TM System',
+    name: 'Consumer Goods Distribution and Delivery Operation Management System',
+    shortName: 'Tres Marias',
     version: '1.0.0',
     company: 'Tres Marias Marketing',
     location: 'San Fernando City, La Union, Philippines',
@@ -175,29 +175,29 @@ export const formatDateTime = (date) => {
 export const getStatusColor = (status) => {
   const colors = {
     // Success states
-    delivered: 'bg-green-100 text-green-800',
-    completed: 'bg-green-100 text-green-800',
-    approved: 'bg-green-100 text-green-800',
-    active: 'bg-green-100 text-green-800',
+    delivered: 'bg-emerald-50 text-emerald-700',
+    completed: 'bg-emerald-50 text-emerald-700',
+    approved: 'bg-emerald-50 text-emerald-700',
+    active: 'bg-emerald-50 text-emerald-700',
     
     // Warning states
-    pending: 'bg-yellow-100 text-yellow-800',
-    processing: 'bg-yellow-100 text-yellow-800',
-    assigned: 'bg-yellow-100 text-yellow-800',
-    draft: 'bg-gray-100 text-gray-800',
+    pending: 'bg-amber-50 text-amber-700',
+    processing: 'bg-amber-50 text-amber-700',
+    assigned: 'bg-amber-50 text-amber-700',
+    draft: 'bg-slate-100 text-slate-600',
     
     // Info states
-    confirmed: 'bg-blue-100 text-blue-800',
-    'in-transit': 'bg-blue-100 text-blue-800',
-    executing: 'bg-blue-100 text-blue-800',
-    shipped: 'bg-blue-100 text-blue-800',
+    confirmed: 'bg-blue-50 text-blue-700',
+    'in-transit': 'bg-blue-50 text-blue-700',
+    executing: 'bg-blue-50 text-blue-700',
+    shipped: 'bg-blue-50 text-blue-700',
     
     // Error states
-    cancelled: 'bg-red-100 text-red-800',
-    failed: 'bg-red-100 text-red-800',
+    cancelled: 'bg-red-50 text-red-700',
+    failed: 'bg-red-50 text-red-700',
     
     // Default
-    default: 'bg-gray-100 text-gray-800',
+    default: 'bg-slate-100 text-slate-600',
   };
   
   return colors[status] || colors.default;

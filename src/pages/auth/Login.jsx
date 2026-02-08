@@ -32,25 +32,77 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full">
-        {/* Logo and Title */}
-        <div className="text-center mb-8">
-          <div className="mx-auto h-20 w-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl shadow-lg shadow-purple-500/30 flex items-center justify-center mb-4">
-            <span className="text-white font-bold text-3xl">TM</span>
+    <div className="min-h-screen flex bg-slate-50">
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-primary-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-800 via-primary-900 to-primary-950" />
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+        <div className="relative z-10 flex flex-col justify-center px-12 xl:px-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="h-12 w-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
+              <span className="text-white font-bold text-xl">TM</span>
+            </div>
+            <div>
+              <h2 className="text-white font-semibold text-lg">Tres Marias</h2>
+              <p className="text-primary-200 text-xs">Marketing</p>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-white">Tres Marias Marketing</h1>
-          <p className="mt-2 text-white/60">Warehouse Distribution Management System</p>
-          <p className="text-white/40 text-sm">San Fernando City, La Union</p>
+          <h1 className="text-white text-3xl xl:text-4xl font-bold leading-tight mb-4">
+            Consumer Goods Distribution & Delivery Operations
+          </h1>
+          <p className="text-primary-200 text-base leading-relaxed mb-8 max-w-md">
+            Streamline your distribution workflows, track deliveries in real-time, and manage your entire supply chain from one centralized platform.
+          </p>
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <svg className="h-4 w-4 text-primary-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <span className="text-primary-200 text-sm">Real-time delivery tracking & route optimization</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <svg className="h-4 w-4 text-primary-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <span className="text-primary-200 text-sm">Inventory management & stock alerts</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <svg className="h-4 w-4 text-primary-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <span className="text-primary-200 text-sm">Order processing & distribution planning</span>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Login Card */}
-        <div className="glass-card p-8">
-          <h2 className="text-2xl font-semibold text-white text-center mb-6">
-            Sign in to your account
-          </h2>
+      {/* Right Panel - Login Form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12">
+        <div className="w-full max-w-[400px]">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center mb-8">
+            <div className="mx-auto h-14 w-14 bg-primary-600 rounded-xl flex items-center justify-center mb-3">
+              <span className="text-white font-bold text-2xl">TM</span>
+            </div>
+            <h1 className="text-xl font-semibold text-slate-900">Tres Marias Marketing</h1>
+            <p className="text-slate-500 text-sm mt-1">Distribution & Delivery Operations</p>
+          </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Form Header */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold text-slate-900">
+              Welcome back
+            </h2>
+            <p className="text-slate-500 mt-1.5">Sign in to manage your operations</p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="form-label">
@@ -67,11 +119,11 @@ export default function Login() {
                     message: 'Invalid email address'
                   }
                 })}
-                className={`form-input ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
+                className={`form-input ${errors.email ? 'border-red-400 focus:ring-red-500/20 focus:border-red-500' : ''}`}
                 placeholder="you@example.com"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
+                <p className="mt-1.5 text-sm text-red-600">{errors.email.message}</p>
               )}
             </div>
 
@@ -92,13 +144,13 @@ export default function Login() {
                       message: 'Password must be at least 6 characters'
                     }
                   })}
-                  className={`form-input pr-12 ${errors.password ? 'border-red-500 focus:ring-red-500' : ''}`}
+                  className={`form-input pr-12 ${errors.password ? 'border-red-400 focus:ring-red-500/20 focus:border-red-500' : ''}`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                 >
                   {showPassword ? (
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -113,7 +165,7 @@ export default function Login() {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
+                <p className="mt-1.5 text-sm text-red-600">{errors.password.message}</p>
               )}
             </div>
 
@@ -138,19 +190,19 @@ export default function Login() {
           </form>
 
           {/* Demo credentials */}
-          <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
-            <p className="text-sm text-white/60 text-center mb-2">Demo Credentials</p>
-            <div className="text-xs text-white/40 text-center">
-              <p>Email: <span className="font-mono text-purple-400">admin@tresmarias.ph</span></p>
-              <p>Password: <span className="font-mono text-purple-400">admin123</span></p>
+          <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <p className="text-sm text-slate-500 text-center mb-2 font-medium">Demo Credentials</p>
+            <div className="text-xs text-slate-500 text-center space-y-0.5">
+              <p>Email: <span className="font-mono text-primary-600">admin@tresmarias.ph</span></p>
+              <p>Password: <span className="font-mono text-primary-600">admin123</span></p>
             </div>
           </div>
-        </div>
 
-        {/* Footer */}
-        <p className="mt-6 text-center text-white/40 text-sm">
-          © 2024 Tres Marias Marketing. All rights reserved.
-        </p>
+          {/* Footer */}
+          <p className="mt-8 text-center text-slate-400 text-xs">
+            © 2026 Tres Marias Marketing. San Fernando City, La Union.
+          </p>
+        </div>
       </div>
     </div>
   );

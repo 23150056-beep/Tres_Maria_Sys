@@ -83,8 +83,8 @@ function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-slate-200 border-t-primary-600"></div>
       </div>
     );
   }
@@ -100,17 +100,20 @@ function App() {
         toastOptions={{
           duration: 4000,
           style: {
-            background: '#363636',
-            color: '#fff',
+            background: '#ffffff',
+            color: '#1e293b',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+            fontSize: '14px',
           },
           success: {
             style: {
-              background: '#059669',
+              borderLeft: '4px solid #10b981',
             },
           },
           error: {
             style: {
-              background: '#DC2626',
+              borderLeft: '4px solid #ef4444',
             },
           },
         }}

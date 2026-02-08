@@ -65,8 +65,8 @@ export default function Categories() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Categories</h1>
-          <p className="text-white/60 mt-1">Organize your products</p>
+          <h1 className="text-2xl font-bold text-slate-900">Categories</h1>
+          <p className="text-slate-500 mt-1">Organize your products</p>
         </div>
         <button onClick={() => { setShowModal(true); setEditingCategory(null); setFormData({ name: '', description: '', parent_id: '' }); }} className="btn-primary">
           <PlusIcon className="h-5 w-5 mr-2" />
@@ -78,31 +78,31 @@ export default function Categories() {
         {loading ? (
           <div className="flex items-center justify-center h-64"><div className="spinner h-12 w-12"></div></div>
         ) : categories.length === 0 ? (
-          <div className="p-12 text-center text-white/60">No categories yet</div>
+          <div className="p-12 text-center text-slate-500">No categories yet</div>
         ) : (
           <table className="glass-table">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Description</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Products</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Description</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Products</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody>
               {categories.map((cat) => (
-                <tr key={cat.id} className="hover:bg-white/5">
+                <tr key={cat.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4">
                     <div className="flex items-center">
-                      <FolderIcon className="h-5 w-5 text-white/40 mr-2" />
-                      <span className="font-medium text-white">{cat.name}</span>
+                      <FolderIcon className="h-5 w-5 text-slate-400 mr-2" />
+                      <span className="font-medium text-slate-900">{cat.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-white/60">{cat.description || '-'}</td>
-                  <td className="px-6 py-4 text-sm text-white/60">{cat.product_count || 0}</td>
+                  <td className="px-6 py-4 text-sm text-slate-500">{cat.description || '-'}</td>
+                  <td className="px-6 py-4 text-sm text-slate-500">{cat.product_count || 0}</td>
                   <td className="px-6 py-4 text-right space-x-2">
-                    <button onClick={() => handleEdit(cat)} className="text-purple-400 hover:text-purple-300"><PencilIcon className="h-5 w-5 inline" /></button>
-                    <button onClick={() => handleDelete(cat.id)} className="text-red-400 hover:text-red-300"><TrashIcon className="h-5 w-5 inline" /></button>
+                    <button onClick={() => handleEdit(cat)} className="text-primary-600 hover:text-primary-700"><PencilIcon className="h-5 w-5 inline" /></button>
+                    <button onClick={() => handleDelete(cat.id)} className="text-red-600 hover:text-red-300"><TrashIcon className="h-5 w-5 inline" /></button>
                   </td>
                 </tr>
               ))}
@@ -113,19 +113,19 @@ export default function Categories() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="glass-card p-6 w-full max-w-md border border-white/10">
-            <h2 className="text-lg font-semibold text-white mb-4">{editingCategory ? 'Edit Category' : 'Add Category'}</h2>
+          <div className="glass-card p-6 w-full max-w-md border border-slate-200">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">{editingCategory ? 'Edit Category' : 'Add Category'}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Name *</label>
+                <label className="block text-sm font-medium text-slate-600 mb-1">Name *</label>
                 <input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required className="form-input" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Description</label>
+                <label className="block text-sm font-medium text-slate-600 mb-1">Description</label>
                 <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={3} className="form-input" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Parent Category</label>
+                <label className="block text-sm font-medium text-slate-600 mb-1">Parent Category</label>
                 <select value={formData.parent_id} onChange={(e) => setFormData({ ...formData, parent_id: e.target.value })} className="form-select">
                   <option value="">None (Top Level)</option>
                   {categories.filter(c => c.id !== editingCategory?.id).map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}

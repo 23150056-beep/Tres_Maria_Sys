@@ -160,7 +160,6 @@ const fullNavigation = [
 // Normalize role name for comparison
 function normalizeRole(role) {
   if (!role) return 'Staff';
-  // Map lowercase role values to display names
   const roleMap = {
     'admin': 'Admin',
     'manager': 'Manager',
@@ -188,27 +187,27 @@ function NavItem({ item }) {
       <div>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between px-4 py-2.5 text-white/70 hover:bg-white/10 hover:text-white rounded-xl transition-all duration-200"
+          className="w-full flex items-center justify-between px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded-lg transition-colors duration-150"
         >
           <div className="flex items-center">
-            <item.icon className="h-5 w-5 mr-3" />
+            <item.icon className="h-5 w-5 mr-3 text-slate-400" />
             <span className="text-sm font-medium">{item.name}</span>
           </div>
           <ChevronDownIcon
-            className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
           />
         </button>
         {isOpen && (
-          <div className="ml-8 mt-1 space-y-1">
+          <div className="ml-8 mt-0.5 space-y-0.5 border-l border-slate-200 pl-3">
             {item.children.map((child) => (
               <NavLink
                 key={child.href}
                 to={child.href}
                 className={({ isActive }) =>
-                  `block px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
+                  `block px-3 py-1.5 text-sm rounded-md transition-colors duration-150 ${
                     isActive
-                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30'
-                      : 'text-white/60 hover:bg-white/10 hover:text-white'
+                      ? 'text-primary-700 bg-primary-50 font-medium'
+                      : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                   }`
                 }
               >
@@ -226,10 +225,10 @@ function NavItem({ item }) {
       to={item.href}
       end={item.href === '/'}
       className={({ isActive }) =>
-        `flex items-center px-4 py-2.5 rounded-xl transition-all duration-200 ${
+        `flex items-center px-3 py-2 rounded-lg transition-colors duration-150 ${
           isActive
-            ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30'
-            : 'text-white/70 hover:bg-white/10 hover:text-white'
+            ? 'bg-primary-50 text-primary-700'
+            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
         }`
       }
     >
@@ -252,9 +251,8 @@ export default function DashboardLayout() {
 
   // Start notification polling and socket connection when layout mounts
   useEffect(() => {
-    const cleanup = startNotificationPolling(60000); // Check every 60 seconds
+    const cleanup = startNotificationPolling(60000);
     
-    // Initialize socket connection for real-time updates
     if (user?.id) {
       socketService.connect(user.id);
     }
@@ -272,64 +270,64 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-slate-100">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/20 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900/80 backdrop-blur-xl border-r border-white/10 transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col ${
+        className={`fixed inset-y-0 left-0 z-50 w-[260px] bg-white border-r border-slate-200 shadow-sidebar transform transition-transform duration-200 ease-in-out lg:translate-x-0 flex flex-col ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-white/10 flex-shrink-0">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-slate-200 flex-shrink-0">
           <div className="flex items-center">
-            <div className="h-10 w-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
-              <span className="text-white font-bold text-xl">TM</span>
+            <div className="h-9 w-9 bg-primary-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-base">TM</span>
             </div>
             <div className="ml-3">
-              <h1 className="text-white font-semibold text-sm">Tres Marias</h1>
-              <p className="text-white/50 text-xs">Distribution System</p>
+              <h1 className="text-slate-900 font-semibold text-sm leading-tight">Tres Marias</h1>
+              <p className="text-slate-400 text-[11px] leading-tight">Distribution & Delivery Ops</p>
             </div>
           </div>
           <button
-            className="lg:hidden text-white/60 hover:text-white"
+            className="lg:hidden text-slate-400 hover:text-slate-600 transition-colors"
             onClick={() => setSidebarOpen(false)}
           >
-            <XMarkIcon className="h-6 w-6" />
+            <XMarkIcon className="h-5 w-5" />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto min-h-0">
+        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto min-h-0">
           {navigation.map((item) => (
             <NavItem key={item.name} item={item} />
           ))}
         </nav>
 
         {/* User section */}
-        <div className="border-t border-white/10 p-4 flex-shrink-0">
+        <div className="border-t border-slate-200 p-3 flex-shrink-0">
           <div className="flex items-center">
-            <div className="h-10 w-10 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white text-sm font-bold">
+            <div className="h-9 w-9 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span className="text-primary-700 text-sm font-semibold">
                 {user?.first_name?.[0]}{user?.last_name?.[0]}
               </span>
             </div>
-            <div className="ml-3 flex-1">
-              <p className="text-white text-sm font-medium">
+            <div className="ml-3 flex-1 min-w-0">
+              <p className="text-slate-900 text-sm font-medium truncate">
                 {user?.first_name} {user?.last_name}
               </p>
-              <p className="text-white/50 text-xs">{user?.role_name}</p>
+              <p className="text-slate-400 text-xs truncate">{user?.role_name}</p>
             </div>
             <button
               onClick={handleLogout}
-              className="text-white/50 hover:text-red-400 p-2 rounded-lg hover:bg-white/10 transition-colors"
+              className="text-slate-400 hover:text-red-500 p-1.5 rounded-md hover:bg-slate-100 transition-colors flex-shrink-0"
               title="Logout"
             >
               <ArrowRightOnRectangleIcon className="h-5 w-5" />
@@ -339,34 +337,36 @@ export default function DashboardLayout() {
       </aside>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className="lg:pl-[260px]">
         {/* Top header */}
-        <header className="sticky top-0 z-40 bg-slate-900/50 backdrop-blur-xl border-b border-white/10">
+        <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
           <div className="flex items-center justify-between h-16 px-4 lg:px-6">
-            <button
-              className="lg:hidden text-white/70 hover:text-white"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <Bars3Icon className="h-6 w-6" />
-            </button>
-
-            <div className="flex-1 flex items-center justify-end space-x-3">
+            <div className="flex items-center gap-3">
+              <button
+                className="lg:hidden text-slate-500 hover:text-slate-700 transition-colors"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <Bars3Icon className="h-6 w-6" />
+              </button>
+              
               {/* Search */}
-              <div className="hidden md:flex items-center bg-white/10 rounded-xl px-3 py-2">
-                <MagnifyingGlassIcon className="h-5 w-5 text-white/50" />
+              <div className="hidden md:flex items-center bg-slate-100 rounded-lg px-3 py-2">
+                <MagnifyingGlassIcon className="h-4 w-4 text-slate-400" />
                 <input 
                   type="text" 
                   placeholder="Search..." 
-                  className="bg-transparent border-none outline-none text-white text-sm ml-2 w-40 placeholder-white/50"
+                  className="bg-transparent border-none outline-none text-slate-700 text-sm ml-2 w-48 placeholder-slate-400"
                 />
               </div>
-              
+            </div>
+
+            <div className="flex items-center space-x-2">
               {/* Notifications */}
               <NotificationDropdown />
               
               {/* Settings */}
-              <button className="text-white/60 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors">
-                <Cog6ToothIcon className="h-6 w-6" />
+              <button className="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-100 transition-colors">
+                <Cog6ToothIcon className="h-5 w-5" />
               </button>
             </div>
           </div>

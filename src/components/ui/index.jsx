@@ -1,13 +1,12 @@
 /**
  * REUSABLE UI COMPONENTS
  * ======================
- * Consistent, simple components used throughout the application.
- * 
- * Principles: Simplicity, Consistency, Reusability
+ * Consistent, minimal, professional components used throughout the application.
+ * Consumer Goods Distribution & Delivery Operation Management System
  */
 
 import { forwardRef } from 'react';
-import { getStatusColor } from '../config';
+import { getStatusColor } from '../../config';
 
 // ===================
 // LOADING SPINNER
@@ -20,7 +19,7 @@ export const Spinner = ({ size = 'md', className = '' }) => {
   };
 
   return (
-    <div className={`animate-spin rounded-full border-b-2 border-blue-600 ${sizes[size]} ${className}`} />
+    <div className={`animate-spin rounded-full border-[3px] border-primary-600 border-t-transparent ${sizes[size]} ${className}`} />
   );
 };
 
@@ -28,9 +27,9 @@ export const Spinner = ({ size = 'md', className = '' }) => {
 // PAGE LOADER
 // ===================
 export const PageLoader = ({ message = 'Loading...' }) => (
-  <div className="flex flex-col items-center justify-center h-64 gap-4">
+  <div className="flex flex-col items-center justify-center h-64 gap-3">
     <Spinner size="lg" />
-    <p className="text-gray-500">{message}</p>
+    <p className="text-slate-500 text-sm">{message}</p>
   </div>
 );
 
@@ -50,7 +49,7 @@ export const StatusBadge = ({ status, className = '' }) => {
 // CARD COMPONENT
 // ===================
 export const Card = ({ children, className = '', padding = true }) => (
-  <div className={`bg-white rounded-xl shadow-sm ${padding ? 'p-6' : ''} ${className}`}>
+  <div className={`bg-white rounded-xl border border-slate-200 shadow-card ${padding ? 'p-6' : ''} ${className}`}>
     {children}
   </div>
 );
@@ -58,8 +57,8 @@ export const Card = ({ children, className = '', padding = true }) => (
 export const CardHeader = ({ title, subtitle, action, children }) => (
   <div className="flex items-center justify-between mb-4">
     <div>
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-      {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
+      <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+      {subtitle && <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>}
     </div>
     {action && <div>{action}</div>}
     {children}
@@ -79,11 +78,11 @@ export const Button = forwardRef(({
   ...props 
 }, ref) => {
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400',
-    secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:bg-gray-100',
-    success: 'bg-green-600 text-white hover:bg-green-700 disabled:bg-green-400',
-    danger: 'bg-red-600 text-white hover:bg-red-700 disabled:bg-red-400',
-    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:bg-gray-50',
+    primary: 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 disabled:bg-primary-300 shadow-sm',
+    secondary: 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300 disabled:bg-slate-100 disabled:text-slate-400',
+    success: 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-emerald-300 shadow-sm',
+    danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 disabled:bg-red-300 shadow-sm',
+    outline: 'border border-slate-300 text-slate-700 hover:bg-slate-50 disabled:bg-slate-50 disabled:text-slate-400',
   };
 
   const sizes = {
@@ -122,21 +121,22 @@ export const Input = forwardRef(({
 }, ref) => (
   <div className={className}>
     {label && (
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-slate-700 mb-1.5">
         {label}
       </label>
     )}
     <input
       ref={ref}
       className={`
-        w-full px-3 py-2 border rounded-lg
-        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-        disabled:bg-gray-100 disabled:cursor-not-allowed
-        ${error ? 'border-red-500' : 'border-gray-300'}
+        w-full px-3.5 py-2.5 border rounded-lg text-slate-900
+        focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500
+        disabled:bg-slate-50 disabled:cursor-not-allowed
+        placeholder-slate-400 transition-all
+        ${error ? 'border-red-400' : 'border-slate-300'}
       `}
       {...props}
     />
-    {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+    {error && <p className="mt-1.5 text-sm text-red-600">{error}</p>}
   </div>
 ));
 
@@ -155,17 +155,18 @@ export const Select = forwardRef(({
 }, ref) => (
   <div className={className}>
     {label && (
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-slate-700 mb-1.5">
         {label}
       </label>
     )}
     <select
       ref={ref}
       className={`
-        w-full px-3 py-2 border rounded-lg
-        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-        disabled:bg-gray-100 disabled:cursor-not-allowed
-        ${error ? 'border-red-500' : 'border-gray-300'}
+        w-full px-3.5 py-2.5 border rounded-lg text-slate-900
+        focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500
+        disabled:bg-slate-50 disabled:cursor-not-allowed
+        transition-all
+        ${error ? 'border-red-400' : 'border-slate-300'}
       `}
       {...props}
     >
@@ -176,7 +177,7 @@ export const Select = forwardRef(({
         </option>
       ))}
     </select>
-    {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+    {error && <p className="mt-1.5 text-sm text-red-600">{error}</p>}
   </div>
 ));
 
@@ -193,12 +194,12 @@ export const EmptyState = ({
 }) => (
   <div className="text-center py-12">
     {Icon && (
-      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <Icon className="h-8 w-8 text-gray-400" />
+      <div className="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+        <Icon className="h-7 w-7 text-slate-400" />
       </div>
     )}
-    <h3 className="text-lg font-medium text-gray-900 mb-1">{title}</h3>
-    {description && <p className="text-gray-500 mb-4">{description}</p>}
+    <h3 className="text-base font-semibold text-slate-900 mb-1">{title}</h3>
+    {description && <p className="text-sm text-slate-500 mb-4">{description}</p>}
     {action}
   </div>
 );
@@ -221,10 +222,10 @@ export const ConfirmModal = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose} />
-        <div className="relative bg-white rounded-xl max-w-md w-full p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-          <p className="text-gray-600 mb-6">{message}</p>
+        <div className="fixed inset-0 bg-black/40 transition-opacity" onClick={onClose} />
+        <div className="relative bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
+          <h3 className="text-lg font-semibold text-slate-900 mb-2">{title}</h3>
+          <p className="text-slate-600 text-sm mb-6">{message}</p>
           <div className="flex gap-3 justify-end">
             <Button variant="outline" onClick={onClose}>
               {cancelText}
@@ -251,28 +252,28 @@ export const StatCard = ({
   color = 'blue' 
 }) => {
   const colors = {
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    yellow: 'bg-yellow-500',
-    red: 'bg-red-500',
-    purple: 'bg-purple-500',
+    blue: 'bg-blue-50 text-blue-600',
+    green: 'bg-emerald-50 text-emerald-600',
+    yellow: 'bg-amber-50 text-amber-600',
+    red: 'bg-red-50 text-red-600',
+    purple: 'bg-violet-50 text-violet-600',
   };
 
   return (
     <Card>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm text-slate-500">{title}</p>
+          <p className="mt-1.5 text-2xl font-semibold text-slate-900">{value}</p>
           {trend && (
-            <p className={`text-sm mt-1 ${trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`text-sm mt-1 font-medium ${trend === 'up' ? 'text-emerald-600' : 'text-red-600'}`}>
               {trend === 'up' ? '↑' : '↓'} {trendValue}
             </p>
           )}
         </div>
         {Icon && (
-          <div className={`${colors[color]} p-3 rounded-lg`}>
-            <Icon className="h-8 w-8 text-white" />
+          <div className={`p-3 rounded-lg ${colors[color]}`}>
+            <Icon className="h-6 w-6" />
           </div>
         )}
       </div>

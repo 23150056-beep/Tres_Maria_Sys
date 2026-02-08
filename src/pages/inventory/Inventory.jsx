@@ -79,19 +79,19 @@ export default function Inventory() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Inventory</h1>
-          <p className="text-white/60 mt-1">Manage warehouse stock levels</p>
+          <h1 className="text-2xl font-bold text-slate-900">Inventory</h1>
+          <p className="text-slate-500 mt-1">Manage warehouse stock levels</p>
         </div>
         <div className="flex gap-2">
           <Link
             to="/inventory/transactions"
-            className="px-4 py-2 border border-white/10 text-white/60 rounded-lg hover:text-white"
+            className="px-4 py-2 border border-slate-200 text-slate-500 rounded-lg hover:text-slate-700"
           >
             Transactions
           </Link>
           <Link
             to="/inventory/alerts"
-            className="px-4 py-2 border border-white/10 text-white/60 rounded-lg hover:text-white"
+            className="px-4 py-2 border border-slate-200 text-slate-500 rounded-lg hover:text-slate-700"
           >
             <ExclamationTriangleIcon className="h-5 w-5 inline mr-1" />
             Alerts
@@ -103,7 +103,7 @@ export default function Inventory() {
       <div className="glass-card rounded-xl p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
             <input
               type="text"
               placeholder="Search by product name or SKU..."
@@ -134,7 +134,7 @@ export default function Inventory() {
           </select>
           <button
             onClick={fetchInventory}
-            className="px-4 py-2 text-white/60 hover:text-white"
+            className="px-4 py-2 text-slate-500 hover:text-slate-700"
           >
             <ArrowPathIcon className="h-5 w-5" />
           </button>
@@ -149,8 +149,8 @@ export default function Inventory() {
           </div>
         ) : filteredInventory.length === 0 ? (
           <div className="p-12 text-center">
-            <CubeIcon className="h-12 w-12 mx-auto mb-4 text-white/40" />
-            <p className="text-white/60">No inventory items found</p>
+            <CubeIcon className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+            <p className="text-slate-500">No inventory items found</p>
           </div>
         ) : (
           <>
@@ -158,15 +158,15 @@ export default function Inventory() {
               <table className="glass-table">
                 <thead>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Product</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Warehouse</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Location</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Quantity</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Reserved</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Available</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Batch</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Expiry</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Product</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Warehouse</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Location</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Quantity</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Reserved</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Available</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Batch</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Expiry</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -177,23 +177,23 @@ export default function Inventory() {
                       <tr key={item.id}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
-                            <p className="text-sm font-medium text-white">{item.product_name}</p>
-                            <p className="text-xs text-white/60">{item.sku}</p>
+                            <p className="text-sm font-medium text-slate-900">{item.product_name}</p>
+                            <p className="text-xs text-slate-500">{item.sku}</p>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {item.warehouse_name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {item.location_code || '-'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
                           {item.quantity}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {item.reserved_quantity}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
                           {available}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -201,10 +201,10 @@ export default function Inventory() {
                             {status.label}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {item.batch_number || '-'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                           {item.expiry_date 
                             ? new Date(item.expiry_date).toLocaleDateString('en-PH')
                             : '-'}
@@ -217,22 +217,22 @@ export default function Inventory() {
             </div>
 
             {/* Pagination */}
-            <div className="px-6 py-4 border-t border-white/10 flex items-center justify-between">
-              <p className="text-sm text-white/60">
+            <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+              <p className="text-sm text-slate-500">
                 Page {page} of {totalPages}
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-3 py-1 border border-white/10 rounded text-sm text-white/60 hover:text-white disabled:opacity-50"
+                  className="px-3 py-1 border border-slate-200 rounded text-sm text-slate-500 hover:text-slate-700 disabled:opacity-50"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-3 py-1 border border-white/10 rounded text-sm text-white/60 hover:text-white disabled:opacity-50"
+                  className="px-3 py-1 border border-slate-200 rounded text-sm text-slate-500 hover:text-slate-700 disabled:opacity-50"
                 >
                   Next
                 </button>

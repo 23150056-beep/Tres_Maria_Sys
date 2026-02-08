@@ -14,11 +14,11 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const statusColors = {
-  draft: 'bg-gray-500/20 text-gray-400',
-  approved: 'bg-blue-500/20 text-blue-400',
-  executing: 'bg-yellow-500/20 text-yellow-400',
-  completed: 'bg-green-500/20 text-green-400',
-  cancelled: 'bg-red-500/20 text-red-400'
+  draft: 'bg-slate-100 text-slate-600',
+  approved: 'bg-blue-50 text-blue-700',
+  executing: 'bg-amber-50 text-amber-700',
+  completed: 'bg-emerald-50 text-emerald-700',
+  cancelled: 'bg-red-50 text-red-700'
 };
 
 const statusIcons = {
@@ -70,8 +70,8 @@ export default function DistributionPlans() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Distribution Plans</h1>
-          <p className="text-white/60 mt-1">Dynamic Centralized Distribution System</p>
+          <h1 className="text-2xl font-bold text-slate-900">Distribution Plans</h1>
+          <p className="text-slate-500 mt-1">Dynamic Centralized Distribution System</p>
         </div>
         <Link
           to="/distribution/create"
@@ -86,7 +86,7 @@ export default function DistributionPlans() {
       <div className="glass-card p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
             <input
               type="text"
               placeholder="Search plans..."
@@ -96,7 +96,7 @@ export default function DistributionPlans() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <FunnelIcon className="h-5 w-5 text-white/40" />
+            <FunnelIcon className="h-5 w-5 text-slate-400" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -112,7 +112,7 @@ export default function DistributionPlans() {
           </div>
           <button
             onClick={fetchPlans}
-            className="px-4 py-2 text-white/60 hover:text-white"
+            className="px-4 py-2 text-slate-500 hover:text-slate-700"
           >
             <ArrowPathIcon className="h-5 w-5" />
           </button>
@@ -126,11 +126,11 @@ export default function DistributionPlans() {
         </div>
       ) : filteredPlans.length === 0 ? (
         <div className="glass-card p-12 text-center">
-          <div className="h-16 w-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ClockIcon className="h-8 w-8 text-white/40" />
+          <div className="h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ClockIcon className="h-8 w-8 text-slate-400" />
           </div>
-          <h3 className="text-lg font-medium text-white mb-2">No distribution plans found</h3>
-          <p className="text-white/60 mb-4">Get started by creating your first distribution plan</p>
+          <h3 className="text-lg font-medium text-slate-900 mb-2">No distribution plans found</h3>
+          <p className="text-slate-500 mb-4">Get started by creating your first distribution plan</p>
           <Link
             to="/distribution/create"
             className="btn-primary"
@@ -147,37 +147,37 @@ export default function DistributionPlans() {
               <Link
                 key={plan.id}
                 to={`/distribution/${plan.id}`}
-                className="glass-card p-6 hover:bg-white/10 transition-colors"
+                className="glass-card p-6 hover:bg-slate-100 transition-colors"
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[plan.status]}`}>
                     <StatusIcon className="h-3.5 w-3.5 mr-1" />
                     {plan.status.charAt(0).toUpperCase() + plan.status.slice(1)}
                   </span>
-                  <span className="text-sm text-white/60">
+                  <span className="text-sm text-slate-500">
                     {new Date(plan.plan_date).toLocaleDateString('en-PH')}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-white mb-2">{plan.plan_number}</h3>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">{plan.plan_number}</h3>
                 
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-white/60">Total Orders</span>
-                    <span className="font-medium text-white">{plan.total_orders || 0}</span>
+                    <span className="text-slate-500">Total Orders</span>
+                    <span className="font-medium text-slate-900">{plan.total_orders || 0}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-white/60">Total Value</span>
-                    <span className="font-medium text-white">{formatCurrency(plan.total_value)}</span>
+                    <span className="text-slate-500">Total Value</span>
+                    <span className="font-medium text-slate-900">{formatCurrency(plan.total_value)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-white/60">Warehouse</span>
-                    <span className="font-medium text-white">{plan.warehouse_name || 'All'}</span>
+                    <span className="text-slate-500">Warehouse</span>
+                    <span className="font-medium text-slate-900">{plan.warehouse_name || 'All'}</span>
                   </div>
                 </div>
 
                 {plan.status === 'approved' && (
-                  <div className="mt-4 pt-4 border-t border-white/10">
+                  <div className="mt-4 pt-4 border-t border-slate-200">
                     <button className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
                       <PlayIcon className="h-4 w-4 mr-2" />
                       Execute Plan

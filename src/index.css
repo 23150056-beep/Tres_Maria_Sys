@@ -16,108 +16,111 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
+  background-color: #f1f5f9;
+  color: #1e293b;
 }
 
-/* Custom scrollbar for dark theme */
+/* Clean scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #94a3b8;
 }
 
 /* ===================
-   DARK THEME GLASS COMPONENTS
+   MINIMAL PROFESSIONAL COMPONENTS
    =================== */
 
 @layer components {
-  /* Glass Card */
-  .glass-card {
-    @apply bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl;
+  /* Card */
+  .tm-card {
+    @apply bg-white rounded-xl border border-slate-200/80 shadow-card;
   }
 
-  /* Glass Card Hover */
+  .tm-card-hover {
+    @apply tm-card hover:shadow-card-hover hover:border-slate-300 transition-all duration-200;
+  }
+
+  /* Legacy glass-card compatibility */
+  .glass-card {
+    @apply tm-card;
+  }
+
   .glass-card-hover {
-    @apply glass-card hover:bg-white/15 transition-all duration-200;
+    @apply tm-card-hover;
   }
 
   /* Page Title */
   .page-title {
-    @apply text-2xl font-bold text-white;
+    @apply text-2xl font-semibold text-slate-900 tracking-tight;
   }
 
   /* Page Subtitle */
   .page-subtitle {
-    @apply text-white/60 text-sm;
+    @apply text-slate-500 text-sm;
   }
 
   /* Section Title */
   .section-title {
-    @apply text-lg font-semibold text-white;
+    @apply text-lg font-semibold text-slate-800;
   }
 
   /* Form Label */
   .form-label {
-    @apply block text-sm font-medium text-white/80 mb-1;
+    @apply block text-sm font-medium text-slate-700 mb-1.5;
   }
 
   /* Form Input */
   .form-input {
-    @apply w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all;
+    @apply w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all;
   }
 
   /* Form Select */
   .form-select {
-    @apply w-full px-4 py-2.5 bg-slate-800 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all appearance-none cursor-pointer;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    @apply w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
+    background-size: 1.25em 1.25em;
     padding-right: 2.5rem;
   }
 
   .form-select option {
-    background-color: #1e293b;
-    color: #fff;
+    background-color: #ffffff;
+    color: #1e293b;
     padding: 12px;
-  }
-
-  .form-select option:hover,
-  .form-select option:checked {
-    background-color: #7c3aed;
-    color: #fff;
   }
 
   /* Primary Button */
   .btn-primary {
-    @apply px-4 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg shadow-purple-500/30;
+    @apply px-4 py-2.5 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 active:bg-primary-800 transition-colors duration-150 shadow-sm;
   }
 
   /* Secondary Button */
   .btn-secondary {
-    @apply px-4 py-2.5 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 border border-white/20 transition-all duration-200;
+    @apply px-4 py-2.5 bg-white text-slate-700 font-medium rounded-lg hover:bg-slate-50 border border-slate-300 transition-colors duration-150;
   }
 
   /* Success Button */
   .btn-success {
-    @apply px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-lg shadow-green-500/30;
+    @apply px-4 py-2.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 active:bg-emerald-800 transition-colors duration-150 shadow-sm;
   }
 
   /* Danger Button */
   .btn-danger {
-    @apply px-4 py-2.5 bg-gradient-to-r from-red-500 to-pink-600 text-white font-medium rounded-xl hover:from-red-600 hover:to-pink-700 transition-all duration-200 shadow-lg shadow-red-500/30;
+    @apply px-4 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 active:bg-red-800 transition-colors duration-150 shadow-sm;
   }
 
   /* Table Styles */
@@ -126,19 +129,19 @@ body {
   }
 
   .glass-table thead {
-    @apply border-b border-white/10;
+    @apply border-b border-slate-200;
   }
 
   .glass-table th {
-    @apply text-left py-3 px-4 text-white/60 text-xs font-medium uppercase tracking-wider;
+    @apply text-left py-3 px-4 text-slate-500 text-xs font-semibold uppercase tracking-wider bg-slate-50/60;
   }
 
   .glass-table tbody tr {
-    @apply border-b border-white/5 hover:bg-white/5 transition-colors;
+    @apply border-b border-slate-100 hover:bg-slate-50/50 transition-colors;
   }
 
   .glass-table td {
-    @apply py-3 px-4 text-white/80 text-sm;
+    @apply py-3 px-4 text-slate-700 text-sm;
   }
 
   /* Status Badges */
@@ -147,60 +150,60 @@ body {
   }
 
   .badge-success {
-    @apply bg-green-500/20 text-green-400;
+    @apply bg-emerald-50 text-emerald-700;
   }
 
   .badge-warning {
-    @apply bg-yellow-500/20 text-yellow-400;
+    @apply bg-amber-50 text-amber-700;
   }
 
   .badge-danger {
-    @apply bg-red-500/20 text-red-400;
+    @apply bg-red-50 text-red-700;
   }
 
   .badge-info {
-    @apply bg-blue-500/20 text-blue-400;
+    @apply bg-blue-50 text-blue-700;
   }
 
   .badge-purple {
-    @apply bg-purple-500/20 text-purple-400;
+    @apply bg-violet-50 text-violet-700;
   }
 
   /* Stat Card */
   .stat-card {
-    @apply glass-card p-5;
+    @apply tm-card p-5;
   }
 
   .stat-card-icon {
-    @apply h-10 w-10 rounded-xl flex items-center justify-center;
+    @apply h-10 w-10 rounded-lg flex items-center justify-center;
   }
 
   /* Modal Overlay */
   .modal-overlay {
-    @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+    @apply fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4;
   }
 
   /* Modal Content */
   .modal-content {
-    @apply glass-card p-6 w-full max-w-lg;
+    @apply bg-white rounded-xl shadow-xl p-6 w-full max-w-lg border border-slate-200;
   }
 
   /* Loading Spinner */
   .spinner {
-    @apply animate-spin rounded-full border-4 border-purple-500 border-t-transparent;
+    @apply animate-spin rounded-full border-[3px] border-primary-600 border-t-transparent;
   }
 
   /* Text colors */
   .text-primary {
-    @apply text-white;
+    @apply text-slate-900;
   }
 
   .text-secondary {
-    @apply text-white/60;
+    @apply text-slate-500;
   }
 
   .text-muted {
-    @apply text-white/40;
+    @apply text-slate-400;
   }
 }
 
@@ -208,7 +211,6 @@ body {
    PWA & MOBILE OPTIMIZATIONS
    =================== */
 
-/* iOS Safe Area Support */
 @supports (padding: max(0px)) {
   .safe-area-bottom {
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
@@ -219,9 +221,7 @@ body {
   }
 }
 
-/* Touch-friendly improvements */
 @media (hover: none) and (pointer: coarse) {
-  /* Increase tap targets on mobile */
   button, 
   a, 
   input[type="checkbox"], 
@@ -230,37 +230,27 @@ body {
     min-width: 44px;
   }
   
-  /* Disable hover effects on touch devices */
-  .glass-card-hover:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  /* Active state for touch feedback */
   button:active,
   a:active {
-    opacity: 0.7;
+    opacity: 0.8;
     transform: scale(0.98);
   }
 }
 
-/* Mobile-specific styles */
 @media (max-width: 768px) {
-  /* Compact cards on mobile */
+  .tm-card,
   .glass-card {
-    @apply rounded-xl;
+    @apply rounded-lg;
   }
   
-  /* Smaller text on mobile */
   .page-title {
     @apply text-xl;
   }
   
-  /* Full-width modals on mobile */
   .modal-content {
-    @apply max-w-full mx-2 rounded-xl;
+    @apply max-w-full mx-2 rounded-lg;
   }
   
-  /* Adjust tables for mobile */
   table {
     font-size: 0.875rem;
   }
@@ -270,17 +260,11 @@ body {
   }
 }
 
-/* Prevent pull-to-refresh on PWA */
 html {
   overscroll-behavior-y: contain;
-}
-
-/* Smooth scrolling */
-html {
   scroll-behavior: smooth;
 }
 
-/* Hide scrollbar on mobile for cleaner look */
 @media (max-width: 768px) {
   ::-webkit-scrollbar {
     display: none;
@@ -292,15 +276,12 @@ html {
   }
 }
 
-/* PWA Standalone mode styles */
 @media (display-mode: standalone) {
-  /* Add extra padding when in standalone mode */
   body {
     padding-top: env(safe-area-inset-top);
   }
 }
 
-/* Prevent text selection on UI elements */
 .no-select {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -308,7 +289,6 @@ html {
   user-select: none;
 }
 
-/* Touch action for better scrolling */
 .touch-pan {
   touch-action: pan-y;
 }

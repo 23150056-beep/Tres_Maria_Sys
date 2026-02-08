@@ -4,10 +4,10 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const alertTypeColors = {
-  low_stock: { bg: 'bg-yellow-500/20', text: 'text-yellow-400', icon: ExclamationTriangleIcon },
-  out_of_stock: { bg: 'bg-red-500/20', text: 'text-red-400', icon: ExclamationTriangleIcon },
-  expiring: { bg: 'bg-orange-500/20', text: 'text-orange-400', icon: ClockIcon },
-  expired: { bg: 'bg-red-500/20', text: 'text-red-400', icon: ExclamationTriangleIcon }
+  low_stock: { bg: 'bg-amber-50', text: 'text-amber-600', icon: ExclamationTriangleIcon },
+  out_of_stock: { bg: 'bg-red-50', text: 'text-red-600', icon: ExclamationTriangleIcon },
+  expiring: { bg: 'bg-orange-50', text: 'text-orange-600', icon: ClockIcon },
+  expired: { bg: 'bg-red-50', text: 'text-red-600', icon: ExclamationTriangleIcon }
 };
 
 export default function StockAlerts() {
@@ -49,8 +49,8 @@ export default function StockAlerts() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Stock Alerts</h1>
-        <p className="text-white/60 mt-1">Monitor low stock, expiring items, and inventory issues</p>
+        <h1 className="text-2xl font-bold text-slate-900">Stock Alerts</h1>
+        <p className="text-slate-500 mt-1">Monitor low stock, expiring items, and inventory issues</p>
       </div>
 
       {/* Filters */}
@@ -88,16 +88,16 @@ export default function StockAlerts() {
           </div>
         ) : alerts.length === 0 ? (
           <div className="p-12 text-center">
-            <CheckCircleIcon className="h-12 w-12 mx-auto mb-4 text-green-400" />
-            <p className="text-white/60">No active alerts</p>
+            <CheckCircleIcon className="h-12 w-12 mx-auto mb-4 text-emerald-600" />
+            <p className="text-slate-500">No active alerts</p>
           </div>
         ) : (
-          <div className="divide-y divide-white/10">
+          <div className="divide-y divide-slate-200">
             {alerts.map((alert) => {
               const typeStyle = alertTypeColors[alert.alert_type] || alertTypeColors.low_stock;
               const Icon = typeStyle.icon;
               return (
-                <div key={alert.id} className="p-6 hover:bg-white/5">
+                <div key={alert.id} className="p-6 hover:bg-slate-50">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start">
                       <div className={`p-2 rounded-lg ${typeStyle.bg}`}>
@@ -105,13 +105,13 @@ export default function StockAlerts() {
                       </div>
                       <div className="ml-4">
                         <div className="flex items-center gap-2">
-                          <h3 className="text-sm font-medium text-white">{alert.product_name}</h3>
+                          <h3 className="text-sm font-medium text-slate-900">{alert.product_name}</h3>
                           <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${typeStyle.bg} ${typeStyle.text}`}>
                             {alert.alert_type.replace('_', ' ')}
                           </span>
                         </div>
-                        <p className="text-sm text-white/60 mt-1">{alert.message}</p>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-white/40">
+                        <p className="text-sm text-slate-500 mt-1">{alert.message}</p>
+                        <div className="flex items-center gap-4 mt-2 text-xs text-slate-400">
                           <span>Warehouse: {alert.warehouse_name}</span>
                           <span>Current: {alert.current_quantity}</span>
                           <span>Threshold: {alert.threshold_quantity}</span>
@@ -121,7 +121,7 @@ export default function StockAlerts() {
                     {alert.status === 'active' && (
                       <button
                         onClick={() => handleResolve(alert.id)}
-                        className="px-3 py-1 text-sm text-blue-400 hover:text-blue-300"
+                        className="px-3 py-1 text-sm text-blue-600 hover:text-blue-300"
                       >
                         Mark Resolved
                       </button>

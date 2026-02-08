@@ -61,52 +61,52 @@ export default function WarehouseDetail() {
   const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="spinner h-12 w-12"></div></div>;
-  if (!warehouse) return <div className="text-center py-12 text-white/60">Warehouse not found</div>;
+  if (!warehouse) return <div className="text-center py-12 text-slate-500">Warehouse not found</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <button onClick={() => navigate('/warehouse')} className="p-2 text-white/60 hover:bg-white/10 rounded-lg"><ArrowLeftIcon className="h-5 w-5" /></button>
+        <button onClick={() => navigate('/warehouse')} className="p-2 text-slate-500 hover:bg-slate-100 rounded-lg"><ArrowLeftIcon className="h-5 w-5" /></button>
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-white">{warehouse.name}</h1>
-            <span className={`px-2 py-1 text-xs font-medium rounded-full ${warehouse.is_active ? 'bg-green-500/20 text-green-400' : 'bg-white/10 text-white/60'}`}>
+            <h1 className="text-2xl font-bold text-slate-900">{warehouse.name}</h1>
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${warehouse.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
               {warehouse.is_active ? 'Active' : 'Inactive'}
             </span>
           </div>
-          <p className="text-white/60">{warehouse.code}</p>
+          <p className="text-slate-500">{warehouse.code}</p>
         </div>
       </div>
 
       {/* Info Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="glass-card p-4">
-          <CubeIcon className="h-8 w-8 text-blue-400 mb-2" />
-          <p className="text-2xl font-bold text-white">{formatNumber(totalProducts)}</p>
-          <p className="text-sm text-white/60">Product SKUs</p>
+          <CubeIcon className="h-8 w-8 text-blue-600 mb-2" />
+          <p className="text-2xl font-bold text-slate-900">{formatNumber(totalProducts)}</p>
+          <p className="text-sm text-slate-500">Product SKUs</p>
         </div>
         <div className="glass-card p-4">
-          <ArrowTrendingUpIcon className="h-8 w-8 text-green-400 mb-2" />
-          <p className="text-2xl font-bold text-white">{formatNumber(totalUnits)}</p>
-          <p className="text-sm text-white/60">Total Units</p>
+          <ArrowTrendingUpIcon className="h-8 w-8 text-emerald-600 mb-2" />
+          <p className="text-2xl font-bold text-slate-900">{formatNumber(totalUnits)}</p>
+          <p className="text-sm text-slate-500">Total Units</p>
         </div>
         <div className="glass-card p-4">
-          <span className="text-2xl text-white">₱</span>
-          <p className="text-2xl font-bold text-white">{formatCurrency(totalValue).replace('₱', '')}</p>
-          <p className="text-sm text-white/60">Inventory Value</p>
+          <span className="text-2xl text-slate-900">₱</span>
+          <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalValue).replace('₱', '')}</p>
+          <p className="text-sm text-slate-500">Inventory Value</p>
         </div>
         <div className="glass-card p-4">
-          <ExclamationTriangleIcon className={`h-8 w-8 ${lowStockItems > 0 ? 'text-red-400' : 'text-white/40'} mb-2`} />
-          <p className="text-2xl font-bold text-white">{lowStockItems}</p>
-          <p className="text-sm text-white/60">Low Stock Items</p>
+          <ExclamationTriangleIcon className={`h-8 w-8 ${lowStockItems > 0 ? 'text-red-600' : 'text-slate-400'} mb-2`} />
+          <p className="text-2xl font-bold text-slate-900">{lowStockItems}</p>
+          <p className="text-sm text-slate-500">Low Stock Items</p>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-white/10">
+      <div className="border-b border-slate-200">
         <nav className="-mb-px flex space-x-8">
           {['overview', 'inventory', 'transactions', 'info'].map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} className={`py-4 px-1 border-b-2 font-medium text-sm capitalize ${activeTab === tab ? 'border-purple-500 text-purple-400' : 'border-transparent text-white/60 hover:text-white'}`}>
+            <button key={tab} onClick={() => setActiveTab(tab)} className={`py-4 px-1 border-b-2 font-medium text-sm capitalize ${activeTab === tab ? 'border-primary-500 text-primary-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>
               {tab}
             </button>
           ))}
@@ -118,26 +118,26 @@ export default function WarehouseDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Stock by Category */}
           <div className="glass-card p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Stock by Category</h3>
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Stock by Category</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie data={categoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
                   {categoryData.map((_, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
-                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
+                <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', padding: '12px 16px' }} itemStyle={{ color: '#1e293b', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: '#64748b', fontSize: '12px', marginBottom: '4px' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
 
           {/* Recent Transactions */}
           <div className="glass-card p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Recent Activity</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={txTypeData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
-                <YAxis stroke="rgba(255,255,255,0.6)" />
-                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 15, 35, 0.95)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', marginBottom: '4px' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="name" stroke="#94a3b8" />
+                <YAxis stroke="#94a3b8" />
+                <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', padding: '12px 16px' }} itemStyle={{ color: '#1e293b', fontSize: '14px', fontWeight: '500' }} labelStyle={{ color: '#64748b', fontSize: '12px', marginBottom: '4px' }} />
                 <Bar dataKey="count" fill="#8B5CF6" />
               </BarChart>
             </ResponsiveContainer>
@@ -146,14 +146,14 @@ export default function WarehouseDetail() {
           {/* Low Stock Alert */}
           {lowStockItems > 0 && (
             <div className="lg:col-span-2 bg-red-500/10 border border-red-500/20 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-red-400 mb-4 flex items-center">
+              <h3 className="text-lg font-semibold text-red-600 mb-4 flex items-center">
                 <ExclamationTriangleIcon className="h-5 w-5 mr-2" />Low Stock Alert
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {inventory.filter(i => i.quantity <= (i.reorder_level || 10)).slice(0, 6).map(item => (
                   <div key={item.id} className="glass-card p-4">
-                    <p className="font-medium text-white">{item.product?.name || `Product #${item.product_id}`}</p>
-                    <p className="text-sm text-red-400">Stock: {item.quantity} (Reorder: {item.reorder_level || 10})</p>
+                    <p className="font-medium text-slate-900">{item.product?.name || `Product #${item.product_id}`}</p>
+                    <p className="text-sm text-red-600">Stock: {item.quantity} (Reorder: {item.reorder_level || 10})</p>
                   </div>
                 ))}
               </div>
@@ -164,33 +164,33 @@ export default function WarehouseDetail() {
 
       {activeTab === 'inventory' && (
         <div className="glass-table overflow-hidden">
-          <table className="min-w-full divide-y divide-white/10">
+          <table className="min-w-full divide-y divide-slate-200">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Product</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Category</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Location</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Quantity</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Unit Cost</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Total Value</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Product</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Category</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Location</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Quantity</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Unit Cost</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Total Value</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="divide-y divide-slate-200">
               {inventory.length === 0 ? (
-                <tr><td colSpan="7" className="px-6 py-12 text-center text-white/60">No inventory in this warehouse</td></tr>
+                <tr><td colSpan="7" className="px-6 py-12 text-center text-slate-500">No inventory in this warehouse</td></tr>
               ) : inventory.map(item => {
                 const isLow = item.quantity <= (item.reorder_level || 10);
                 return (
-                  <tr key={item.id} className="hover:bg-white/5">
-                    <td className="px-6 py-4 font-medium text-white">{item.product?.name || `Product #${item.product_id}`}</td>
-                    <td className="px-6 py-4 text-white/60">{item.product?.category?.name || '-'}</td>
-                    <td className="px-6 py-4 text-white/60">{item.location || '-'}</td>
-                    <td className="px-6 py-4 text-right text-white">{formatNumber(item.quantity)}</td>
-                    <td className="px-6 py-4 text-right text-white">{formatCurrency(item.unit_cost)}</td>
-                    <td className="px-6 py-4 text-right font-medium text-white">{formatCurrency((item.quantity || 0) * (item.unit_cost || 0))}</td>
+                  <tr key={item.id} className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-medium text-slate-900">{item.product?.name || `Product #${item.product_id}`}</td>
+                    <td className="px-6 py-4 text-slate-500">{item.product?.category?.name || '-'}</td>
+                    <td className="px-6 py-4 text-slate-500">{item.location || '-'}</td>
+                    <td className="px-6 py-4 text-right text-slate-900">{formatNumber(item.quantity)}</td>
+                    <td className="px-6 py-4 text-right text-slate-900">{formatCurrency(item.unit_cost)}</td>
+                    <td className="px-6 py-4 text-right font-medium text-slate-900">{formatCurrency((item.quantity || 0) * (item.unit_cost || 0))}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${isLow ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${isLow ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'}`}>
                         {isLow ? 'Low Stock' : 'OK'}
                       </span>
                     </td>
@@ -204,37 +204,37 @@ export default function WarehouseDetail() {
 
       {activeTab === 'transactions' && (
         <div className="glass-table overflow-hidden">
-          <table className="min-w-full divide-y divide-white/10">
+          <table className="min-w-full divide-y divide-slate-200">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Type</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Product</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase">Quantity</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">Reference</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase">User</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Product</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Quantity</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Reference</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">User</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="divide-y divide-slate-200">
               {transactions.length === 0 ? (
-                <tr><td colSpan="6" className="px-6 py-12 text-center text-white/60">No transactions recorded</td></tr>
+                <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500">No transactions recorded</td></tr>
               ) : transactions.map(tx => {
                 const isIn = ['received', 'adjustment_in', 'transfer_in', 'return'].includes(tx.transaction_type);
                 return (
-                  <tr key={tx.id} className="hover:bg-white/5">
-                    <td className="px-6 py-4 text-white">{formatDate(tx.created_at)}</td>
+                  <tr key={tx.id} className="hover:bg-slate-50">
+                    <td className="px-6 py-4 text-slate-900">{formatDate(tx.created_at)}</td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${isIn ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                      <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${isIn ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
                         {isIn ? <ArrowTrendingUpIcon className="h-3 w-3 mr-1" /> : <ArrowTrendingDownIcon className="h-3 w-3 mr-1" />}
                         {tx.transaction_type?.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-white">{tx.product?.name || `Product #${tx.product_id}`}</td>
-                    <td className={`px-6 py-4 text-right font-medium ${isIn ? 'text-green-400' : 'text-red-400'}`}>
+                    <td className="px-6 py-4 text-slate-900">{tx.product?.name || `Product #${tx.product_id}`}</td>
+                    <td className={`px-6 py-4 text-right font-medium ${isIn ? 'text-emerald-600' : 'text-red-600'}`}>
                       {isIn ? '+' : '-'}{formatNumber(Math.abs(tx.quantity))}
                     </td>
-                    <td className="px-6 py-4 text-white/60">{tx.reference_type || '-'}</td>
-                    <td className="px-6 py-4 text-white/60">{tx.user?.name || '-'}</td>
+                    <td className="px-6 py-4 text-slate-500">{tx.reference_type || '-'}</td>
+                    <td className="px-6 py-4 text-slate-500">{tx.user?.name || '-'}</td>
                   </tr>
                 );
               })}
@@ -245,45 +245,45 @@ export default function WarehouseDetail() {
 
       {activeTab === 'info' && (
         <div className="glass-card p-6">
-          <h3 className="text-lg font-semibold text-white mb-6">Warehouse Information</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-6">Warehouse Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <MapPinIcon className="h-5 w-5 text-white/40 mt-0.5" />
+                <MapPinIcon className="h-5 w-5 text-slate-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-white/60">Address</p>
-                  <p className="font-medium text-white">{warehouse.address || '-'}</p>
-                  <p className="text-white/60">{warehouse.city}, {warehouse.province}</p>
+                  <p className="text-sm text-slate-500">Address</p>
+                  <p className="font-medium text-slate-900">{warehouse.address || '-'}</p>
+                  <p className="text-slate-500">{warehouse.city}, {warehouse.province}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <PhoneIcon className="h-5 w-5 text-white/40 mt-0.5" />
+                <PhoneIcon className="h-5 w-5 text-slate-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-white/60">Phone</p>
-                  <p className="font-medium text-white">{warehouse.phone || '-'}</p>
+                  <p className="text-sm text-slate-500">Phone</p>
+                  <p className="font-medium text-slate-900">{warehouse.phone || '-'}</p>
                 </div>
               </div>
             </div>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <UserIcon className="h-5 w-5 text-white/40 mt-0.5" />
+                <UserIcon className="h-5 w-5 text-slate-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-white/60">Manager</p>
-                  <p className="font-medium text-white">{warehouse.manager_name || '-'}</p>
+                  <p className="text-sm text-slate-500">Manager</p>
+                  <p className="font-medium text-slate-900">{warehouse.manager_name || '-'}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CubeIcon className="h-5 w-5 text-white/40 mt-0.5" />
+                <CubeIcon className="h-5 w-5 text-slate-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-white/60">Capacity</p>
-                  <p className="font-medium text-white">{warehouse.capacity ? `${formatNumber(warehouse.capacity)} units` : '-'}</p>
+                  <p className="text-sm text-slate-500">Capacity</p>
+                  <p className="font-medium text-slate-900">{warehouse.capacity ? `${formatNumber(warehouse.capacity)} units` : '-'}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <ClockIcon className="h-5 w-5 text-white/40 mt-0.5" />
+                <ClockIcon className="h-5 w-5 text-slate-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-white/60">Created</p>
-                  <p className="font-medium text-white">{formatDate(warehouse.created_at)}</p>
+                  <p className="text-sm text-slate-500">Created</p>
+                  <p className="font-medium text-slate-900">{formatDate(warehouse.created_at)}</p>
                 </div>
               </div>
             </div>
